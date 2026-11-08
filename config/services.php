@@ -35,4 +35,23 @@ return [
         ],
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'ios_client_id' => env('GOOGLE_IOS_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_CALLBACK_URL', 'http://localhost:5000/api/v1/auth/google/callback'),
+    ],
+
+    'apple' => [
+        'bundle_id' => env('APPLE_BUNDLE_ID'),
+        'issuer' => env('APPLE_ISSUER', 'https://appleid.apple.com'),
+        'keys_url' => env('APPLE_KEYS_URL', 'https://appleid.apple.com/auth/keys'),
+    ],
+
+    'cloudinary' => [
+        'cloud_name' => env('CLOUDINARY_NAME'),
+        'api_key' => env('CLOUDINARY_API_KEY'),
+        'api_secret' => env('CLOUDINARY_API_SECRET'),
+    ],
+
 ];
