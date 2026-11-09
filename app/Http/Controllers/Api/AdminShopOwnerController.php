@@ -99,4 +99,3 @@ class AdminShopOwnerController extends Controller
         ], 'Shop owner account created successfully.', 201);
     }
 }
-

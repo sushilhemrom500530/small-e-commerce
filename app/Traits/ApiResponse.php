@@ -68,13 +68,13 @@ trait ApiResponse
             'statusCode' => $statusCode,
             'success' => true,
             'message' => $message,
+            'data' => $results,
+            'results' => $results,
         ];
 
         if ($meta !== null) {
             $payload['meta'] = $meta;
         }
-
-        $payload['results'] = $results;
 
         return new JsonResponse($payload, $statusCode);
     }
@@ -103,6 +103,7 @@ trait ApiResponse
             'success' => true,
             'message' => $message,
             'meta' => $meta,
+            'data' => $items ?? $paginator->items(),
             'results' => $items ?? $paginator->items(),
         ], $statusCode);
     }

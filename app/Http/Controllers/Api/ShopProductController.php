@@ -203,4 +203,3 @@ class ShopProductController extends Controller
         return $this->sendResponse(null, 'Product removed from your shop successfully.');
     }
 }
-

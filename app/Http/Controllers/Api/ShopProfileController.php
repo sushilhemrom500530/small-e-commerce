@@ -88,4 +88,3 @@ class ShopProfileController extends Controller
         );
     }
 }
-

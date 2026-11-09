@@ -125,4 +125,3 @@ class AdminProductController extends Controller
         return $this->sendResponse(null, 'Product removed from catalog successfully.');
     }
 }
-

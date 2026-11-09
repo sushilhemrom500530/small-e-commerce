@@ -24,36 +24,51 @@ export default function Login() {
 
     const handleSubmit = async (values: LoginFormValues) => {
         try {
-            const res = await login({
+            const res: any = await login({
                 email: values.email,
                 password: values.password,
             }).unwrap();
 
-            Cookies.set("token", res.data.token, {
-                expires: values.remember ? 30 : 7,
-                secure: import.meta.env.PROD,
-                sameSite: "Lax",
-            });
-            localStorage.setItem("user", JSON.stringify(res.data.results));
-            dispatch(
-                setCredentials({
-                    user: res.data.results,
-                    token: res.data.token,
-                })
-            );
-            const loginUser = res.data.results;
-            message.success(res.message);
+            const token =
+                res?.data?.token ||
+                res?.results?.token ||
+                res?.token ||
+                res?.data?.accessToken ||
+                res?.results?.accessToken;
 
-            if (loginUser.role === "admin") {
+            const loginUser =
+                res?.data?.user ||
+                res?.results?.user ||
+                res?.data?.results ||
+                res?.results;
+
+            if (token) {
+                Cookies.set("token", token, {
+                    expires: values.remember ? 30 : 7,
+                    secure: import.meta.env.PROD,
+                    sameSite: "Lax",
+                });
+            }
+
+            if (loginUser) {
+                localStorage.setItem("user", JSON.stringify(loginUser));
+                dispatch(
+                    setCredentials({
+                        user: loginUser,
+                        token: token || "",
+                    })
+                );
+            }
+
+            message.success(res.message || "Logged in successfully!");
+
+            const role = loginUser?.role;
+            if (role === "admin") {
                 navigate(location.state?.from || "/admin/dashboard", {
                     replace: true,
                 });
-            } else if (loginUser.role === "shop_owner" || loginUser.role === "manager") {
+            } else if (role === "shop_owner" || role === "manager") {
                 navigate(location.state?.from || "/shop-owner/dashboard", {
-                    replace: true,
-                });
-            } else if (loginUser.role === "employee") {
-                navigate(location.state?.from || "/employee", {
                     replace: true,
                 });
             } else {

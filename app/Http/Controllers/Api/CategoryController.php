@@ -57,4 +57,3 @@ class CategoryController extends Controller
         ], 'Category created successfully.', 201);
     }
 }
-

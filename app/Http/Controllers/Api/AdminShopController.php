@@ -161,4 +161,3 @@ class AdminShopController extends Controller
         return $this->sendResponse(null, 'Shop deleted successfully.');
     }
 }
-

@@ -122,4 +122,3 @@ class StorefrontController extends Controller
         );
     }
 }
-

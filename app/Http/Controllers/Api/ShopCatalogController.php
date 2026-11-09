@@ -117,4 +117,3 @@ class ShopCatalogController extends Controller
         );
     }
 }
-

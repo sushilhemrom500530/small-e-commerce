@@ -145,6 +145,7 @@ class AuthService
 
         return [
             'user' => $userData,
+            'results' => $userData,
             'role' => $user->role,
             'token' => $token,
             'accessToken' => $token,

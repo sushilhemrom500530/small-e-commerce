@@ -55,7 +55,7 @@ class AuthController extends Controller
 
         $isProduction = app()->environment('production');
 
-        $response = $this->sendResponse($result, 'Login successfully.', 201);
+        $response = $this->sendResponse($result, 'Login successfully.', 200);
 
         $response->headers->setCookie(
             new Cookie('refreshToken', $result['refreshToken'], time() + (365 * 86400), '/', null, $isProduction, true, false, Cookie::SAMESITE_LAX)
