@@ -83,7 +83,7 @@ export default function ProductDetailPage() {
                     <button
                       key={thumb.id}
                       onClick={() => setSelectedImage(thumb.id)}
-                      className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl border p-1 bg-white flex items-center justify-center overflow-hidden transition-all ${
+                      className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl border p-1 bg-white flex items-center justify-center overflow-hidden transition-all cursor-pointer ${
                         active
                           ? "border-blue-600 ring-2 ring-blue-500/20 shadow-xs"
                           : "border-gray-200 hover:border-gray-300"
@@ -171,7 +171,7 @@ export default function ProductDetailPage() {
                 <div className="inline-flex items-center border border-gray-200 rounded-xl bg-white shadow-2xs">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-3 text-gray-500 hover:text-gray-800 transition-colors"
+                    className="p-3 text-gray-500 hover:text-gray-800 transition-colors cursor-pointer"
                     aria-label="Decrease quantity"
                   >
                     <Minus className="w-4 h-4" />
@@ -181,7 +181,7 @@ export default function ProductDetailPage() {
                   </span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="p-3 text-gray-500 hover:text-gray-800 transition-colors"
+                    className="p-3 text-gray-500 hover:text-gray-800 transition-colors cursor-pointer"
                     aria-label="Increase quantity"
                   >
                     <Plus className="w-4 h-4" />
@@ -192,7 +192,7 @@ export default function ProductDetailPage() {
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  className={`flex-1 min-w-[180px] font-semibold py-3 px-6 rounded-xl shadow-sm transition-all text-sm text-center flex items-center justify-center gap-2 ${
+                  className={`flex-1 min-w-[180px] font-semibold py-3 px-6 rounded-xl shadow-sm transition-all text-sm text-center flex items-center justify-center gap-2 cursor-pointer ${
                     addedToast
                       ? "bg-emerald-600 text-white shadow-emerald-500/20"
                       : "bg-[#2563eb] hover:bg-blue-700 text-white shadow-blue-500/20"
@@ -211,7 +211,7 @@ export default function ProductDetailPage() {
                 <button
                   type="button"
                   onClick={() => setIsWishlisted(!isWishlisted)}
-                  className={`p-3 rounded-xl border transition-colors shadow-2xs ${
+                  className={`p-3 rounded-xl border transition-colors shadow-2xs cursor-pointer ${
                     isWishlisted
                       ? "border-rose-200 bg-rose-50 text-rose-500"
                       : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
@@ -256,7 +256,7 @@ export default function ProductDetailPage() {
             <div className="border-b border-gray-200 flex items-center gap-8">
               <button
                 onClick={() => setActiveTab("description")}
-                className={`pb-3 text-sm font-bold transition-all relative ${
+                className={`pb-3 text-sm font-bold transition-all relative cursor-pointer ${
                   activeTab === "description"
                     ? "text-gray-900 border-b-2 border-[#2563eb]"
                     : "text-gray-500 hover:text-gray-800"
@@ -266,7 +266,7 @@ export default function ProductDetailPage() {
               </button>
               <button
                 onClick={() => setActiveTab("specifications")}
-                className={`pb-3 text-sm font-bold transition-all relative ${
+                className={`pb-3 text-sm font-bold transition-all relative cursor-pointer ${
                   activeTab === "specifications"
                     ? "text-gray-900 border-b-2 border-[#2563eb]"
                     : "text-gray-500 hover:text-gray-800"
@@ -276,7 +276,7 @@ export default function ProductDetailPage() {
               </button>
               <button
                 onClick={() => setActiveTab("reviews")}
-                className={`pb-3 text-sm font-bold transition-all relative ${
+                className={`pb-3 text-sm font-bold transition-all relative cursor-pointer ${
                   activeTab === "reviews"
                     ? "text-gray-900 border-b-2 border-[#2563eb]"
                     : "text-gray-500 hover:text-gray-800"

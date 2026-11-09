@@ -154,9 +154,9 @@ export default function ShopsPage() {
       {/* Main Content: Categories Sidebar + Shops Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* Left Sidebar: Categories */}
-          <aside className="lg:col-span-3 bg-white p-5 rounded-2xl border border-gray-200/80 shadow-2xs">
+          <aside className="lg:col-span-3 bg-white p-5 rounded-2xl border border-gray-200/80 ">
             <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">
               Categories
             </h2>
@@ -169,11 +169,10 @@ export default function ShopsPage() {
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-left ${
-                      active
-                        ? "bg-blue-50 text-[#2563eb] font-semibold shadow-2xs"
-                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
+                    className={`flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-left cursor-pointer ${active
+                      ? "bg-blue-50 text-[#2563eb] font-semibold shadow-2xs"
+                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                      }`}
                   >
                     <Icon className={`w-4 h-4 ${active ? "text-[#2563eb]" : "text-gray-500"}`} />
                     <span>{cat.name}</span>
@@ -185,7 +184,7 @@ export default function ShopsPage() {
 
           {/* Right Main Content */}
           <main className="lg:col-span-9 space-y-6">
-            
+
             {/* Search & Sort Header Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="relative flex-1 max-w-md">
@@ -195,7 +194,7 @@ export default function ShopsPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search shops..."
-                  className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm bg-white border border-gray-200/90 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-2xs"
+                  className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm bg-white border border-gray-200/90 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 />
               </div>
 
@@ -204,7 +203,7 @@ export default function ShopsPage() {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="appearance-none bg-white border border-gray-200/90 rounded-xl px-4 py-2 pr-9 text-xs sm:text-sm font-medium text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-2xs cursor-pointer"
+                    className="appearance-none bg-white border border-gray-200/90 rounded-xl px-4 py-2 pr-9 text-xs sm:text-sm font-medium text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
                   >
                     <option value="popular">Sort by: Popular</option>
                     <option value="rating">Sort by: Top Rated</option>
@@ -220,7 +219,7 @@ export default function ShopsPage() {
               {filteredShops.map((shop) => (
                 <div
                   key={shop.id}
-                  className="bg-white rounded-2xl border border-gray-200/80 shadow-2xs hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
+                  className="bg-white rounded-2xl border border-gray-200/80 hover:shadow transition-all duration-200 overflow-hidden flex flex-col"
                 >
                   {/* Shop Image with exact 2.2:1 aspect ratio */}
                   <div className="relative aspect-[2.2/1] w-full overflow-hidden bg-slate-100">
