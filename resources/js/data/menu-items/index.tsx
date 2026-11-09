@@ -1,7 +1,11 @@
 import {
   LayoutDashboard,
-  UserRound,
+  Store,
   Package,
+  Users,
+  UserPlus,
+  Settings,
+  UserRound,
   PackagePlus,
   ShoppingCart,
 } from "lucide-react";
@@ -39,29 +43,29 @@ export const sidebarMenus = {
       icon: LayoutDashboard,
     },
     {
+      label: "Shops",
+      href: "/admin/dashboard/shops",
+      icon: Store,
+    },
+    {
       label: "Products",
       href: "/admin/dashboard/products",
       icon: Package,
     },
     {
-      label: "Add Product",
-      href: "/admin/dashboard/product/add",
-      icon: PackagePlus,
+      label: "Shop Owners",
+      href: "/admin/dashboard/shop-owners",
+      icon: Users,
     },
     {
-      label: "Create Sale",
-      href: "/admin/dashboard/sales/create",
-      icon: ShoppingCart,
+      label: "Users",
+      href: "/admin/dashboard/users",
+      icon: UserPlus,
     },
     {
-      label: "Sales History",
-      href: "/admin/dashboard/sales/history",
-      icon: FaHistory,
-    },
-    {
-      label: "Profile",
+      label: "Settings",
       href: "/admin/dashboard/profile",
-      icon: UserRound,
+      icon: Settings,
     },
   ],
 
