@@ -3,6 +3,7 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import { FaFacebookF, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 import { RiMessengerLine } from "react-icons/ri";
 import PageBanner from "../../Components/shared/page-banner/index.js";
+import ContactBannerMap from "../../Components/shared/page-banner/contact-map.js";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -24,7 +25,7 @@ export default function ContactPage() {
 
   return (
     <div className="w-full bg-[#fbfcfd] min-h-screen">
-      {/* Reusable Page Banner */}
+      {/* Reusable Page Banner with Pure SVG Vector Map */}
       <PageBanner
         title="Contact Us"
         description="We're here to help. Get in touch with us!"
@@ -32,9 +33,8 @@ export default function ContactPage() {
           { label: "Home", href: "/" },
           { label: "Contact Us" },
         ]}
-        backgroundImage="/images/contact-banner-hd.png"
-        imageAlt="World map and location pins"
-        gradient="bg-gradient-to-r from-[#0c1b2e] via-[#0e223b] to-[#122b4a]"
+        gradient="bg-gradient-to-r from-[#0b1e36] via-[#0d2544] to-[#12335c]"
+        rightElement={<ContactBannerMap />}
       />
 
       {/* Main Content: Info & Form */}

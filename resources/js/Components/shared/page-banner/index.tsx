@@ -46,9 +46,9 @@ export default function PageBanner({
         </div>
       )}
 
-      {/* Optional custom right element (e.g. vector art for Shops) */}
+      {/* Optional custom right element (e.g. SVG map for Contact, vector art for Shops) */}
       {!backgroundImage && rightElement && (
-        <div className="absolute right-0 top-0 bottom-0 w-1/2 pointer-events-none overflow-hidden flex items-center justify-end pr-8 sm:pr-14">
+        <div className="absolute right-0 top-0 bottom-0 w-full sm:w-4/5 lg:w-3/5 pointer-events-none overflow-hidden flex items-center justify-end">
           {rightElement}
         </div>
       )}

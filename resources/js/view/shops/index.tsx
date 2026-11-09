@@ -123,7 +123,7 @@ export default function ShopsPage() {
           { label: "Shops" },
         ]}
         rightElement={
-          <div className="relative w-44 h-32 flex items-center justify-center opacity-85 select-none">
+          <div className="relative w-44 h-32 flex items-center justify-center opacity-85 select-none mr-8 sm:mr-14">
             <svg viewBox="0 0 160 140" fill="none" className="w-full h-full text-blue-300">
               <path
                 d="M 15 120 C 50 115, 75 90, 105 60"
