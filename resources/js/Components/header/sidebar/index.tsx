@@ -1,6 +1,6 @@
 import { type Dispatch, type SetStateAction } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ShoppingCart, LogOut, X } from "lucide-react";
+import { ShoppingCart, LogOut, X, Store } from "lucide-react";
 import { sidebarMenus, type MenuItem } from "../../../data/menu-items/index.js";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store.js";
@@ -122,12 +122,20 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
                     </nav>
                 </div>
 
-                {/* Bottom Section: Logout */}
-                <div className="p-4 border-t border-slate-100 bg-white">
+                {/* Bottom Section: View Storefront & Logout */}
+                <div className="p-4 border-t border-slate-100 bg-white space-y-1">
+                    <Link
+                        to="/"
+                        className="flex w-full items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-primary hover:bg-primary/5 transition-all duration-200 group cursor-pointer"
+                    >
+                        <Store className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors shrink-0" />
+                        <span>Public Storefront</span>
+                    </Link>
+
                     <button
                         type="button"
                         onClick={handleLogout}
-                        className="flex w-full items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50/80 transition-all duration-200 group cursor-pointer"
+                        className="flex w-full items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50/80 transition-all duration-200 group cursor-pointer"
                     >
                         <LogOut className="w-5 h-5 text-slate-400 group-hover:text-red-500 transition-colors shrink-0" />
                         <span>Logout</span>

@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Search, ShoppingCart, User, Menu, X } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, X, LogOut, LayoutDashboard } from "lucide-react";
 import Logo from "../logo/index.js";
 import { navLinks, type MenuItem } from "../../../data/menu-items/index.js";
-import { useAppSelector } from "../../../redux/hooks.js";
+import { useAppSelector, useAppDispatch } from "../../../redux/hooks.js";
+import { logout } from "../../../redux/userSlice.js";
+import Cookies from "js-cookie";
 
 export default function Navbar() {
   const { pathname } = useLocation();
+  const dispatch = useAppDispatch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const cartItems = useAppSelector((state) => state.cart?.items ?? []);
@@ -15,13 +18,25 @@ export default function Navbar() {
   const user = useAppSelector((state) => state.auth?.user);
   const isAuthenticated = useAppSelector((state) => state.auth?.isAuthenticated);
 
+  const hasDashboard =
+    isAuthenticated &&
+    user &&
+    (user.role === "admin" || user.role === "shop_owner" || user.role === "manager");
+
   const dashboardLink = !isAuthenticated || !user
     ? "/auth/login"
     : user.role === "admin"
       ? "/admin/dashboard"
-      : user.role === "shop_owner"
+      : user.role === "shop_owner" || user.role === "manager"
         ? "/shop-owner/dashboard"
-        : "/customer/dashboard";
+        : "/";
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    dispatch(logout());
+    Cookies.remove("token");
+    localStorage.removeItem("user");
+  };
 
   const isActive = (href?: string) => {
     if (!href) return false;
@@ -95,23 +110,47 @@ export default function Navbar() {
               )}
             </Link>
 
-            {/* User Profile Avatar */}
-            <Link
-              to={dashboardLink}
-              className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors"
-              aria-label="User Account"
-            >
-              <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
-                {isAuthenticated && user ? user.name?.charAt(0).toUpperCase() : <User className="w-3.5 h-3.5 text-slate-700" strokeWidth={2} />}
+            {/* User Profile / Dashboard Link */}
+            {isAuthenticated && user ? (
+              <div className="flex items-center gap-2">
+                {hasDashboard ? (
+                  <Link
+                    to={dashboardLink}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 hover:bg-primary text-primary hover:text-white border border-primary/20 transition-all font-semibold text-xs shadow-2xs"
+                    title="Open Dashboard"
+                  >
+                    <LayoutDashboard className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">
+                      {user.role === "admin" ? "Admin Dashboard" : "Shop Dashboard"}
+                    </span>
+                  </Link>
+                ) : (
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span className="font-semibold text-slate-700 max-w-[120px] truncate">
+                      {user.name || user.fullName || "Customer"}
+                    </span>
+                  </div>
+                )}
+
+                <button
+                  onClick={handleLogout}
+                  title="Sign Out"
+                  className="p-1.5 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                  aria-label="Sign Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
               </div>
-              {isAuthenticated && user ? (
-                <span className="text-xs font-semibold text-slate-700 hidden sm:inline capitalize">
-                  {user.role?.replace('_', ' ')}
-                </span>
-              ) : (
-                <span className="text-xs font-medium text-slate-600 hidden sm:inline">Sign In</span>
-              )}
-            </Link>
+            ) : (
+              <Link
+                to="/auth/login"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-primary hover:text-white border border-slate-200 transition-colors text-xs font-semibold text-slate-700"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span>Sign In</span>
+              </Link>
+            )}
 
             {/* Mobile Hamburger Toggle */}
             <button

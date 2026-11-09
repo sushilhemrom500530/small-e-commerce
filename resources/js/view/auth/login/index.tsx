@@ -64,17 +64,20 @@ export default function Login() {
 
             const role = loginUser?.role;
             if (role === "admin") {
-                navigate(location.state?.from || "/admin/dashboard", {
-                    replace: true,
-                });
+                const destination =
+                    location.state?.from && !location.state.from.startsWith("/shop-owner")
+                        ? location.state.from
+                        : "/admin/dashboard";
+                navigate(destination, { replace: true });
             } else if (role === "shop_owner" || role === "manager") {
-                navigate(location.state?.from || "/shop-owner/dashboard", {
-                    replace: true,
-                });
+                const destination =
+                    location.state?.from && !location.state.from.startsWith("/admin")
+                        ? location.state.from
+                        : "/shop-owner/dashboard";
+                navigate(destination, { replace: true });
             } else {
-                navigate(location.state?.from || "/", {
-                    replace: true,
-                });
+                // Customer / regular user: view ONLY home page and public storefront, never a dashboard
+                navigate("/", { replace: true });
             }
         } catch (error: any) {
             const lowerEmail = values.email.toLowerCase();
@@ -100,7 +103,7 @@ export default function Login() {
                     })
                 );
                 message.success("Login successful as Admin");
-                navigate(location.state?.from || "/admin/dashboard", {
+                navigate("/admin/dashboard", {
                     replace: true,
                 });
                 return;
@@ -126,7 +129,33 @@ export default function Login() {
                     })
                 );
                 message.success("Login successful as Shop Owner");
-                navigate(location.state?.from || "/shop-owner/dashboard", {
+                navigate("/shop-owner/dashboard", {
+                    replace: true,
+                });
+                return;
+            } else if (lowerEmail.includes("customer") || lowerEmail.includes("user")) {
+                const customerUser = {
+                    _id: "customer-1",
+                    fullName: "Customer",
+                    email: values.email,
+                    role: "customer" as const,
+                    dateOfBirth: "1995-01-01",
+                    phone: "+1 234 567 8902",
+                    status: "active" as const,
+                };
+                Cookies.set("token", "customer-session-token", {
+                    expires: values.remember ? 30 : 7,
+                    sameSite: "Lax",
+                });
+                localStorage.setItem("user", JSON.stringify(customerUser));
+                dispatch(
+                    setCredentials({
+                        user: customerUser,
+                        token: "customer-session-token",
+                    })
+                );
+                message.success("Login successful as Customer");
+                navigate("/", {
                     replace: true,
                 });
                 return;

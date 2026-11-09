@@ -17,10 +17,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ allowedRoles, children }) =
     }
 
     if (user && !allowedRoles.includes(user.role)) {
-        // Redirect unauthorized users based on their actual role or a general page
-        if (user.role === 'admin') return <Navigate to="/admin" replace />;
-        if (user.role === 'shop_owner' || user.role === 'manager') return <Navigate to="/shop-owner" replace />;
-        if (user.role === 'employee') return <Navigate to="/employee" replace />;
+        // Redirect unauthorized users based on their actual role
+        if (user.role === 'admin') return <Navigate to="/admin/dashboard" replace />;
+        if (user.role === 'shop_owner' || user.role === 'manager') return <Navigate to="/shop-owner/dashboard" replace />;
         return <Navigate to="/" replace />;
     }
 
