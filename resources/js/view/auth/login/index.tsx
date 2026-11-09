@@ -116,7 +116,7 @@ export default function Login() {
                             label="Email Address"
                             placeholder="Enter your email"
                             icon={<User className="w-[18px] h-[18px] text-slate-400 mr-2 shrink-0" />}
-                            className="!rounded-xl !border-slate-200 !bg-white hover:!border-[#4345c9] focus:!border-[#4345c9] text-sm !py-2.5 !px-3.5 mb-4 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
+                            className="!mb-0 !rounded-xl !border-slate-200 !bg-white hover:!border-[#4345c9] focus:!border-[#4345c9] text-sm !py-2.5 !px-3.5 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
                             rules={[
                                 {
                                     required: true,
@@ -136,7 +136,7 @@ export default function Login() {
                             label="Password"
                             placeholder="Enter your password"
                             icon={<Lock className="w-[18px] h-[18px] text-slate-400 mr-2 shrink-0" />}
-                            className="!rounded-xl !border-slate-200 !bg-white hover:!border-[#4345c9] focus:!border-[#4345c9] text-sm !py-2.5 !px-3.5 mb-4 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
+                            className="!rounded-xl !border-slate-200 !bg-white hover:!border-[#4345c9] focus:!border-[#4345c9] text-sm !py-2.5 !px-3.5 !mb-0 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
                             rules={[
                                 {
                                     required: true,
@@ -159,7 +159,7 @@ export default function Login() {
                             />
 
                             <Link
-                                to="/auth/forgot-password"
+                                to="#auth/forgot-password"
                                 className="text-xs sm:text-[13px] font-medium text-[#4345c9] hover:text-[#3234a8] hover:underline transition-colors"
                             >
                                 Forgot password?
