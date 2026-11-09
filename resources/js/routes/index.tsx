@@ -5,6 +5,7 @@ import authRoutes from "./auth/index.js";
 import adminRoutes from './admin/index.jsx';
 import HomePage from "../view/home/index.js";
 import ShopsPage from "../view/shops/index.js";
+import ProductDetailPage from "../view/product-detail/index.js";
 import employeeRoutes from "./customer/index.js";
 import managerRoutes from "./manager/index.js";
 
@@ -26,6 +27,14 @@ const routes = [
             {
                 path: "/shops",
                 element: <ShopsPage />
+            },
+            {
+                path: "/shops/:id",
+                element: <ProductDetailPage />
+            },
+            {
+                path: "/product/:id",
+                element: <ProductDetailPage />
             },
         ]
     },
