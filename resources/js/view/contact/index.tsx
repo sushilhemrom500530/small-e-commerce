@@ -34,7 +34,7 @@ export default function ContactPage() {
         ]}
         backgroundImage="/images/contact-banner-hd.png"
         imageAlt="World map and location pins"
-        gradient="bg-gradient-to-r from-[#0d274a] via-[#12335f] to-[#1c4780]"
+        gradient="bg-gradient-to-r from-[#0c1b2e] via-[#0e223b] to-[#122b4a]"
       />
 
       {/* Main Content: Info & Form */}

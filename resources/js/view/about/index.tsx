@@ -14,7 +14,7 @@ export default function AboutPage() {
         ]}
         backgroundImage="/images/about-banner-hd.png"
         imageAlt="ShopEase Team Collaborating"
-        gradient="bg-gradient-to-r from-[#173766] via-[#1c4176] to-[#244f8b]"
+        gradient="bg-gradient-to-r from-[#14385c] via-[#163f68] to-[#1c4774]"
       />
 
       {/* Main Content Area */}
