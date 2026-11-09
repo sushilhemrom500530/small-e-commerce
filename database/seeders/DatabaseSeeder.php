@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 3. Seed Demo Customer
+        // 3. Seed Demo Customers
         User::updateOrCreate(
             ['email' => 'customer@example.com'],
             [
@@ -75,6 +75,36 @@ class DatabaseSeeder extends Seeder
                 'password' => $defaultPassword,
                 'role' => UserRole::Customer->value,
                 'phone_number' => '+8801700000004',
+                'status' => 'active',
+                'is_verified' => true,
+                'is_deleted' => false,
+                'is_profile_completed' => true,
+                'email_verified_at' => now(),
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'john.customer@example.com'],
+            [
+                'name' => 'John Doe',
+                'password' => $defaultPassword,
+                'role' => UserRole::Customer->value,
+                'phone_number' => '+8801700000005',
+                'status' => 'active',
+                'is_verified' => true,
+                'is_deleted' => false,
+                'is_profile_completed' => true,
+                'email_verified_at' => now(),
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'emily.customer@example.com'],
+            [
+                'name' => 'Emily Watson',
+                'password' => $defaultPassword,
+                'role' => UserRole::Customer->value,
+                'phone_number' => '+8801700000006',
                 'status' => 'active',
                 'is_verified' => true,
                 'is_deleted' => false,
@@ -275,5 +305,22 @@ class DatabaseSeeder extends Seeder
 
         // NOTE: "Stainless Steel Smart Thermos" is deliberately NOT assigned to any shop!
         // This validates requirement: "Products that are not assigned to any shop must not be visible to customers."
+
+        if ($this->command) {
+            $this->command->newLine();
+            $this->command->info('✅ Multi-Shop E-Commerce demo database seeded successfully!');
+            $this->command->table(
+                ['Role', 'Full Name', 'Email', 'Password', 'Assigned Store / Info'],
+                [
+                    ['System Admin', 'Super Administrator', 'admin@example.com', 'password123', 'Full Administrative Access'],
+                    ['Shop Owner', 'John Tech', 'tech_owner@example.com', 'password123', 'Shop: Tech World'],
+                    ['Shop Owner', 'Sarah Fashion', 'fashion_owner@example.com', 'password123', 'Shop: Fashion Hub'],
+                    ['Customer', 'Alice Customer', 'customer@example.com', 'password123', 'Verified Storefront Customer'],
+                    ['Customer', 'John Doe', 'john.customer@example.com', 'password123', 'Verified Storefront Customer'],
+                    ['Customer', 'Emily Watson', 'emily.customer@example.com', 'password123', 'Verified Storefront Customer'],
+                ]
+            );
+            $this->command->newLine();
+        }
     }
 }

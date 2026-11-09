@@ -129,8 +129,15 @@ DB_PASSWORD=your_password
 Create the database in your database engine if it doesn't already exist.
 
 ### 5. Run Database Migrations & Seeders
-This seeds the initial categories, demo admin, shop owners, master shared catalog, and shop listings:
+This creates the schema and seeds demo accounts (admin, shop owners, customers, categories, shops, and products). You can run this via **`npm run seeder`** (Node.js convention) or artisan:
+
 ```bash
+# Option A (Convenient Node.js command):
+npm run seeder
+
+# Option B (Fresh migration + seed):
+npm run seed:fresh
+# or
 php artisan migrate:fresh --seed
 ```
 
@@ -152,14 +159,16 @@ The application is now live at: **`http://127.0.0.1:8000`**
 
 ## 🔑 Demo & Test Credentials
 
-The database seeder automatically creates the following test accounts:
+Running **`npm run seeder`** automatically outputs and seeds the following demo credentials:
 
-| Role | Email | Password | Assigned Shop | Purpose |
+| Role | Name | Email | Password | Assigned Shop / Role Details |
 | :--- | :--- | :--- | :--- | :--- |
-| **System Admin** | `admin@example.com` | `password123` | *All Shops / System* | Full system control, shop & catalog CRUD |
-| **Shop Owner 1** | `tech_owner@example.com` | `password123` | **Tech World** | Shared catalog listing, price override |
-| **Shop Owner 2** | `fashion_owner@example.com` | `password123` | **Fashion Hub** | Shared catalog listing, custom details |
-| **Customer** | `customer@example.com` | `password123` | *Storefront Visitor* | View only assigned shop products |
+| **System Admin** | Super Administrator | `admin@example.com` | `password123` | Master Administrative Access |
+| **Shop Owner 1** | John Tech | `tech_owner@example.com` | `password123` | Shop: **Tech World** |
+| **Shop Owner 2** | Sarah Fashion | `fashion_owner@example.com` | `password123` | Shop: **Fashion Hub** |
+| **Customer 1** | Alice Customer | `customer@example.com` | `password123` | Verified Storefront Customer |
+| **Customer 2** | John Doe | `john.customer@example.com` | `password123` | Verified Storefront Customer |
+| **Customer 3** | Emily Watson | `emily.customer@example.com` | `password123` | Verified Storefront Customer |
 
 ---
 

@@ -4,7 +4,10 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "tsc -b && vite build"
+        "build": "tsc -b && vite build",
+        "seeder": "php artisan db:seed",
+        "seed": "php artisan db:seed",
+        "seed:fresh": "php artisan migrate:fresh --seed"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.6.1",
