@@ -6,11 +6,11 @@ import Products from "../../view/admin/products/index.js";
 import Profile from "../../view/admin/profile/index.js";
 import CreateSales from "../../view/admin/create-sales/index.js";
 
-const employeeRoutes = [
+const customerRoutes = [
     {
-        path: "/employee/",
+        path: "/customer/",
         element: (
-            <PrivateRoute allowedRoles={["employee"]}>
+            <PrivateRoute allowedRoles={["customer"]}>
                 <DashboardLayout />
             </PrivateRoute>
         ),
@@ -40,4 +40,4 @@ const employeeRoutes = [
     }
 ]
 
-export default employeeRoutes;
+export default customerRoutes;

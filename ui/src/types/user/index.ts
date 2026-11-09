@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-export type UserRole = "admin" | "manager" | "employee";
+export type UserRole = "admin" | "shop_owner" | "customer";
 
 export type UserStatus =
     | "pending"
