@@ -1,38 +1,20 @@
-import { Link } from "react-router-dom";
 import { CheckCircle2, Users, Store } from "lucide-react";
+import PageBanner from "../../Components/shared/page-banner/index.js";
 
 export default function AboutPage() {
   return (
     <div className="w-full bg-[#fbfcfd] min-h-screen">
-      {/* Page Header Banner */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#102a4b] via-[#16355e] to-[#214380] text-white py-10 sm:py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
-              About Us
-            </h1>
-            <p className="mt-2 text-sm sm:text-base text-blue-100 font-normal">
-              Learn more about our mission and values
-            </p>
-            <div className="mt-3.5 flex items-center gap-2 text-xs sm:text-sm text-blue-200/90 font-medium">
-              <Link to="/" className="hover:text-white transition-colors">
-                Home
-              </Link>
-              <span>›</span>
-              <span className="text-white">About Us</span>
-            </div>
-          </div>
-
-          {/* Banner Office Team Graphic */}
-          <div className="hidden md:block w-72 lg:w-96 rounded-xl overflow-hidden opacity-90 shadow-md">
-            <img
-              src="/images/about-team-banner@2x.jpg"
-              alt="ShopEase Team Collaborating"
-              className="w-full h-auto object-cover select-none"
-            />
-          </div>
-        </div>
-      </section>
+      {/* Reusable Page Banner */}
+      <PageBanner
+        title="About Us"
+        description="Learn more about our mission and values"
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "About Us" },
+        ]}
+        backgroundImage="/images/about-banner-blend.png"
+        imageAlt="ShopEase Team Collaborating"
+      />
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">

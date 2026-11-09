@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import PageBanner from "../../Components/shared/page-banner/index.js";
 import {
   LayoutGrid,
   Laptop,
@@ -114,54 +115,41 @@ export default function ShopsPage() {
   return (
     <div className="w-full bg-[#fbfcfd] min-h-screen">
       {/* Page Header Banner */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#102a4b] via-[#16355e] to-[#214380] text-white py-10 sm:py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
-              Our Shops
-            </h1>
-            <p className="mt-2 text-sm sm:text-base text-blue-100 font-normal">
-              Explore our trusted shops and find your favorite products
-            </p>
-            <div className="mt-3.5 flex items-center gap-2 text-xs sm:text-sm text-blue-200/90 font-medium">
-              <Link to="/" className="hover:text-white transition-colors">
-                Home
-              </Link>
-              <span>›</span>
-              <span className="text-white">Shops</span>
-            </div>
+      <PageBanner
+        title="Our Shops"
+        description="Explore our trusted shops and find your favorite products"
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Shops" },
+        ]}
+        rightElement={
+          <div className="relative w-44 h-32 flex items-center justify-center opacity-85 select-none">
+            <svg viewBox="0 0 160 140" fill="none" className="w-full h-full text-blue-300">
+              <path
+                d="M 15 120 C 50 115, 75 90, 105 60"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeDasharray="4 4"
+                opacity="0.55"
+              />
+              <rect
+                x="70"
+                y="45"
+                width="72"
+                height="72"
+                rx="9"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              />
+              <path
+                d="M 88 45 V 32 C 88 23 124 23 124 32 V 45"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              />
+            </svg>
           </div>
-
-          {/* Line-art Shopping Bag Illustration */}
-          <div className="hidden md:flex items-center justify-end pr-4">
-            <div className="relative w-44 h-32 flex items-center justify-center opacity-85 select-none">
-              <svg viewBox="0 0 160 140" fill="none" className="w-full h-full text-blue-300">
-                <path
-                  d="M 15 120 C 50 115, 75 90, 105 60"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeDasharray="4 4"
-                  opacity="0.55"
-                />
-                <rect
-                  x="70"
-                  y="45"
-                  width="72"
-                  height="72"
-                  rx="9"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                />
-                <path
-                  d="M 88 45 V 32 C 88 23 124 23 124 32 V 45"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </section>
+        }
+      />
 
       {/* Main Content: Categories Sidebar + Shops Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
