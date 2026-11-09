@@ -4,6 +4,7 @@ import Index from "../view/error-page/index.js";
 import authRoutes from "./auth/index.js";
 import adminRoutes from './admin/index.jsx';
 import HomePage from "../view/home/index.js";
+import ShopsPage from "../view/shops/index.js";
 import employeeRoutes from "./customer/index.js";
 import managerRoutes from "./manager/index.js";
 
@@ -17,6 +18,14 @@ const routes = [
             {
                 path: "/",
                 element: <HomePage />
+            },
+            {
+                path: "/shop",
+                element: <ShopsPage />
+            },
+            {
+                path: "/shops",
+                element: <ShopsPage />
             },
         ]
     },
