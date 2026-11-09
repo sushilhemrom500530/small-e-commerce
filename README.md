@@ -172,21 +172,9 @@ Running **`npm run seeder`** automatically outputs and seeds the following demo 
 
 ---
 
-## Verification & Assessment Walkthrough
+## 🧪 Assessment Walkthrough & Verification Guide
 
-### 1. Run Automated Test Suite
-Execute the comprehensive PHPUnit feature test suite covering all functional requirements:
-```bash
-php artisan test --compact
-```
-**Test Coverage Includes:**
-* `Admin can create a shop and assign an owner`
-* `Shop owner can select product from shared catalog and override price and details`
-* `Customer can only see products assigned to a shop (unassigned products isolated)`
-
----
-
-### 2. Manual Verification Guide
+Follow these step-by-step verification flows to evaluate all functional requirements:
 
 #### Step A: Customer Isolation Check
 1. Open `http://localhost:8000/shops` to view all registered partner shops.
