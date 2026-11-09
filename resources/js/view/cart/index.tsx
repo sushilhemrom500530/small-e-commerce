@@ -23,7 +23,7 @@ import {
   addToCart,
   clearCart,
   DEFAULT_CART_ITEM,
-} from "../../redux/cartSlice.js";
+} from "../../redux/cart-slice/index.js";
 
 export default function CartPage() {
   const dispatch = useAppDispatch();

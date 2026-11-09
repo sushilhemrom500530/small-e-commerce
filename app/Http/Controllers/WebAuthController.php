@@ -100,7 +100,7 @@ class WebAuthController extends Controller
         $request->session()->regenerate();
 
         return redirect()->route('storefront.index')
-            ->with('success', 'Account created successfully! Welcome to ShopEase.');
+            ->with('success', 'Account created successfully!');
     }
 
     /**

@@ -9,15 +9,9 @@ export default function HeroSection() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center">
-          
+
           {/* Left Column: Text & Call to Actions */}
           <div className="lg:col-span-6 xl:col-span-6 text-left">
-            
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-gray-700 bg-white/90 border border-blue-100/80 shadow-2xs mb-5">
-              <span className="text-amber-400 text-sm leading-none">★</span>
-              <span>Welcome to ShopEase</span>
-            </div>
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold tracking-tight leading-[1.12]">

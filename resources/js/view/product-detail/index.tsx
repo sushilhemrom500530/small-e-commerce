@@ -12,7 +12,7 @@ import {
   Check,
 } from "lucide-react";
 import { useAppDispatch } from "../../redux/hooks.js";
-import { addToCart } from "../../redux/cartSlice.js";
+import { addToCart } from "../../redux/cart-slice/index.js";
 
 export default function ProductDetailPage() {
   const dispatch = useAppDispatch();

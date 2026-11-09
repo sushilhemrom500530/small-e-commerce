@@ -1,18 +1,17 @@
-import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Button, Checkbox, Form, Input, message } from "antd";
-import { FcGoogle } from "react-icons/fc";
-import { FaLock, FaUser } from "react-icons/fa";
+import { Button, Form, message } from "antd";
+import { User, Lock } from "lucide-react";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../redux/store.js";
 import { useLoginMutation } from "../../../redux/features/user/index.js";
 import { setCredentials } from "../../../redux/userSlice.js";
+import FormField from "../../../Components/form/index.js";
 import Cookies from "js-cookie";
-
 
 interface LoginFormValues {
     email: string;
     password: string;
+    remember?: boolean;
 }
 
 export default function Login() {
@@ -21,16 +20,17 @@ export default function Login() {
     const dispatch = useDispatch<AppDispatch>();
 
     const [form] = Form.useForm();
-    const [remember, setRemember] = useState(false);
-
     const [login, { isLoading }] = useLoginMutation();
 
     const handleSubmit = async (values: LoginFormValues) => {
         try {
-            const res = await login(values).unwrap();
+            const res = await login({
+                email: values.email,
+                password: values.password,
+            }).unwrap();
 
             Cookies.set("token", res.data.token, {
-                expires: 7, // 7 days
+                expires: values.remember ? 30 : 7,
                 secure: import.meta.env.PROD,
                 sameSite: "Lax",
             });
@@ -66,44 +66,56 @@ export default function Login() {
         }
     };
 
-    const handleGoogleLogin = () => {
-        window.location.href = `${import.meta.env.VITE_PUBLIC_URL}/auth/google`;
-    };
-
     return (
-        <div
-            className="relative flex min-h-screen items-center justify-center bg-fixed bg-cover bg-center bg-no-repeat px-4 py-10"
-            style={{
-                backgroundImage: "url('/image/register.jpg')",
-            }}
-        >
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-black/60"></div>
+        <div className="min-h-screen bg-[#f0f3fa] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+            {/* Split Card Container */}
+            <div className="w-full max-w-[760px] bg-white rounded-3xl shadow-2xl shadow-indigo-100/60 border border-slate-100/80 overflow-hidden flex flex-col md:flex-row">
+                
+                {/* Left Side: Brand Panel */}
+                <div className="w-full md:w-1/2 bg-gradient-to-b from-[#e1ebfd] via-[#ecf1fe] to-[#f5f6ff] p-8 sm:p-10 flex flex-col items-center justify-center text-center select-none">
+                    <div className="w-full flex items-center justify-center mb-5">
+                        <img
+                            src="/images/auth-bags-transparent.png"
+                            alt="E-Commerce Management"
+                            className="w-60 sm:w-64 h-auto max-h-56 object-contain drop-shadow-sm pointer-events-none transform transition-transform hover:scale-105 duration-300"
+                        />
+                    </div>
 
-            {/* Login Card */}
-            <div className="relative z-20 w-full max-w-lg rounded-2xl border border-white/10 bg-white/10 p-8 shadow-2xl backdrop-blur-xl">
-                <div className="mb-8 text-center">
-                    <h1 className="mb-3 text-4xl font-bold text-white">
-                        Hello, Welcome!
-                    </h1>
+                    <h2 className="text-2xl sm:text-[27px] font-black text-[#0f172a] tracking-tight leading-snug mb-2">
+                        E-Commerce<br />Management
+                    </h2>
 
-                    <p className="text-gray-300">
-                        Please enter your details below to continue.
+                    <p className="text-xs sm:text-[13px] text-slate-500 font-normal leading-relaxed max-w-[220px]">
+                        Manage Your Shops &amp; Products<br />in One Place
                     </p>
                 </div>
 
-                <Form
-                    form={form}
-                    layout="vertical"
-                    onFinish={handleSubmit}
-                    autoComplete="off"
-                    requiredMark={false}
-                >
-                    <div className="space-y-4">
-                        {/* Email Field */}
-                        <Form.Item
+                {/* Right Side: Login Form Panel */}
+                <div className="w-full md:w-1/2 bg-white p-8 sm:p-11 flex flex-col justify-center">
+                    <div className="text-center mb-7">
+                        <h1 className="text-2xl sm:text-[27px] font-black text-[#0f172a] tracking-tight mb-1.5">
+                            Welcome Back!
+                        </h1>
+                        <p className="text-xs sm:text-[13px] text-slate-400 font-normal">
+                            Sign in to your account
+                        </p>
+                    </div>
+
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        onFinish={handleSubmit}
+                        autoComplete="off"
+                        requiredMark={false}
+                        initialValues={{ remember: false }}
+                    >
+                        {/* Email Field with FormField */}
+                        <FormField
+                            type="email"
                             name="email"
-                            label={<span className="text-sm font-medium text-white">Email</span>}
+                            placeholder="Email Address"
+                            icon={<User className="w-[18px] h-[18px] text-slate-400 mr-2 shrink-0" />}
+                            className="!rounded-xl !border-slate-200 !bg-white hover:!border-[#4345c9] focus:!border-[#4345c9] text-sm !py-2.5 !px-3.5 mb-4 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
                             rules={[
                                 {
                                     required: true,
@@ -114,23 +126,15 @@ export default function Login() {
                                     message: "Enter a valid email address.",
                                 },
                             ]}
-                        >
-                            <Input
-                                type="email"
-                                placeholder="Enter your email"
-                                size="large"
-                                prefix={<FaUser className="mr-2 text-gray-500" />}
-                                className="!bg-white/10 !text-white"
-                                classNames={{
-                                    input: 'placeholder:!text-white/60'
-                                }}
-                            />
-                        </Form.Item>
+                        />
 
-                        {/* Password Field */}
-                        <Form.Item
+                        {/* Password Field with FormField */}
+                        <FormField
+                            type="password"
                             name="password"
-                            label={<span className="text-sm font-medium text-white">Password</span>}
+                            placeholder="Password"
+                            icon={<Lock className="w-[18px] h-[18px] text-slate-400 mr-2 shrink-0" />}
+                            className="!rounded-xl !border-slate-200 !bg-white hover:!border-[#4345c9] focus:!border-[#4345c9] text-sm !py-2.5 !px-3.5 mb-4 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
                             rules={[
                                 {
                                     required: true,
@@ -141,72 +145,49 @@ export default function Login() {
                                     message: "Password must be at least 6 characters.",
                                 },
                             ]}
-                        >
-                            <Input.Password
-                                placeholder="Enter your password"
-                                size="large"
-                                prefix={<FaLock className="mr-2 text-gray-500" />}
-                                className="!bg-white/10 !text-white"
-                                classNames={{
-                                    input: 'placeholder:!text-white/60'
-                                }}
+                        />
+
+                        {/* Remember me & Forgot Password */}
+                        <div className="flex items-center justify-between mt-2 mb-6">
+                            <FormField
+                                type="checkbox"
+                                name="remember"
+                                placeholder="Remember me"
+                                className="!mb-0 text-slate-600 text-xs sm:text-[13px] font-normal [&_.ant-checkbox-checked_.ant-checkbox-inner]:!bg-[#4345c9] [&_.ant-checkbox-checked_.ant-checkbox-inner]:!border-[#4345c9] cursor-pointer"
                             />
-                        </Form.Item>
-                    </div>
 
-                    <div className="mt-6 mb-8 flex items-center justify-between">
-                        <Checkbox
-                            checked={remember}
-                            onChange={(e) => setRemember(e.target.checked)}
+                            <Link
+                                to="/auth/forgot-password"
+                                className="text-xs sm:text-[13px] font-medium text-[#4345c9] hover:text-[#3234a8] hover:underline transition-colors"
+                            >
+                                Forgot password?
+                            </Link>
+                        </div>
+
+                        {/* Submit Button */}
+                        <Button
+                            htmlType="submit"
+                            type="primary"
+                            size="large"
+                            loading={isLoading}
+                            className="w-full !h-11 sm:!h-12 !rounded-xl !bg-[#4345c9] hover:!bg-[#3537b0] !text-white font-semibold text-sm sm:text-base shadow-lg shadow-[#4345c9]/25 transition-all mb-6 cursor-pointer border-none"
                         >
-                            <span className="text-gray-200">Remember me</span>
-                        </Checkbox>
+                            Login
+                        </Button>
 
-                        <Link
-                            to="/auth/forgot-password"
-                            className="text-sm font-semibold !text-secondary hover:!text-primary/80"
-                        >
-                            Forgot Password?
-                        </Link>
-                    </div>
+                        {/* Register Link */}
+                        <div className="text-center text-xs sm:text-[13px] text-slate-500 font-normal">
+                            Don't have an account?{" "}
+                            <Link
+                                to="/auth/register"
+                                className="font-bold text-[#4345c9] hover:text-[#3234a8] hover:underline transition-colors ml-1"
+                            >
+                                Register
+                            </Link>
+                        </div>
+                    </Form>
+                </div>
 
-                    <Button
-                        htmlType="submit"
-                        type="primary"
-                        size="large"
-                        loading={isLoading}
-                        className="w-full !rounded-xl !bg-primary hover:!bg-primary/90 text-lg font-semibold shadow-md mb-6"
-                    >
-                        Sign In
-                    </Button>
-
-                    <div className="relative mb-6 flex items-center">
-                        <div className="flex-1 border-t border-white/20"></div>
-
-                        <span className="mx-4 text-sm text-gray-300">Or</span>
-
-                        <div className="flex-1 border-t border-white/20"></div>
-                    </div>
-
-                    <button
-                        type="button"
-                        onClick={handleGoogleLogin}
-                        className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/20 py-3 text-white transition-all hover:bg-secondary/10 cursor-pointer"
-                    >
-                        <FcGoogle size={22} />
-                        Continue With Google
-                    </button>
-
-                    <div className="mt-8 text-center text-sm text-gray-300">
-                        Don't have an account?{" "}
-                        <Link
-                            to="/auth/register"
-                            className="font-semibold !text-secondary hover:!text-primary/80"
-                        >
-                            Sign Up
-                        </Link>
-                    </div>
-                </Form>
             </div>
         </div>
     );

@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { baseApi } from './api/index.js'
-import userReducer from './userSlice.js'
-import cartReducer from './cartSlice.js'
+import userReducer from './user-slice/index.js'
+import cartReducer from './cart-slice/index.js'
+
 
 export const store = configureStore({
     reducer: {
