@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -65,16 +66,29 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role === UserRole::Admin->value;
     }
 
+    public function isShopOwner(): bool
+    {
+        return $this->role === UserRole::ShopOwner->value;
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->role === UserRole::Customer->value;
+    }
+
+    /**
+     * Backwards-compatible aliases.
+     */
     public function isProvider(): bool
     {
-        return $this->role === 'provider';
+        return $this->isShopOwner();
     }
 
     public function isClient(): bool
     {
-        return $this->role === 'client';
+        return $this->isCustomer();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -20,7 +21,7 @@ class AppleLoginRequest extends FormRequest
         return [
             'identityToken' => ['required', 'string'],
             // Security fix: strictly prohibit 'admin' role elevation
-            'role' => ['sometimes', 'nullable', 'string', Rule::in(['client', 'provider'])],
+            'role' => ['sometimes', 'nullable', 'string', Rule::in(UserRole::assignableValues())],
             'fullName' => ['sometimes', 'nullable', 'string', 'max:255'],
         ];
     }
@@ -32,7 +33,7 @@ class AppleLoginRequest extends FormRequest
     {
         return [
             'identityToken.required' => 'Apple identity token is required',
-            'role.in' => 'Invalid role. Role must be client or provider',
+            'role.in' => 'Invalid role. Role must be customer or shop_owner',
         ];
     }
 }

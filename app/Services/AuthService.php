@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\UserRole;
 use App\Exceptions\AppException;
 use App\Http\Resources\UserResource;
 use App\Models\TempUser;
@@ -45,7 +46,10 @@ class AuthService
         TempUser::where('email', $normalizedEmail)->delete();
 
         // 3. Security check: normal registration can NEVER assign admin role
-        $role = ($payload['role'] ?? null) === 'provider' ? 'provider' : 'client';
+        $requestedRole = $payload['role'] ?? null;
+        $role = in_array($requestedRole, [UserRole::ShopOwner->value, 'provider'], true)
+            ? UserRole::ShopOwner->value
+            : UserRole::Customer->value;
 
         // 4. Store user registration info in TempUser model
         $tempUser = TempUser::create([
@@ -344,11 +348,13 @@ class AuthService
         }
 
         // Security check: non-admin roles only
-        $requestedRole = $payload['role'] ?? 'client';
-        if ($requestedRole === 'admin') {
-            throw new AppException(400, "Invalid role. Role must be 'client' or 'provider'.");
+        $requestedRole = $payload['role'] ?? UserRole::Customer->value;
+        if ($requestedRole === UserRole::Admin->value) {
+            throw new AppException(400, "Invalid role. Role must be 'customer' or 'shop_owner'.");
         }
-        $role = $requestedRole === 'provider' ? 'provider' : 'client';
+        $role = in_array($requestedRole, [UserRole::ShopOwner->value, 'provider'], true)
+            ? UserRole::ShopOwner->value
+            : UserRole::Customer->value;
 
         $googleData = $this->googleAuthService->verifyGoogleToken($token);
         $googleId = $googleData['sub'];
@@ -444,11 +450,13 @@ class AuthService
         }
 
         // Security check: non-admin roles only
-        $requestedRole = $payload['role'] ?? 'client';
-        if ($requestedRole === 'admin') {
-            throw new AppException(400, "Invalid role. Role must be 'client' or 'provider'.");
+        $requestedRole = $payload['role'] ?? UserRole::Customer->value;
+        if ($requestedRole === UserRole::Admin->value) {
+            throw new AppException(400, "Invalid role. Role must be 'customer' or 'shop_owner'.");
         }
-        $role = $requestedRole === 'provider' ? 'provider' : 'client';
+        $role = in_array($requestedRole, [UserRole::ShopOwner->value, 'provider'], true)
+            ? UserRole::ShopOwner->value
+            : UserRole::Customer->value;
 
         $appleData = $this->appleAuthService->verifyIdentityToken($identityToken);
         $appleId = $appleData['sub'];
@@ -531,9 +539,16 @@ class AuthService
      */
     public function selectRole(string $targetIdentifier, string $role): array
     {
-        // Fix security vulnerability: ONLY client and provider are permissible
-        if (! in_array($role, ['provider', 'client'], true)) {
-            throw new AppException(400, "Invalid role. Role must be 'provider' or 'client'");
+        // Normalize legacy roles
+        if ($role === 'provider') {
+            $role = UserRole::ShopOwner->value;
+        } elseif ($role === 'client') {
+            $role = UserRole::Customer->value;
+        }
+
+        // Security check: ONLY customer and shop_owner are permissible
+        if (! in_array($role, UserRole::assignableValues(), true)) {
+            throw new AppException(400, "Invalid role. Role must be 'shop_owner' or 'customer'");
         }
 
         // Try User model first

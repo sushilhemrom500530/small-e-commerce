@@ -88,7 +88,7 @@ class WebAuthController extends Controller
             'name' => $validated['name'],
             'email' => strtolower(trim($validated['email'])),
             'password' => Hash::make($validated['password']),
-            'role' => 'client',
+            'role' => 'customer',
             'phone_number' => $validated['phone_number'] ?? null,
             'status' => 'active',
             'is_verified' => true,

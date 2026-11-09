@@ -34,7 +34,7 @@ Route::prefix('auth')->group(function () {
 
     // 5. Password Change (requires valid JWT access token)
     Route::post('/change-password', [AuthController::class, 'changePassword'])
-        ->middleware(['throttle:auth.password.change', 'jwt.auth:admin,provider,client']);
+        ->middleware(['throttle:auth.password.change', 'jwt.auth:admin,shop_owner,customer']);
 
     // 6. Social Authentication
     Route::post('/google', [AuthController::class, 'googleSignIn'])
@@ -54,5 +54,5 @@ Route::prefix('auth')->group(function () {
         ->middleware('throttle:auth.refresh');
 
     Route::get('/me', [AuthController::class, 'me'])
-        ->middleware('jwt.auth:admin,provider,client');
+        ->middleware('jwt.auth:admin,shop_owner,customer');
 });

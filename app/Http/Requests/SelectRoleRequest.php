@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,7 +20,7 @@ class SelectRoleRequest extends FormRequest
     {
         return [
             // Security fix: strictly prohibit 'admin' role elevation
-            'role' => ['required', 'string', Rule::in(['client', 'provider'])],
+            'role' => ['required', 'string', Rule::in(UserRole::assignableValues())],
             'email' => ['sometimes', 'nullable', 'string', 'email'],
             'userId' => ['sometimes', 'nullable', 'string'],
         ];
@@ -31,8 +32,8 @@ class SelectRoleRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'role.required' => "Role is required (must be 'provider' or 'client')",
-            'role.in' => "Invalid role. Role must be 'provider' or 'client'",
+            'role.required' => "Role is required (must be 'shop_owner' or 'customer')",
+            'role.in' => "Invalid role. Role must be 'shop_owner' or 'customer'",
             'email.email' => 'Invalid email',
         ];
     }

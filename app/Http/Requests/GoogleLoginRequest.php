@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -22,7 +23,7 @@ class GoogleLoginRequest extends FormRequest
             'identityToken' => ['required_without_all:idToken,token', 'nullable', 'string'],
             'token' => ['required_without_all:idToken,identityToken', 'nullable', 'string'],
             // Security fix: strictly prohibit 'admin' role elevation
-            'role' => ['sometimes', 'nullable', 'string', Rule::in(['client', 'provider'])],
+            'role' => ['sometimes', 'nullable', 'string', Rule::in(UserRole::assignableValues())],
             'fullName' => ['sometimes', 'nullable', 'string', 'max:255'],
         ];
     }
@@ -34,7 +35,7 @@ class GoogleLoginRequest extends FormRequest
     {
         return [
             'idToken.required_without_all' => 'Google ID token is required (idToken, identityToken, or token)',
-            'role.in' => 'Invalid role. Role must be client or provider',
+            'role.in' => 'Invalid role. Role must be customer or shop_owner',
         ];
     }
 }

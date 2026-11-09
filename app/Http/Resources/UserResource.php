@@ -35,7 +35,7 @@ class UserResource extends JsonResource
             'updatedAt' => $this->updated_at?->toISOString() ?? $this->updated_at,
         ];
 
-        if ($this->role === 'provider') {
+        if ($this->role === 'shop_owner' || $this->role === 'provider') {
             $base['serviceName'] = (string) ($this->service_name ?? '');
             $base['serviceLisence'] = (string) ($this->service_lisence ?? '');
         }

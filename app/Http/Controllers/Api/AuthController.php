@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\UserRole;
 use App\Exceptions\AppException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AppleLoginRequest;
@@ -240,11 +241,11 @@ class AuthController extends Controller
      */
     public function googleRedirect(Request $request): RedirectResponse|JsonResponse
     {
-        $role = $request->query('role', 'client');
-        $validRoles = ['client', 'provider']; // Security fix: 'admin' is prohibited
+        $role = $request->query('role', UserRole::Customer->value);
+        $validRoles = UserRole::assignableValues(); // Security fix: 'admin' is prohibited
 
         if (! in_array($role, $validRoles, true)) {
-            return $this->sendError('Invalid role parameter. Must be provider or client.', 400);
+            return $this->sendError('Invalid role parameter. Must be shop_owner or customer.', 400);
         }
 
         $clientId = config('services.google.client_id');
@@ -277,7 +278,7 @@ class AuthController extends Controller
             return $this->sendError('Authentication failed', 401);
         }
 
-        $stateDecoded = ['role' => 'client', 'mobile' => false];
+        $stateDecoded = ['role' => UserRole::Customer->value, 'mobile' => false];
         if ($request->query('state')) {
             try {
                 $decoded = json_decode(base64_decode((string) $request->query('state')), true);
@@ -309,7 +310,7 @@ class AuthController extends Controller
         $idToken = $tokenData['id_token'] ?? null;
         $accessToken = $tokenData['access_token'] ?? null;
 
-        $role = in_array($stateDecoded['role'] ?? '', ['client', 'provider'], true) ? $stateDecoded['role'] : 'client';
+        $role = in_array($stateDecoded['role'] ?? '', UserRole::assignableValues(), true) ? $stateDecoded['role'] : UserRole::Customer->value;
 
         $result = $this->authService->googleSignIn([
             'idToken' => $idToken,

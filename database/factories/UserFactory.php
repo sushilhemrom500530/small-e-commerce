@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +30,7 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password123'),
-            'role' => 'client',
+            'role' => UserRole::Customer->value,
             'phone_number' => fake()->phoneNumber(),
             'gender' => fake()->randomElement(['male', 'female', 'other']),
             'address' => fake()->address(),
@@ -45,24 +46,37 @@ class UserFactory extends Factory
     public function admin(): static
     {
         return $this->state(fn (array $attributes) => [
-            'role' => 'admin',
+            'role' => UserRole::Admin->value,
         ]);
     }
 
-    public function provider(): static
+    public function shopOwner(): static
     {
         return $this->state(fn (array $attributes) => [
-            'role' => 'provider',
+            'role' => UserRole::ShopOwner->value,
             'service_name' => fake()->company(),
             'service_lisence' => Str::upper(Str::random(10)),
         ]);
     }
 
-    public function client(): static
+    public function customer(): static
     {
         return $this->state(fn (array $attributes) => [
-            'role' => 'client',
+            'role' => UserRole::Customer->value,
         ]);
+    }
+
+    /**
+     * Backwards-compatible factory aliases.
+     */
+    public function provider(): static
+    {
+        return $this->shopOwner();
+    }
+
+    public function client(): static
+    {
+        return $this->customer();
     }
 
     public function unverified(): static

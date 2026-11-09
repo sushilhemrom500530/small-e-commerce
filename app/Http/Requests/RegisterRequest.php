@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -22,7 +23,7 @@ class RegisterRequest extends FormRequest
             'password' => ['required', 'string', 'min:6'],
             'confirmPassword' => ['required', 'string', 'min:6', 'same:password'],
             // Security fix: strictly prohibit 'admin' role elevation during registration
-            'role' => ['sometimes', 'nullable', 'string', Rule::in(['client', 'provider'])],
+            'role' => ['sometimes', 'nullable', 'string', Rule::in(UserRole::assignableValues())],
             'name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'phoneNumber' => ['sometimes', 'nullable', 'string', 'max:30'],
             'phone_number' => ['sometimes', 'nullable', 'string', 'max:30'],
@@ -47,7 +48,7 @@ class RegisterRequest extends FormRequest
             'confirmPassword.required' => 'Confirm password is required',
             'confirmPassword.same' => 'Password and confirmPassword must match',
             'confirmPassword.min' => 'Confirm password must be at least 6 characters',
-            'role.in' => 'Invalid role. Must be provider or client',
+            'role.in' => 'Invalid role. Must be shop_owner or customer',
         ];
     }
 }
