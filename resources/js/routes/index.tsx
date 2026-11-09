@@ -1,6 +1,8 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import Cookies from "js-cookie";
 import type { RootState } from "../redux/store.js";
+import { logout } from "../redux/user-slice/index.js";
 import MainLayout from "../layout/main/index.js";
 import Index from "../view/error-page/index.js";
 import authRoutes from "./auth/index.js";
@@ -16,8 +18,19 @@ import employeeRoutes from "./customer/index.js";
 import managerRoutes from "./manager/index.js";
 
 function RoleBasedDashboardRedirect() {
+    const dispatch = useDispatch();
     const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
-    if (!isAuthenticated || !user) {
+    const token =
+        Cookies.get("token") ||
+        Cookies.get("authToken") ||
+        (typeof window !== "undefined"
+            ? localStorage.getItem("token") || localStorage.getItem("authToken")
+            : null);
+
+    if (!token || !isAuthenticated || !user) {
+        if (isAuthenticated) {
+            dispatch(logout());
+        }
         return <Navigate to="/auth/login" replace />;
     }
     if (user.role === "admin") {

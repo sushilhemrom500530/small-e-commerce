@@ -151,7 +151,7 @@ try {
 }
 
 export const initialState: IInitialState = {
-    user: parsedUser,
+    user: storedToken ? parsedUser : null,
     token: storedToken,
     isAuthenticated: !!storedToken && !!parsedUser,
 };

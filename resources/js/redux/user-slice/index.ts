@@ -21,8 +21,15 @@ const authSlice = createSlice({
             state.user = null;
             state.token = null;
             state.isAuthenticated = false;
-            localStorage.removeItem("user");
+            if (typeof window !== "undefined") {
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+                localStorage.removeItem("authToken");
+            }
+            Cookies.remove("token", { path: "/" });
+            Cookies.remove("authToken", { path: "/" });
             Cookies.remove("token");
+            Cookies.remove("authToken");
         },
     },
 });

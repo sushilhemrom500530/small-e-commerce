@@ -41,22 +41,20 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
         <>
             {/* Backdrop for Mobile / Tablet */}
             <div
-                className={`fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 lg:hidden transition-opacity duration-300 ${
-                    navOpened ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-                }`}
+                className={`fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 lg:hidden transition-opacity duration-300 ${navOpened ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                    }`}
                 onClick={() => setNavOpened(false)}
             />
 
             {/* Sidebar drawer */}
             <aside
-                className={`fixed top-0 left-0 z-50 h-screen w-64 bg-white border-r border-slate-200/80 flex flex-col justify-between transition-transform duration-300 ease-in-out ${
-                    navOpened ? "translate-x-0 shadow-2xl" : "-translate-x-full"
-                } lg:translate-x-0 lg:shadow-none`}
+                className={`fixed top-0 left-0 z-50 h-screen w-64 bg-white border-r border-slate-200/80 flex flex-col justify-between transition-transform duration-300 ease-in-out ${navOpened ? "translate-x-0 shadow-2xl" : "-translate-x-full"
+                    } lg:translate-x-0 lg:shadow-none`}
             >
                 {/* Top Section */}
                 <div className="flex flex-col flex-1 overflow-y-auto">
                     {/* Brand Header */}
-                    <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
                         <Link
                             to={homeLink}
                             onClick={() => setNavOpened(false)}
@@ -100,19 +98,17 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
                                     key={index}
                                     to={item.href || "#"}
                                     onClick={() => setNavOpened(false)}
-                                    className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${
-                                        isActive
-                                            ? "bg-primary text-white shadow-md shadow-primary/20"
-                                            : "text-slate-600 hover:text-primary hover:bg-slate-50"
-                                    }`}
+                                    className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${isActive
+                                        ? "bg-primary text-white shadow-md shadow-primary/20"
+                                        : "text-slate-600 hover:text-primary hover:bg-slate-50"
+                                        }`}
                                 >
                                     {Icon && (
                                         <Icon
-                                            className={`w-5 h-5 shrink-0 transition-colors ${
-                                                isActive
-                                                    ? "text-white"
-                                                    : "text-slate-400 group-hover:text-primary"
-                                            }`}
+                                            className={`w-5 h-5 shrink-0 transition-colors ${isActive
+                                                ? "text-white"
+                                                : "text-slate-400 group-hover:text-primary"
+                                                }`}
                                         />
                                     )}
                                     <span className="truncate">{item.label}</span>
@@ -124,14 +120,6 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
 
                 {/* Bottom Section: View Storefront & Logout */}
                 <div className="p-4 border-t border-slate-100 bg-white space-y-1">
-                    <Link
-                        to="/"
-                        className="flex w-full items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-primary hover:bg-primary/5 transition-all duration-200 group cursor-pointer"
-                    >
-                        <Store className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors shrink-0" />
-                        <span>Public Storefront</span>
-                    </Link>
-
                     <button
                         type="button"
                         onClick={handleLogout}
