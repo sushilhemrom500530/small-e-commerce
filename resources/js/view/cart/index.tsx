@@ -28,7 +28,7 @@ export default function CartPage() {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart?.items ?? []);
   const shippingFee = useAppSelector((state) => state.cart?.shippingFee ?? 0);
-  const [checkoutStep, setCheckoutStep] = useState(false);
+  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
 
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -37,10 +37,11 @@ export default function CartPage() {
   const total = subtotal + (cartItems.length > 0 ? shippingFee : 0);
 
   const handleCheckout = () => {
-    setCheckoutStep(true);
+    setCheckoutSuccess(true);
+    dispatch(clearCart());
     setTimeout(() => {
-      setCheckoutStep(false);
-    }, 4000);
+      setCheckoutSuccess(false);
+    }, 6000);
   };
 
   const handleResetSample = () => {
@@ -74,28 +75,28 @@ export default function CartPage() {
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {checkoutStep && (
-          <div className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between">
+        {checkoutSuccess && (
+          <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between shadow-2xs">
             <div className="flex items-center gap-3">
               <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-sm sm:text-base">
-                  Checkout Initiated!
+                <p className="font-semibold text-sm sm:text-base text-emerald-950">
+                  Checkout Successful!
                 </p>
                 <p className="text-xs sm:text-sm text-emerald-700">
-                  Preparing your secure checkout and shipping details...
+                  Your order has been placed successfully and your cart items have been cleared.
                 </p>
               </div>
             </div>
-            <span className="text-xs font-semibold px-2.5 py-1 bg-white rounded-lg border border-emerald-200 text-emerald-700">
-              Processing
+            <span className="text-xs font-semibold px-2.5 py-1 bg-white rounded-lg border border-emerald-200 text-emerald-700 shadow-2xs">
+              Order Confirmed
             </span>
           </div>
         )}
 
         {cartItems.length === 0 ? (
           /* Empty Cart State */
-          <div className="bg-white rounded-3xl border border-gray-200/80 p-8 sm:p-14 text-center max-w-xl mx-auto">
+          <div className="bg-white rounded-3xl border border-gray-200/80 p-8 sm:p-14 text-center w-full">
             <div className="w-20 h-20 mx-auto rounded-3xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 mb-5">
               <ShoppingCart className="w-10 h-10" />
             </div>

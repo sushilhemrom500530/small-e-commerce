@@ -306,7 +306,7 @@ export default function ProductDetailPage() {
       </div>
 
       {/* Frequently Asked Questions Banner */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#102a4b] via-[#16355e] to-[#214380] text-white py-10 sm:py-14 mt-8">
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#102a4b] via-[#16355e] to-[#214380] text-white py-10 sm:py-14 my-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex items-center justify-between">
           <div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
