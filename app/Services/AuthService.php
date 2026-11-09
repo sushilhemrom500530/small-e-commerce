@@ -130,10 +130,24 @@ class AuthService
         $token = $this->jwtService->generateAccessToken($user);
         $refreshToken = $this->jwtService->generateRefreshToken($user);
 
+        $userData = (new UserResource($user))->resolve();
+        $shop = $user->shops()->first();
+        if ($shop) {
+            $userData['shop'] = [
+                'id' => (int) $shop->id,
+                'name' => (string) $shop->name,
+                'slug' => (string) $shop->slug,
+            ];
+            $userData['shopId'] = (int) $shop->id;
+            $userData['shopSlug'] = (string) $shop->slug;
+            $userData['shopName'] = (string) $shop->name;
+        }
+
         return [
-            'user' => (new UserResource($user))->resolve(),
+            'user' => $userData,
             'role' => $user->role,
             'token' => $token,
+            'accessToken' => $token,
             'refreshToken' => $refreshToken,
         ];
     }

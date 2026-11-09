@@ -1,35 +1,32 @@
 import { useState } from "react";
-import { Users, Plus, Search, Mail, Phone, MoreVertical } from "lucide-react";
-import { Button } from "antd";
-
-interface ShopOwner {
-    id: number;
-    name: string;
-    email: string;
-    phone: string;
-    shopName: string;
-    joinedDate: string;
-    status: "Active" | "Pending";
-}
-
-const initialOwners: ShopOwner[] = [
-    { id: 1, name: "John Doe", email: "john@techworld.com", phone: "+1 234 567 890", shopName: "Tech World", joinedDate: "Jan 12, 2026", status: "Active" },
-    { id: 2, name: "Sarah Khan", email: "sarah@fashionhub.com", phone: "+1 234 567 891", shopName: "Fashion Hub", joinedDate: "Feb 05, 2026", status: "Active" },
-    { id: 3, name: "Mike Ross", email: "mike@gadgetstore.com", phone: "+1 234 567 892", shopName: "Gadget Store", joinedDate: "Mar 18, 2026", status: "Active" },
-    { id: 4, name: "Emma Watson", email: "emma@electroplus.com", phone: "+1 234 567 893", shopName: "Electro Plus", joinedDate: "Apr 22, 2026", status: "Active" },
-    { id: 5, name: "Lisa Ray", email: "lisa@beautycare.com", phone: "+1 234 567 894", shopName: "Beauty Care", joinedDate: "May 10, 2026", status: "Active" },
-];
+import { Users, Plus, Search, Mail, Phone, Store } from "lucide-react";
+import { Button, Modal, Form, Input, message } from "antd";
+import {
+    useGetAdminShopOwnersQuery,
+    useCreateAdminShopOwnerMutation,
+    type IShopOwner,
+} from "../../../redux/features/ecommerce/index.js";
 
 export default function ShopOwnersManagement() {
     const [searchTerm, setSearchTerm] = useState("");
-    const [owners] = useState<ShopOwner[]>(initialOwners);
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [form] = Form.useForm();
 
-    const filtered = owners.filter(
-        (o) =>
-            o.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            o.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            o.shopName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const { data, isLoading } = useGetAdminShopOwnersQuery({ search: searchTerm });
+    const [createOwner, { isLoading: isCreating }] = useCreateAdminShopOwnerMutation();
+
+    const owners: IShopOwner[] = data?.results || [];
+
+    const handleCreateOwner = async (values: any) => {
+        try {
+            await createOwner(values).unwrap();
+            message.success("Shop owner account created successfully!");
+            setIsCreateOpen(false);
+            form.resetFields();
+        } catch (err: any) {
+            message.error(err?.data?.message || "Failed to create shop owner.");
+        }
+    };
 
     return (
         <div className="space-y-6">
@@ -39,11 +36,12 @@ export default function ShopOwnersManagement() {
                         Shop Owners
                     </h1>
                     <p className="mt-1 text-sm text-slate-500 font-normal">
-                        Manage shop owners, permissions, and vendor accounts
+                        Manage vendor accounts, permissions, and assigned stores
                     </p>
                 </div>
                 <Button
                     type="primary"
+                    onClick={() => setIsCreateOpen(true)}
                     className="!bg-primary hover:!bg-primary-hover !rounded-xl !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white w-fit cursor-pointer"
                 >
                     <Plus className="w-4 h-4" />
@@ -52,15 +50,20 @@ export default function ShopOwnersManagement() {
             </div>
 
             <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-xs">
-                <div className="relative w-full max-w-xs pb-5 border-b border-slate-100">
-                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                        type="text"
-                        placeholder="Search owners or shops..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
-                    />
+                <div className="flex items-center justify-between gap-4 pb-5 border-b border-slate-100">
+                    <div className="relative w-full max-w-xs">
+                        <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                        <input
+                            type="text"
+                            placeholder="Search owners or shops..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
+                        />
+                    </div>
+                    <span className="text-xs font-semibold text-slate-400">
+                        Total Owners: {owners.length}
+                    </span>
                 </div>
 
                 <div className="overflow-x-auto mt-4">
@@ -72,36 +75,114 @@ export default function ShopOwnersManagement() {
                                 <th className="py-3">Assigned Shop</th>
                                 <th className="py-3">Joined Date</th>
                                 <th className="py-3">Status</th>
-                                <th className="py-3 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50 text-sm">
-                            {filtered.map((owner) => (
-                                <tr key={owner.id} className="hover:bg-slate-50/60 transition-colors">
-                                    <td className="py-4 font-semibold text-slate-800">{owner.name}</td>
-                                    <td className="py-4 text-slate-500 text-xs space-y-0.5">
-                                        <div className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-slate-400" />{owner.email}</div>
-                                        <div className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-slate-400" />{owner.phone}</div>
-                                    </td>
-                                    <td className="py-4 font-medium text-slate-700">{owner.shopName}</td>
-                                    <td className="py-4 text-slate-500">{owner.joinedDate}</td>
-                                    <td className="py-4">
-                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60">
-                                            {owner.status}
-                                        </span>
-                                    </td>
-                                    <td className="py-4 text-right">
-                                        <button className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer">
-                                            <MoreVertical className="w-4 h-4" />
-                                        </button>
+                            {isLoading ? (
+                                <tr>
+                                    <td colSpan={5} className="py-10 text-center text-slate-400">
+                                        Loading shop owners...
                                     </td>
                                 </tr>
-                            ))}
+                            ) : owners.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="py-10 text-center text-slate-400">
+                                        No shop owners found. Click "Add Shop Owner" to create one.
+                                    </td>
+                                </tr>
+                            ) : (
+                                owners.map((owner) => (
+                                    <tr key={owner.id} className="hover:bg-slate-50/60 transition-colors">
+                                        <td className="py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-full bg-blue-50 text-primary flex items-center justify-center font-bold text-sm shrink-0">
+                                                    <Users className="w-5 h-5" />
+                                                </div>
+                                                <span className="font-semibold text-slate-800">{owner.name}</span>
+                                            </div>
+                                        </td>
+                                        <td className="py-4">
+                                            <div className="space-y-1">
+                                                <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                                                    <Mail className="w-3.5 h-3.5 text-slate-400" />
+                                                    <span>{owner.email}</span>
+                                                </div>
+                                                {owner.phoneNumber && (
+                                                    <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                                                        <Phone className="w-3.5 h-3.5 text-slate-400" />
+                                                        <span>{owner.phoneNumber}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="py-4">
+                                            <div className="flex items-center gap-2">
+                                                <Store className="w-4 h-4 text-primary" />
+                                                <span className="font-semibold text-slate-700">
+                                                    {owner.shopName || "None"}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td className="py-4 text-slate-500 text-xs">
+                                            {owner.joinedDate || "Recent"}
+                                        </td>
+                                        <td className="py-4">
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60">
+                                                Active
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            {/* Create Shop Owner Modal */}
+            <Modal
+                title={<span className="text-lg font-bold text-[#0c1b3a]">Create Shop Owner Account</span>}
+                open={isCreateOpen}
+                onCancel={() => setIsCreateOpen(false)}
+                footer={null}
+                centered
+            >
+                <Form form={form} layout="vertical" onFinish={handleCreateOwner} className="mt-4">
+                    <Form.Item name="name" label="Full Name" rules={[{ required: true, message: "Name is required" }]}>
+                        <Input placeholder="e.g. Michael Smith" className="rounded-xl py-2" />
+                    </Form.Item>
+
+                    <Form.Item name="email" label="Email Address" rules={[{ required: true, type: "email", message: "Valid email is required" }]}>
+                        <Input placeholder="owner@store.com" className="rounded-xl py-2" />
+                    </Form.Item>
+
+                    <Form.Item name="password" label="Password" rules={[{ required: true, min: 6, message: "Min 6 characters" }]}>
+                        <Input.Password placeholder="••••••••" className="rounded-xl py-2" />
+                    </Form.Item>
+
+                    <Form.Item name="phoneNumber" label="Phone Number">
+                        <Input placeholder="+8801700000000" className="rounded-xl py-2" />
+                    </Form.Item>
+
+                    <Form.Item name="shopName" label="Assign New Shop Name (Optional)">
+                        <Input placeholder="e.g. Galaxy Electronics" className="rounded-xl py-2" />
+                    </Form.Item>
+
+                    <div className="flex justify-end gap-3 mt-6">
+                        <Button onClick={() => setIsCreateOpen(false)} className="rounded-xl h-10 px-4">
+                            Cancel
+                        </Button>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={isCreating}
+                            className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold"
+                        >
+                            Create Account
+                        </Button>
+                    </div>
+                </Form>
+            </Modal>
         </div>
     );
 }
-

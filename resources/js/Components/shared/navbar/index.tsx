@@ -12,6 +12,17 @@ export default function Navbar() {
   const cartItems = useAppSelector((state) => state.cart?.items ?? []);
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
+  const user = useAppSelector((state) => state.auth?.user);
+  const isAuthenticated = useAppSelector((state) => state.auth?.isAuthenticated);
+
+  const dashboardLink = !isAuthenticated || !user
+    ? "/auth/login"
+    : user.role === "admin"
+      ? "/admin/dashboard"
+      : user.role === "shop_owner"
+        ? "/shop-owner/dashboard"
+        : "/customer/dashboard";
+
   const isActive = (href?: string) => {
     if (!href) return false;
     if (href === "/") return pathname === "/";
@@ -86,11 +97,20 @@ export default function Navbar() {
 
             {/* User Profile Avatar */}
             <Link
-              to="/auth/login"
-              className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 hover:text-primary hover:border-primary transition-colors"
+              to={dashboardLink}
+              className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors"
               aria-label="User Account"
             >
-              <User className="w-4.5 h-4.5 text-slate-700" strokeWidth={1.8} />
+              <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
+                {isAuthenticated && user ? user.name?.charAt(0).toUpperCase() : <User className="w-3.5 h-3.5 text-slate-700" strokeWidth={2} />}
+              </div>
+              {isAuthenticated && user ? (
+                <span className="text-xs font-semibold text-slate-700 hidden sm:inline capitalize">
+                  {user.role?.replace('_', ' ')}
+                </span>
+              ) : (
+                <span className="text-xs font-medium text-slate-600 hidden sm:inline">Sign In</span>
+              )}
             </Link>
 
             {/* Mobile Hamburger Toggle */}

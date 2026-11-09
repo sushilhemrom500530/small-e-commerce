@@ -36,4 +36,3 @@ class ShopResource extends JsonResource
         ];
     }
 }
-

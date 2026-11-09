@@ -1,58 +1,250 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Multi-Shop E-Commerce Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Laravel](https://img.shields.io/badge/Laravel-11%2B-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![React](https://img.shields.io/badge/React-18%2B-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Tests](https://img.shields.io/badge/Tests-Passing-success?style=for-the-badge&logo=checkmarx&logoColor=white)]()
 
-## About Laravel
+A comprehensive **Multi-Shop E-Commerce Management System** built with **Laravel**, **React (TypeScript)**, **Redux Toolkit (RTK Query)**, and **Tailwind CSS**. 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The system enables system administrators to manage shops and master products, while shop owners manage their individual storefronts through a **Shared Product Catalog** with full autonomy to set custom prices, custom descriptions, and shop-specific thumbnails.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🌟 Key Functional Features
 
-## Learning Laravel
+### 1. Admin Panel
+* **Secure Authentication & RBAC**: Dedicated administrative role (`admin`) with protected routes.
+* **Shop Management (CRUD)**: Create, view, update status, and manage registered shops with owner assignments.
+* **Master Product Catalog (CRUD)**: Create and maintain central product catalog items (name, master category, base description, master thumbnail).
+* **Shop Owner Management**: Create and oversee shop owner accounts, associating them with designated shops.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 2. Shop Owner Panel
+* **Shared Catalog Browser**: Shop owners browse the global product catalog and selectively add products to their own shop.
+* **Product Creation into Shared Catalog**: Products created by a shop owner are automatically made available to all other merchants in the shared catalog, fostering inventory syndication.
+* **Shop-Level Overrides**:
+  * Set independent shop-specific retail prices (e.g., Shop A sells Samsung Galaxy A56 at ৳45,000 while Shop B lists it at ৳46,500).
+  * Customize product details/specifications for their storefront.
+  * Upload or assign shop-specific marketing thumbnails, gracefully falling back to master catalog media if uncustomized.
+* **Shop Profile Customization**: Update shop name, description, and storefront branding.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 3. Customer Storefront
+* **Strict Shop-Level Isolation**: Customers only see products assigned to a shop (`shop_products`).
+* **Unassigned Products Hidden**: Master catalog items not assigned to any shop are strictly invisible to storefront visitors.
+* **Shop-Specific Pricing & Media**: Customers view the merchant's customized price, thumbnail, and details.
+* **Multi-Shop Directory**: Public directory of verified shops with search, filtering, and instant storefront access (`/shops` & `/shops/:slug`).
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🏗️ Architecture & Database Design
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Database ERD / Schema
 
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```
++--------------------+       1:N       +---------------------+
+|       users        |<----------------|        shops        |
+|--------------------|                 |---------------------|
+| id (PK)            |                 | id (PK)             |
+| name               |                 | owner_id (FK->users)|
+| email              |                 | name, slug          |
+| role (admin/shop_o)|                 | status, logo        |
++--------------------+                 +---------------------+
+          |                                       |
+      1:N | (created_by)                      1:N |
+          v                                       v
++--------------------+       1:N       +---------------------+
+|      products      |<----------------|    shop_products    |
+| (Shared Catalog)   |                 | (Shop Listing & O/R)|
+|--------------------|                 |---------------------|
+| id (PK)            |                 | id (PK)             |
+| category_id (FK)   |                 | shop_id (FK->shops) |
+| created_by (FK)    |                 | product_id (FK->prod|
+| name, description  |                 | price (Custom Price)|
+| thumbnail          |                 | details (Custom)    |
++--------------------+                 | thumbnail (Custom)  |
+                                       | is_active           |
+                                       +---------------------+
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Conventions
+* **Backend API Payloads**: Consistent **`camelCase`** JSON responses (`shopSlug`, `effectiveThumbnail`, `effectiveDetails`, `productsCount`, `isCustomized`).
+* **State Management**: Redux Toolkit Query (`RTK Query`) with automated cache invalidation tags (`catalog`, `shopProduct`, `shop`, `storefront`).
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 📋 System Requirements
 
-## Code of Conduct
+* **PHP**: `>= 8.2` or `8.3`
+* **Composer**: `>= 2.2`
+* **Node.js**: `>= 18.x` & **npm**: `>= 9.x`
+* **Database**: **PostgreSQL** or **MySQL** (`>= 8.0`)
+* **Web Server**: Built-in Artisan server or Nginx/Apache
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🚀 Step-by-Step Installation & Setup
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 1. Clone the Repository
+```bash
+git clone https://github.com/sushilhemrom500530/small-e-commerce.git
+cd small-e-commerce
+```
 
-## License
+### 2. Install Backend Dependencies
+```bash
+composer install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 3. Environment Setup
+Copy the sample environment file and generate the application key:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+### 4. Configure Database
+Open `.env` and set your database connection details. For example:
+
+**For PostgreSQL:**
+```ini
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=small_e_commerce
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+```
+
+**Or For MySQL:**
+```ini
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=small_e_commerce
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
+
+Create the database in your database engine if it doesn't already exist.
+
+### 5. Run Database Migrations & Seeders
+This seeds the initial categories, demo admin, shop owners, master shared catalog, and shop listings:
+```bash
+php artisan migrate:fresh --seed
+```
+
+### 6. Install Frontend Dependencies & Build
+```bash
+npm install
+npm run build
+```
+*(For active frontend development with Hot Module Replacement, run `npm run dev` in a separate terminal).*
+
+### 7. Start the Application Server
+```bash
+php artisan serve
+```
+
+The application is now live at: **`http://127.0.0.1:8000`**
+
+---
+
+## 🔑 Demo & Test Credentials
+
+The database seeder automatically creates the following test accounts:
+
+| Role | Email | Password | Assigned Shop | Purpose |
+| :--- | :--- | :--- | :--- | :--- |
+| **System Admin** | `admin@example.com` | `password123` | *All Shops / System* | Full system control, shop & catalog CRUD |
+| **Shop Owner 1** | `tech_owner@example.com` | `password123` | **Tech World** | Shared catalog listing, price override |
+| **Shop Owner 2** | `fashion_owner@example.com` | `password123` | **Fashion Hub** | Shared catalog listing, custom details |
+| **Customer** | `customer@example.com` | `password123` | *Storefront Visitor* | View only assigned shop products |
+
+---
+
+## 🧪 Verification & Assessment Walkthrough
+
+### 1. Run Automated Test Suite
+Execute the comprehensive PHPUnit feature test suite covering all functional requirements:
+```bash
+php artisan test --compact
+```
+**Test Coverage Includes:**
+* `Admin can create a shop and assign an owner`
+* `Shop owner can select product from shared catalog and override price and details`
+* `Customer can only see products assigned to a shop (unassigned products isolated)`
+
+---
+
+### 2. Manual Verification Guide
+
+#### Step A: Customer Isolation Check
+1. Open `http://localhost:8000/shops` to view all registered partner shops.
+2. Click **Tech World** (`/shops/tech-world`). Notice that `Samsung Galaxy A56` is listed at **৳45,000**.
+3. Go back to `/shops` and click **Fashion Hub** (`/shops/fashion-hub`). Notice the same `Samsung Galaxy A56` is listed at **৳46,500** with custom details.
+4. **Notice**: The product `Stainless Steel Smart Thermos` (which exists in the master catalog but has not been assigned to any shop) is **completely hidden** from both storefronts.
+
+#### Step B: Shop Owner Shared Catalog & Custom Listing
+1. Log in as `fashion_owner@example.com` (`password123`) at `http://localhost:8000/auth/login`.
+2. Go to **Catalog** (`/shop-owner/dashboard/catalog`).
+3. Find an unadded product (e.g., `Stainless Steel Smart Thermos`) and click **"Add to My Shop"**.
+4. Set your custom price (e.g., `৳1,850`) and custom description.
+5. Visit the Fashion Hub storefront at `/shops/fashion-hub`. The product is now instantly visible to customers at your custom price!
+
+#### Step C: Shop Owner Product Creation (Auto-Catalog)
+1. In the Shop Owner panel, go to **My Products** (`/shop-owner/dashboard/products`) and click **"New Product"**.
+2. Create a new product.
+3. Switch to another shop owner or admin: notice this newly created product is now available in the shared catalog for all merchants!
+
+---
+
+## 📂 Project Directory Structure
+
+```
+├── app/
+│   ├── Enums/
+│   │   └── UserRole.php              # Strict roles: admin, shop_owner, customer
+│   ├── Http/
+│   │   ├── Controllers/Api/          # Clean, single-responsibility API controllers
+│   │   │   ├── AdminShopController.php
+│   │   │   ├── AdminProductController.php
+│   │   │   ├── AdminShopOwnerController.php
+│   │   │   ├── ShopCatalogController.php
+│   │   │   ├── ShopProductController.php
+│   │   │   ├── ShopProfileController.php
+│   │   │   └── StorefrontController.php
+│   │   └── Resources/                # camelCase API resource transformations
+│   │       ├── ShopResource.php
+│   │       ├── ProductResource.php
+│   │       └── ShopProductResource.php
+│   └── Models/
+│       ├── Shop.php
+│       ├── Product.php
+│       ├── ShopProduct.php           # Pivot with effectiveThumbnail & effectiveDetails
+│       └── User.php
+├── database/
+│   ├── migrations/                   # Clean schema migrations
+│   └── seeders/DatabaseSeeder.php    # Complete realistic seed data
+├── resources/js/
+│   ├── redux/
+│   │   └── features/ecommerce/       # Full RTK Query hooks and API cache tags
+│   ├── routes/                       # Role-based protected routes
+│   └── view/
+│       ├── admin/                    # Admin Shops, Products, Shop Owners
+│       ├── shop-owner/               # Shared Catalog, Shop Listings, Shop Profile
+│       ├── shops/                    # Public shop directory
+│       └── storefront/               # Customer shop storefront view
+├── routes/
+│   └── api.php                       # Restful API endpoints under /api/v1
+└── tests/Feature/
+    └── MultiShopEcommerceTest.php    # Verification test suite
+```
+
+---
+
+## 📬 Contact & Submission
+
+* **Recipient**: `career@csnbangladesh.com`
+* **Assessment**: CSN Bangladesh Ltd — Small E-commerce Management
+* **Author**: Sushil Hemrom

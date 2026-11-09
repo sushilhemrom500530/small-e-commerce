@@ -2,122 +2,30 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import PageBanner from "../../Components/shared/page-banner/index.js";
 import {
-  LayoutGrid,
-  Laptop,
-  Shirt,
-  Home,
-  Sparkles,
-  Dumbbell,
-  HeartPulse,
+  Store,
   Search,
-  ChevronDown,
-  Star,
+  Sparkles,
+  ArrowRight,
+  PackageCheck,
+  ShieldCheck
 } from "lucide-react";
-
-interface Shop {
-  id: string;
-  name: string;
-  category: string;
-  categorySlug: string;
-  rating: number;
-  reviewCount: string;
-  image: string;
-  slug: string;
-}
-
-const categories = [
-  { id: "all", name: "All Categories", icon: LayoutGrid },
-  { id: "electronics", name: "Electronics", icon: Laptop },
-  { id: "fashion", name: "Fashion", icon: Shirt },
-  { id: "home", name: "Home & Living", icon: Home },
-  { id: "beauty", name: "Beauty & Personal Care", icon: Sparkles },
-  { id: "sports", name: "Sports", icon: Dumbbell },
-  { id: "health", name: "Health & Wellness", icon: HeartPulse },
-];
-
-const allShops: Shop[] = [
-  {
-    id: "1",
-    name: "Tech World",
-    category: "Electronics & More",
-    categorySlug: "electronics",
-    rating: 4.8,
-    reviewCount: "1.2k reviews",
-    image: "/images/shop-tech-v2.jpg",
-    slug: "tech-world",
-  },
-  {
-    id: "2",
-    name: "Fashion Hub",
-    category: "Trendy Fashion",
-    categorySlug: "fashion",
-    rating: 4.7,
-    reviewCount: "856 reviews",
-    image: "/images/shop-fashion@2x.jpg",
-    slug: "fashion-hub",
-  },
-  {
-    id: "3",
-    name: "Home Decor",
-    category: "Home & Living",
-    categorySlug: "home",
-    rating: 4.7,
-    reviewCount: "720 reviews",
-    image: "/images/shop-home@2x.jpg",
-    slug: "home-decor",
-  },
-  {
-    id: "4",
-    name: "Beauty Zone",
-    category: "Beauty & Care",
-    categorySlug: "beauty",
-    rating: 4.8,
-    reviewCount: "640 reviews",
-    image: "/images/shop-beauty@2x.jpg",
-    slug: "beauty-zone",
-  },
-  {
-    id: "5",
-    name: "Sports Zone",
-    category: "Sports & Fitness",
-    categorySlug: "sports",
-    rating: 4.6,
-    reviewCount: "510 reviews",
-    image: "/images/shop-sports@2x.jpg",
-    slug: "sports-zone",
-  },
-  {
-    id: "6",
-    name: "Health Plus",
-    category: "Health & Wellness",
-    categorySlug: "health",
-    rating: 4.7,
-    reviewCount: "450 reviews",
-    image: "/images/shop-health@2x.jpg",
-    slug: "health-plus",
-  },
-];
+import { useGetStoreShopsQuery } from "../../redux/features/ecommerce/index.js";
 
 export default function ShopsPage() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("popular");
 
-  const filteredShops = allShops.filter((shop) => {
-    const matchesCategory =
-      selectedCategory === "all" || shop.categorySlug === selectedCategory;
-    const matchesSearch =
-      shop.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      shop.category.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+  const { data: shopsData, isLoading } = useGetStoreShopsQuery({
+    search: searchQuery || undefined,
   });
+
+  const shops = shopsData?.results || [];
 
   return (
     <div className="w-full bg-[#fbfcfd] min-h-screen">
       {/* Page Header Banner */}
       <PageBanner
-        title="Our Shops"
-        description="Explore our trusted shops and find your favorite products"
+        title="Explore Partner Shops"
+        description="Discover multi-vendor shops, compare exclusive listings, and browse verified stores"
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Shops" },
@@ -151,124 +59,106 @@ export default function ShopsPage() {
         }
       />
 
-      {/* Main Content: Categories Sidebar + Shops Grid */}
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Search & Statistics Bar */}
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="relative flex-1 w-full max-w-md">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search shops by name or description..."
+              className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
+            />
+          </div>
 
-          {/* Left Sidebar: Categories */}
-          <aside className="lg:col-span-3 bg-white p-5 rounded-2xl border border-gray-200/80 ">
-            <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">
-              Categories
-            </h2>
-
-            <div className="flex flex-col space-y-1.5">
-              {categories.map((cat) => {
-                const Icon = cat.icon;
-                const active = selectedCategory === cat.id;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
-                    className={`flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-left cursor-pointer ${active
-                      ? "bg-primary/10 text-primary font-semibold shadow-2xs"
-                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                      }`}
-                  >
-                    <Icon className={`w-4 h-4 ${active ? "text-primary" : "text-gray-500"}`} />
-                    <span>{cat.name}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </aside>
-
-          {/* Right Main Content */}
-          <main className="lg:col-span-9 space-y-6">
-
-            {/* Search & Sort Header Controls */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="relative flex-1 max-w-md">
-                <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search shops..."
-                  className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm bg-white border border-gray-200/90 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
-                />
-              </div>
-
-              <div className="flex items-center justify-end">
-                <div className="relative inline-flex items-center">
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="appearance-none bg-white border border-gray-200/90 rounded-xl px-4 py-2 pr-9 text-xs sm:text-sm font-medium text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                  >
-                    <option value="popular">Sort by: Popular</option>
-                    <option value="rating">Sort by: Top Rated</option>
-                    <option value="newest">Sort by: Newest</option>
-                  </select>
-                  <ChevronDown className="w-4 h-4 text-gray-500 absolute right-3 pointer-events-none" />
-                </div>
-              </div>
-            </div>
-
-            {/* Shops Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredShops.map((shop) => (
-                <div
-                  key={shop.id}
-                  className="bg-white rounded-2xl border border-gray-200/80 hover:shadow transition-all duration-200 overflow-hidden flex flex-col"
-                >
-                  {/* Shop Image with exact 2.2:1 aspect ratio */}
-                  <div className="relative aspect-[2.2/1] w-full overflow-hidden bg-slate-100">
-                    <img
-                      src={shop.image}
-                      alt={shop.name}
-                      className="w-full h-full object-cover select-none"
-                      loading="lazy"
-                    />
-                  </div>
-
-                  {/* Shop Card Body */}
-                  <div className="p-4 flex flex-col justify-between flex-1">
-                    <div>
-                      <h3 className="text-sm sm:text-base font-bold text-gray-900 leading-snug">
-                        {shop.name}
-                      </h3>
-                      <p className="text-xs text-gray-500 mt-0.5">
-                        {shop.category}
-                      </p>
-                      <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-600">
-                        <span className="text-amber-500 flex items-center gap-0.5 font-bold">
-                          ★ {shop.rating}
-                        </span>
-                        <span className="text-gray-400">({shop.reviewCount})</span>
-                      </div>
-                    </div>
-
-                    <div className="mt-3.5">
-                      <Link
-                        to={`/shops/${shop.slug}`}
-                        className="inline-flex items-center justify-center px-4 py-1.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs"
-                      >
-                        Visit Shop
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {filteredShops.length === 0 && (
-              <div className="text-center py-12 bg-white rounded-2xl border border-gray-200/80 p-8">
-                <p className="text-gray-500 text-sm">No shops found matching your search.</p>
-              </div>
-            )}
-          </main>
-
+          <div className="flex items-center gap-6 text-xs text-slate-500 w-full sm:w-auto justify-end">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" /> All stores verified
+            </span>
+            <span className="flex items-center gap-1.5 font-medium text-slate-700">
+              <Store className="w-4 h-4 text-primary" /> {shops.length} Active {shops.length === 1 ? 'Shop' : 'Shops'}
+            </span>
+          </div>
         </div>
+
+        {/* Shops Grid */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6 h-64 animate-pulse" />
+            ))}
+          </div>
+        ) : shops.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {shops.map((shop) => (
+              <div
+                key={shop.id}
+                className="bg-white rounded-3xl border border-slate-200/90 hover:shadow-xl hover:border-slate-300 transition-all duration-200 overflow-hidden flex flex-col group"
+              >
+                {/* Shop Banner / Image */}
+                <div className="relative aspect-[2.2/1] w-full overflow-hidden bg-slate-100 flex items-center justify-center">
+                  {shop.logo ? (
+                    <img
+                      src={shop.logo}
+                      alt={shop.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/images/shop-tech-v2.jpg";
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-tr from-slate-100 to-indigo-50 flex items-center justify-center">
+                      <Store className="w-12 h-12 text-slate-400" />
+                    </div>
+                  )}
+                  <span className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-xs text-[11px] font-bold text-slate-700 shadow-2xs">
+                    {shop.status || "active"}
+                  </span>
+                </div>
+
+                {/* Shop Card Body */}
+                <div className="p-5 flex flex-col justify-between flex-1">
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 group-hover:text-primary transition-colors">
+                      {shop.name}
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                      {shop.description || "Browse exclusive catalog items curated by this merchant."}
+                    </p>
+
+                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                      <span>Owner: <strong className="text-slate-700 font-medium">{shop.owner?.name || "Verified Merchant"}</strong></span>
+                      <span className="flex items-center gap-1 font-semibold text-primary">
+                        <PackageCheck className="w-3.5 h-3.5" />
+                        {shop.productsCount ?? 0} {shop.productsCount === 1 ? 'Product' : 'Products'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-5">
+                    <Link
+                      to={`/shops/${shop.slug}`}
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-primary text-white text-xs font-semibold rounded-xl transition-colors shadow-2xs"
+                    >
+                      Visit Storefront <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-3xl border border-slate-200/80 p-12 text-center max-w-md mx-auto">
+            <Store className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+            <h3 className="text-base font-bold text-slate-800">No Shops Found</h3>
+            <p className="text-xs text-slate-500 mt-1">
+              There are no active shops matching your search. Try another keyword.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

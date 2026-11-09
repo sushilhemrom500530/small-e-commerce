@@ -14,6 +14,8 @@ export interface IUser {
 
     fullName: string;
 
+    name?: string;
+
     email: string;
 
     role: UserRole;

@@ -4,7 +4,7 @@ import DashboardLayout from "../../layout/dashboard/index.js";
 import ShopOwnerDashboard from "../../view/shop-owner/dashboard/index.js";
 import MyShopPage from "../../view/shop-owner/my-shop/index.js";
 import ProductCatalog from "../../view/shop-owner/catalog/index.js";
-import ManageProducts from "../../view/admin/products/index.js";
+import ShopOwnerProductsPage from "../../view/shop-owner/products/index.js";
 import AddProduct from "../../view/admin/add-product/index.js";
 import ShopOrdersPage from "../../view/shop-owner/orders/index.js";
 import Profile from "../../view/admin/profile/index.js";
@@ -30,7 +30,7 @@ const shopOwnerChildren = [
     },
     {
         path: "dashboard/products",
-        element: <ManageProducts />,
+        element: <ShopOwnerProductsPage />,
     },
     {
         path: "dashboard/product/add",
@@ -54,7 +54,7 @@ const shopOwnerChildren = [
     },
     {
         path: "products",
-        element: <ManageProducts />,
+        element: <ShopOwnerProductsPage />,
     },
     {
         path: "product/add",

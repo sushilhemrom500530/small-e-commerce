@@ -64,4 +64,3 @@ class Shop extends Model
             ->withTimestamps();
     }
 }
-

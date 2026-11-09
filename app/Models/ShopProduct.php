@@ -63,4 +63,3 @@ class ShopProduct extends Model
         return $this->details ?: $this->product?->description;
     }
 }
-

@@ -352,6 +352,23 @@ class AuthController extends Controller
     }
 
     /**
+     * POST /api/v1/auth/logout
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        if ($user && method_exists($user, 'currentAccessToken')) {
+            $user->currentAccessToken()?->delete();
+        }
+
+        $response = $this->sendResponse(null, 'Logged out successfully.', 200);
+        $response->headers->clearCookie('token');
+        $response->headers->clearCookie('refreshToken');
+
+        return $response;
+    }
+
+    /**
      * GET /api/v1/auth/me
      */
     public function me(Request $request): JsonResponse
@@ -361,6 +378,19 @@ class AuthController extends Controller
             throw new AppException(401, 'Unauthenticated');
         }
 
-        return $this->sendResponse((new UserResource($user))->resolve(), 'User profile retrieved successfully.', 200);
+        $userData = (new UserResource($user))->resolve();
+        $shop = $user->shops()->first();
+        if ($shop) {
+            $userData['shop'] = [
+                'id' => (int) $shop->id,
+                'name' => (string) $shop->name,
+                'slug' => (string) $shop->slug,
+            ];
+            $userData['shopId'] = (int) $shop->id;
+            $userData['shopSlug'] = (string) $shop->slug;
+            $userData['shopName'] = (string) $shop->name;
+        }
+
+        return $this->sendResponse($userData, 'User profile retrieved successfully.', 200);
     }
 }

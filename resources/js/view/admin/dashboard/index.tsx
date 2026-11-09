@@ -1,51 +1,51 @@
 import { useState } from "react";
-import { Store, Package, Users, ShoppingCart, ArrowRight, ChevronDown } from "lucide-react";
+import { Store, Package, Users, ShoppingCart, ArrowRight, ChevronDown, CheckCircle2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store.js";
 import { Link } from "react-router-dom";
-
-interface ShopItem {
-    name: string;
-    owner: string;
-    status: "Active" | "Pending" | "Inactive";
-}
-
-const recentShops: ShopItem[] = [
-    { name: "Tech World", owner: "John Doe", status: "Active" },
-    { name: "Fashion Hub", owner: "Sarah Khan", status: "Active" },
-    { name: "Gadget Store", owner: "Mike Ross", status: "Active" },
-    { name: "Electro Plus", owner: "Emma Watson", status: "Active" },
-];
+import {
+    useGetAdminShopsQuery,
+    useGetAdminProductsQuery,
+    useGetAdminShopOwnersQuery,
+} from "../../../redux/features/ecommerce/index.js";
 
 export default function Dashboard() {
     const { user } = useSelector((state: RootState) => state.auth);
     const [timeRange, setTimeRange] = useState("6 Months");
 
+    const { data: shopsData, isLoading: isShopsLoading } = useGetAdminShopsQuery();
+    const { data: productsData, isLoading: isProductsLoading } = useGetAdminProductsQuery();
+    const { data: ownersData, isLoading: isOwnersLoading } = useGetAdminShopOwnersQuery();
+
+    const shops = shopsData?.results || [];
+    const products = productsData?.results || [];
+    const owners = ownersData?.results || [];
+
     const statCards = [
         {
             title: "Total Shops",
-            value: "5",
+            value: isShopsLoading ? "..." : shops.length.toString(),
             icon: Store,
             iconColor: "text-purple-600",
             iconBg: "bg-purple-50",
         },
         {
-            title: "Total Products",
-            value: "120",
+            title: "Catalog Products",
+            value: isProductsLoading ? "..." : products.length.toString(),
             icon: Package,
             iconColor: "text-emerald-500",
             iconBg: "bg-emerald-50",
         },
         {
             title: "Shop Owners",
-            value: "8",
+            value: isOwnersLoading ? "..." : owners.length.toString(),
             icon: Users,
             iconColor: "text-blue-500",
             iconBg: "bg-blue-50",
         },
         {
-            title: "Total Orders",
-            value: "245",
+            title: "Active Listings",
+            value: isShopsLoading ? "..." : shops.reduce((acc, s) => acc + (s.productsCount || 0), 0).toString(),
             icon: ShoppingCart,
             iconColor: "text-amber-500",
             iconBg: "bg-amber-50",
@@ -118,21 +118,28 @@ export default function Dashboard() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-50 text-sm">
-                                    {recentShops.map((shop, idx) => (
-                                        <tr key={idx} className="hover:bg-slate-50/60 transition-colors">
+                                    {shops.slice(0, 5).map((shop) => (
+                                        <tr key={shop.id} className="hover:bg-slate-50/60 transition-colors">
                                             <td className="py-3.5 font-semibold text-slate-800">
                                                 {shop.name}
                                             </td>
                                             <td className="py-3.5 text-slate-500 font-normal">
-                                                {shop.owner}
+                                                {shop.owner?.name || "Unassigned"}
                                             </td>
                                             <td className="py-3.5 text-right sm:text-left">
-                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60">
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60 capitalize">
                                                     {shop.status}
                                                 </span>
                                             </td>
                                         </tr>
                                     ))}
+                                    {shops.length === 0 && (
+                                        <tr>
+                                            <td colSpan={3} className="py-4 text-center text-xs text-slate-400">
+                                                No shops registered yet.
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>

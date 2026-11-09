@@ -1,218 +1,260 @@
 import { useState } from "react";
-import { Plus, Search, Edit2, Trash2 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
-import { message, Popconfirm } from "antd";
-
-interface ProductItem {
-    id: number;
-    name: string;
-    image: string;
-    createdBy: string;
-    status: "Active" | "Inactive";
-}
-
-const initialProducts: ProductItem[] = [
-    {
-        id: 1,
-        name: "Laptop",
-        image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=100&auto=format&fit=crop&q=80",
-        createdBy: "Admin",
-        status: "Active",
-    },
-    {
-        id: 2,
-        name: "Smart Watch",
-        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&auto=format&fit=crop&q=80",
-        createdBy: "Admin",
-        status: "Active",
-    },
-    {
-        id: 3,
-        name: "Headphones",
-        image: "/images/product-headphone-main@2x.jpg",
-        createdBy: "Admin",
-        status: "Active",
-    },
-    {
-        id: 4,
-        name: "Backpack",
-        image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100&auto=format&fit=crop&q=80",
-        createdBy: "Admin",
-        status: "Active",
-    },
-    {
-        id: 5,
-        name: "Shoes",
-        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100&auto=format&fit=crop&q=80",
-        createdBy: "Admin",
-        status: "Active",
-    },
-];
+import { Plus, Search, Edit2, Trash2, Package } from "lucide-react";
+import { Button, Modal, Form, Input, Select, message, Popconfirm } from "antd";
+import {
+    useGetAdminProductsQuery,
+    useCreateAdminProductMutation,
+    useUpdateAdminProductMutation,
+    useDeleteAdminProductMutation,
+    useGetCategoriesQuery,
+    type ICatalogProduct,
+} from "../../../redux/features/ecommerce/index.js";
 
 export default function ManageProducts() {
-    const location = useLocation();
-    const isShopOwner = location.pathname.includes("shop-owner") || location.pathname.includes("manager");
-    const addProductLink = isShopOwner ? "/shop-owner/dashboard/product/add" : "/admin/dashboard/product/add";
-
-    const [products, setProducts] = useState<ProductItem[]>(initialProducts);
     const [searchTerm, setSearchTerm] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
+    const [selectedCategory, setSelectedCategory] = useState<number | undefined>(undefined);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingProduct, setEditingProduct] = useState<ICatalogProduct | null>(null);
+    const [form] = Form.useForm();
 
-    const filtered = products.filter((p) =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const { data, isLoading } = useGetAdminProductsQuery({
+        search: searchTerm,
+        categoryId: selectedCategory,
+    });
+    const { data: catData } = useGetCategoriesQuery();
 
-    const handleDelete = (id: number, name: string) => {
-        setProducts(products.filter((p) => p.id !== id));
-        message.success(`Deleted ${name}`);
+    const [createProduct, { isLoading: isCreating }] = useCreateAdminProductMutation();
+    const [updateProduct, { isLoading: isUpdating }] = useUpdateAdminProductMutation();
+    const [deleteProduct] = useDeleteAdminProductMutation();
+
+    const products: ICatalogProduct[] = data?.results || [];
+    const categories = catData?.results || [];
+
+    const handleOpenCreate = () => {
+        setEditingProduct(null);
+        form.resetFields();
+        setIsModalOpen(true);
+    };
+
+    const handleOpenEdit = (product: ICatalogProduct) => {
+        setEditingProduct(product);
+        form.setFieldsValue({
+            name: product.name,
+            categoryId: product.categoryId,
+            description: product.description,
+            thumbnail: product.thumbnail,
+        });
+        setIsModalOpen(true);
+    };
+
+    const handleSubmit = async (values: any) => {
+        try {
+            if (editingProduct) {
+                await updateProduct({ id: editingProduct.id, body: values }).unwrap();
+                message.success("Product updated successfully!");
+            } else {
+                await createProduct(values).unwrap();
+                message.success("Product added to shared catalog successfully!");
+            }
+            setIsModalOpen(false);
+            form.resetFields();
+        } catch (err: any) {
+            message.error(err?.data?.message || "Operation failed.");
+        }
+    };
+
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteProduct(id).unwrap();
+            message.success("Product removed from catalog successfully!");
+        } catch (err: any) {
+            message.error(err?.data?.message || "Failed to delete product.");
+        }
     };
 
     return (
         <div className="space-y-6">
-            {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0c1b3a] tracking-tight">
-                        Manage Products
+                        Shared Product Catalog
                     </h1>
                     <p className="mt-1 text-sm text-slate-500 font-normal">
-                        View and manage all items currently available in the catalog
+                        Global master catalog available for all shop owners to list in their stores
                     </p>
                 </div>
-
-                <Link
-                    to={addProductLink}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white text-sm font-semibold shadow-md shadow-primary/20 transition-all cursor-pointer w-fit"
+                <Button
+                    type="primary"
+                    onClick={handleOpenCreate}
+                    className="!bg-primary hover:!bg-primary-hover !rounded-xl !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white w-fit cursor-pointer"
                 >
                     <Plus className="w-4 h-4" />
-                    <span>Add Product</span>
-                </Link>
+                    <span>Add to Catalog</span>
+                </Button>
             </div>
 
-            {/* Table Card */}
+            {/* Table Container */}
             <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-xs">
-                {/* Search Bar */}
-                <div className="relative max-w-xs pb-5 border-b border-slate-100">
-                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <input
-                        type="text"
-                        placeholder="Search products..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
-                    />
+                {/* Search & Filter Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+                    <div className="flex flex-wrap items-center gap-3">
+                        <div className="relative w-full sm:w-72">
+                            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                            <input
+                                type="text"
+                                placeholder="Search shared catalog..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
+                            />
+                        </div>
+                        <Select
+                            placeholder="All Categories"
+                            allowClear
+                            onChange={(val) => setSelectedCategory(val)}
+                            className="w-48 !rounded-xl"
+                        >
+                            {categories.map((c) => (
+                                <Select.Option key={c.id} value={c.id}>
+                                    {c.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <span className="text-xs font-semibold text-slate-400">
+                        Total Catalog Items: {products.length}
+                    </span>
                 </div>
 
-                {/* Table */}
                 <div className="overflow-x-auto mt-4">
                     <table className="w-full text-left">
                         <thead>
                             <tr className="border-b border-slate-100 text-xs font-semibold text-slate-400">
-                                <th className="py-3 px-2 w-12">#</th>
-                                <th className="py-3 px-3">Product</th>
-                                <th className="py-3 px-3">Created By</th>
-                                <th className="py-3 px-3">Status</th>
-                                <th className="py-3 px-3 text-right">Actions</th>
+                                <th className="py-3">Product</th>
+                                <th className="py-3">Category</th>
+                                <th className="py-3">Created By</th>
+                                <th className="py-3 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50 text-sm">
-                            {filtered.map((item, index) => (
-                                <tr key={item.id} className="hover:bg-slate-50/60 transition-colors">
-                                    <td className="py-3.5 px-2 font-bold text-slate-500">
-                                        {index + 1}
-                                    </td>
-                                    <td className="py-3.5 px-3">
-                                        <div className="flex items-center gap-3.5">
-                                            <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 overflow-hidden flex items-center justify-center p-1 shrink-0">
-                                                <img
-                                                    src={item.image}
-                                                    alt={item.name}
-                                                    className="w-full h-full object-contain"
-                                                    onError={(e: any) => {
-                                                        e.target.src = "/images/product-headphone-main@2x.jpg";
-                                                    }}
-                                                />
-                                            </div>
-                                            <span className="font-bold text-slate-800">
-                                                {item.name}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="py-3.5 px-3 font-medium text-slate-600">
-                                        {item.createdBy}
-                                    </td>
-                                    <td className="py-3.5 px-3">
-                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60">
-                                            {item.status}
-                                        </span>
-                                    </td>
-                                    <td className="py-3.5 px-3 text-right">
-                                        <div className="inline-flex items-center gap-2">
-                                            <button
-                                                type="button"
-                                                onClick={() => message.info(`Editing ${item.name}`)}
-                                                className="w-8 h-8 rounded-lg bg-primary hover:bg-primary-hover text-white flex items-center justify-center transition-colors cursor-pointer"
-                                                aria-label="Edit"
-                                            >
-                                                <Edit2 className="w-3.5 h-3.5" />
-                                            </button>
-
-                                            <Popconfirm
-                                                title="Delete product"
-                                                description="Are you sure you want to delete this product?"
-                                                onConfirm={() => handleDelete(item.id, item.name)}
-                                                okText="Yes"
-                                                cancelText="No"
-                                            >
-                                                <button
-                                                    type="button"
-                                                    className="w-8 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-colors cursor-pointer"
-                                                    aria-label="Delete"
-                                                >
-                                                    <Trash2 className="w-3.5 h-3.5" />
-                                                </button>
-                                            </Popconfirm>
-                                        </div>
+                            {isLoading ? (
+                                <tr>
+                                    <td colSpan={4} className="py-10 text-center text-slate-400">
+                                        Loading shared catalog...
                                     </td>
                                 </tr>
-                            ))}
+                            ) : products.length === 0 ? (
+                                <tr>
+                                    <td colSpan={4} className="py-10 text-center text-slate-400">
+                                        No products in the catalog yet.
+                                    </td>
+                                </tr>
+                            ) : (
+                                products.map((product) => (
+                                    <tr key={product.id} className="hover:bg-slate-50/60 transition-colors">
+                                        <td className="py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center shrink-0">
+                                                    {product.thumbnail ? (
+                                                        <img src={product.thumbnail} alt={product.name} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <Package className="w-5 h-5 text-slate-400" />
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <span className="font-semibold text-slate-800 block">{product.name}</span>
+                                                    <span className="text-xs text-slate-400 line-clamp-1 max-w-md">{product.description || "No description"}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="py-4">
+                                            <span className="inline-block px-2.5 py-0.5 rounded-lg bg-blue-50 text-primary font-semibold text-xs border border-blue-100">
+                                                {product.categoryName || "Uncategorized"}
+                                            </span>
+                                        </td>
+                                        <td className="py-4">
+                                            <span className="text-slate-700 font-medium block">{product.creatorName || "Admin"}</span>
+                                            <span className="text-xs text-slate-400 capitalize">{product.creatorRole || "admin"}</span>
+                                        </td>
+                                        <td className="py-4 text-right">
+                                            <div className="flex items-center justify-end gap-1">
+                                                <button
+                                                    onClick={() => handleOpenEdit(product)}
+                                                    className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-blue-50 transition-colors cursor-pointer"
+                                                >
+                                                    <Edit2 className="w-4 h-4" />
+                                                </button>
+                                                <Popconfirm
+                                                    title="Remove from shared catalog?"
+                                                    description="This will delete this product from the global catalog and all shops."
+                                                    onConfirm={() => handleDelete(product.id)}
+                                                    okText="Yes, Delete"
+                                                    okButtonProps={{ danger: true }}
+                                                >
+                                                    <button className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </Popconfirm>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>
-
-                {/* Pagination */}
-                <div className="flex items-center justify-end gap-1.5 pt-5 mt-4 border-t border-slate-100">
-                    <button
-                        type="button"
-                        onClick={() => setCurrentPage(1)}
-                        className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                            currentPage === 1
-                                ? "bg-primary text-white shadow-sm"
-                                : "text-slate-600 hover:bg-slate-100"
-                        }`}
-                    >
-                        1
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setCurrentPage(2)}
-                        className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                            currentPage === 2
-                                ? "bg-primary text-white shadow-sm"
-                                : "text-slate-600 hover:bg-slate-100"
-                        }`}
-                    >
-                        2
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setCurrentPage(2)}
-                        className="w-8 h-8 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer"
-                    >
-                        &gt;
-                    </button>
-                </div>
             </div>
+
+            {/* Create/Edit Product Modal */}
+            <Modal
+                title={
+                    <span className="text-lg font-bold text-[#0c1b3a]">
+                        {editingProduct ? "Edit Catalog Product" : "Add Product to Shared Catalog"}
+                    </span>
+                }
+                open={isModalOpen}
+                onCancel={() => setIsModalOpen(false)}
+                footer={null}
+                centered
+            >
+                <Form form={form} layout="vertical" onFinish={handleSubmit} className="mt-4">
+                    <Form.Item name="name" label="Product Name" rules={[{ required: true, message: "Product name is required" }]}>
+                        <Input placeholder="e.g. Samsung Galaxy A56" className="rounded-xl py-2" />
+                    </Form.Item>
+
+                    <Form.Item name="categoryId" label="Category">
+                        <Select placeholder="Select a category" className="rounded-xl">
+                            {categories.map((c) => (
+                                <Select.Option key={c.id} value={c.id}>
+                                    {c.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+
+                    <Form.Item name="description" label="Global Master Description">
+                        <Input.TextArea rows={3} placeholder="Comprehensive description for the shared catalog..." className="rounded-xl" />
+                    </Form.Item>
+
+                    <Form.Item name="thumbnail" label="Master Thumbnail URL">
+                        <Input placeholder="https://example.com/image.jpg" className="rounded-xl py-2" />
+                    </Form.Item>
+
+                    <div className="flex justify-end gap-3 mt-6">
+                        <Button onClick={() => setIsModalOpen(false)} className="rounded-xl h-10 px-4">
+                            Cancel
+                        </Button>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={isCreating || isUpdating}
+                            className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold"
+                        >
+                            {editingProduct ? "Save Changes" : "Add to Catalog"}
+                        </Button>
+                    </div>
+                </Form>
+            </Modal>
         </div>
     );
 }

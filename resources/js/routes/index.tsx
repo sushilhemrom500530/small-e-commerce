@@ -5,6 +5,7 @@ import authRoutes from "./auth/index.js";
 import adminRoutes from './admin/index.jsx';
 import HomePage from "../view/home/index.js";
 import ShopsPage from "../view/shops/index.js";
+import StorefrontPage from "../view/storefront/index.js";
 import ProductDetailPage from "../view/product-detail/index.js";
 import AboutPage from "../view/about/index.js";
 import ContactPage from "../view/contact/index.js";
@@ -32,8 +33,12 @@ const routes = [
                 element: <ShopsPage />
             },
             {
-                path: "/shops/:id",
-                element: <ProductDetailPage />
+                path: "/shops/:slug",
+                element: <StorefrontPage />
+            },
+            {
+                path: "/store/:slug",
+                element: <StorefrontPage />
             },
             {
                 path: "/product/:id",
