@@ -20,7 +20,7 @@ export default function AboutPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         {/* Mission Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
+
           {/* Left: Mission Text */}
           <div className="lg:col-span-6 space-y-6">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight">
@@ -60,7 +60,7 @@ export default function AboutPage() {
         {/* Bottom Metrics / Statistics Strip */}
         <div className="mt-12 bg-white rounded-2xl border border-gray-200/80 shadow-2xs p-6 sm:p-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 gap-6 sm:gap-0">
-            
+
             {/* Metric 1 */}
             <div className="flex items-center justify-center gap-4 py-2 sm:py-0">
               <div className="text-[#2563eb]">
