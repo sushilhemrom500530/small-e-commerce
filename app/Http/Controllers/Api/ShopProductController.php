@@ -150,15 +150,28 @@ class ShopProductController extends Controller
 
         $shopProduct = ShopProduct::where('shop_id', $shop->id)
             ->where('id', $id)
+            ->with(['product.category', 'shop'])
             ->firstOrFail();
 
         $validated = $request->validate([
+            'name' => 'sometimes|nullable|string|max:255',
             'price' => 'sometimes|required|numeric|min:0',
             'details' => 'nullable|string',
             'thumbnail' => 'nullable|string',
             'isActive' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
+            'categoryId' => 'sometimes|nullable|exists:categories,id',
+            'category_id' => 'sometimes|nullable|exists:categories,id',
         ]);
+
+        if (! empty($validated['name']) && $shopProduct->product) {
+            $shopProduct->product->update(['name' => $validated['name']]);
+        }
+
+        if ((array_key_exists('categoryId', $validated) || array_key_exists('category_id', $validated)) && $shopProduct->product) {
+            $catId = $validated['categoryId'] ?? $validated['category_id'];
+            $shopProduct->product->update(['category_id' => $catId]);
+        }
 
         if (array_key_exists('price', $validated)) {
             $shopProduct->price = $validated['price'];
@@ -179,7 +192,7 @@ class ShopProductController extends Controller
         $shopProduct->save();
 
         return $this->sendResponse(
-            new ShopProductResource($shopProduct->load(['product.category', 'shop'])),
+            new ShopProductResource($shopProduct->fresh(['product.category', 'shop'])),
             'Shop product listing updated successfully.'
         );
     }

@@ -31,6 +31,8 @@ export default function ShopOwnerProductsPage() {
     const handleOpenEdit = (sp: IShopProduct) => {
         setEditingProduct(sp);
         form.setFieldsValue({
+            name: sp.name,
+            categoryId: sp.category?.id,
             price: sp.price,
             details: sp.details,
             thumbnail: sp.thumbnail,
@@ -44,13 +46,15 @@ export default function ShopOwnerProductsPage() {
             await updateShopProduct({
                 id: editingProduct.id,
                 body: {
+                    name: values.name,
+                    categoryId: values.categoryId,
                     price: values.price,
                     details: values.details,
                     thumbnail: values.thumbnail,
                     isActive: values.isActive,
                 },
             }).unwrap();
-            message.success("Shop product pricing & details updated successfully!");
+            message.success("Product name, pricing, and details updated successfully!");
             setEditingProduct(null);
             form.resetFields();
         } catch (err: any) {
@@ -90,7 +94,7 @@ export default function ShopOwnerProductsPage() {
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Link to="/shop/catalog">
+                    <Link to="/shop-owner/dashboard/catalog">
                         <Button className="!rounded-xl !h-10 !px-4 !font-semibold">
                             Browse Shared Catalog
                         </Button>
@@ -186,11 +190,10 @@ export default function ShopOwnerProductsPage() {
                                             </div>
                                         </td>
                                         <td className="py-4">
-                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                                                sp.isActive
-                                                    ? "bg-emerald-50 text-emerald-600 border border-emerald-200/60"
-                                                    : "bg-slate-100 text-slate-500"
-                                            }`}>
+                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${sp.isActive
+                                                ? "bg-emerald-50 text-emerald-600 border border-emerald-200/60"
+                                                : "bg-slate-100 text-slate-500"
+                                                }`}>
                                                 {sp.isActive ? "Live in Store" : "Hidden"}
                                             </span>
                                         </td>
@@ -240,6 +243,24 @@ export default function ShopOwnerProductsPage() {
                     Changes made here apply only to your shop's listing. The shared global product remains unaffected.
                 </p>
                 <Form form={form} layout="vertical" onFinish={handleSaveEdit}>
+                    <Form.Item
+                        name="name"
+                        label="Product Name"
+                        rules={[{ required: true, message: "Product name is required" }]}
+                    >
+                        <Input placeholder="Enter product name..." className="rounded-xl py-2 font-medium text-slate-800" />
+                    </Form.Item>
+
+                    <Form.Item name="categoryId" label="Category">
+                        <Select placeholder="Select a category" className="rounded-xl" allowClear>
+                            {categories.map((c) => (
+                                <Select.Option key={c.id} value={c.id}>
+                                    {c.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+
                     <Form.Item name="price" label="Your Selling Price (৳ BDT)" rules={[{ required: true, message: "Price is required" }]}>
                         <InputNumber min={0} className="w-full rounded-xl py-1 text-base font-bold text-slate-800" />
                     </Form.Item>

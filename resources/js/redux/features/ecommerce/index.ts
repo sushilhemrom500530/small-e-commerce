@@ -206,13 +206,13 @@ export const ecommerceApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["shopProduct", "catalog", "product", "storefront", "shop"],
         }),
-        updateShopProduct: builder.mutation<{ results: IShopProduct }, { id: number; body: Partial<IShopProduct> }>({
+        updateShopProduct: builder.mutation<{ results: IShopProduct }, { id: number; body: Partial<IShopProduct> & { categoryId?: number; name?: string } }>({
             query: ({ id, body }) => ({
                 url: `/shop/products/${id}`,
                 method: "PUT",
                 body,
             }),
-            invalidatesTags: ["shopProduct", "storefront"],
+            invalidatesTags: ["shopProduct", "storefront", "catalog", "product", "shop"],
         }),
         deleteShopProduct: builder.mutation<{ results: null }, number>({
             query: (id) => ({
