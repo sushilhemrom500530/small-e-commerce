@@ -40,7 +40,7 @@ export default function ContactPage() {
       {/* Main Content: Info & Form */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          
+
           {/* Left Column: Get in Touch Info */}
           <div className="lg:col-span-5 space-y-6">
             <div>
@@ -97,7 +97,7 @@ export default function ContactPage() {
                   key={item.id}
                   href={`#${item.id}`}
                   aria-label={item.label}
-                  className="w-8 h-8 rounded-full bg-[#2563eb] hover:bg-blue-700 text-white flex items-center justify-center transition-colors shadow-2xs"
+                  className="w-8 h-8 rounded-full bg-[#2563eb] hover:bg-blue-700 text-white flex items-center justify-center transition-colors "
                 >
                   {item.icon}
                 </a>
@@ -107,7 +107,7 @@ export default function ContactPage() {
 
           {/* Right Column: Contact Form */}
           <div className="lg:col-span-7">
-            <div className="bg-white rounded-2xl border border-gray-200/80 p-6 sm:p-8 shadow-2xs">
+            <div className="bg-white rounded-2xl border border-gray-200/80 p-6 sm:p-8 ">
               {submitted ? (
                 <div className="py-12 text-center space-y-3">
                   <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto text-xl font-bold">
@@ -160,7 +160,7 @@ export default function ContactPage() {
                   <div className="pt-1">
                     <button
                       type="submit"
-                      className="w-full bg-[#2563eb] hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors text-sm shadow-2xs"
+                      className="w-full bg-[#2563eb] hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors text-sm cursor-pointer"
                     >
                       Send Message
                     </button>

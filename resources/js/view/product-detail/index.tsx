@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Star,
   CheckCircle2,
@@ -9,13 +9,36 @@ import {
   RotateCcw,
   Minus,
   Plus,
+  Check,
 } from "lucide-react";
+import { useAppDispatch } from "../../redux/hooks.js";
+import { addToCart } from "../../redux/cartSlice.js";
 
 export default function ProductDetailPage() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(1);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [addedToast, setAddedToast] = useState(false);
+
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        id: "wireless-headphones-1",
+        name: "Wireless Headphones",
+        price: 89.99,
+        originalPrice: 120.0,
+        image: "/images/product-headphone-main@2x.jpg",
+        quantity,
+        specs: ["Bluetooth 5.0", "Noise Cancellation", "Long Battery"],
+        shopName: "Tech World",
+      })
+    );
+    setAddedToast(true);
+    setTimeout(() => setAddedToast(false), 3000);
+  };
 
   const thumbnails = [
     { id: 1, src: "/images/product-thumb-1@2x.jpg" },
@@ -168,9 +191,20 @@ export default function ProductDetailPage() {
                 {/* Add to Cart Button */}
                 <button
                   type="button"
-                  className="flex-1 min-w-[180px] bg-[#2563eb] hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl shadow-sm shadow-blue-500/20 transition-colors text-sm text-center"
+                  onClick={handleAddToCart}
+                  className={`flex-1 min-w-[180px] font-semibold py-3 px-6 rounded-xl shadow-sm transition-all text-sm text-center flex items-center justify-center gap-2 ${
+                    addedToast
+                      ? "bg-emerald-600 text-white shadow-emerald-500/20"
+                      : "bg-[#2563eb] hover:bg-blue-700 text-white shadow-blue-500/20"
+                  }`}
                 >
-                  Add to Cart
+                  {addedToast ? (
+                    <>
+                      <Check className="w-4 h-4" /> Added to Cart!
+                    </>
+                  ) : (
+                    "Add to Cart"
+                  )}
                 </button>
 
                 {/* Wishlist Button */}

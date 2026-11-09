@@ -47,7 +47,7 @@ export default function AboutPage() {
 
           {/* Right: Smiling Shopper Graphic */}
           <div className="lg:col-span-6 flex justify-center lg:justify-end">
-            <div className="w-full max-w-[480px] rounded-2xl sm:rounded-3xl overflow-hidden border border-gray-200/70 shadow-sm bg-white">
+            <div className="w-full max-w-[480px] rounded-2xl sm:rounded-3xl overflow-hidden border border-gray-200/70 bg-white">
               <img
                 src="/images/about-shopper-woman@2x.jpg"
                 alt="Happy customer with shopping bags giving thumbs up"
@@ -59,7 +59,7 @@ export default function AboutPage() {
         </div>
 
         {/* Bottom Metrics / Statistics Strip */}
-        <div className="mt-12 bg-white rounded-2xl border border-gray-200/80 shadow-2xs p-6 sm:p-8">
+        <div className="mt-12 bg-white rounded-2xl border border-gray-200/80 p-6 sm:p-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 gap-6 sm:gap-0">
 
             {/* Metric 1 */}

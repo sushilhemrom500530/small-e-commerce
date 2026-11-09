@@ -3,11 +3,14 @@ import { Link, useLocation } from "react-router-dom";
 import { Search, ShoppingCart, User, Menu, X } from "lucide-react";
 import Logo from "../logo/index.js";
 import { navLinks, type MenuItem } from "../../../data/menu-items/index.js";
+import { useAppSelector } from "../../../redux/hooks.js";
 
 export default function Navbar() {
   const { pathname } = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const cartItems = useAppSelector((state) => state.cart?.items ?? []);
+  const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   const isActive = (href?: string) => {
     if (!href) return false;
@@ -74,9 +77,11 @@ export default function Navbar() {
               aria-label="Shopping Cart"
             >
               <ShoppingCart className="w-5 h-5 text-gray-700" strokeWidth={1.8} />
-              <span className="absolute top-0 right-0 bg-[#ef4444] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-white">
-                1
-              </span>
+              {totalCartCount > 0 && (
+                <span className="absolute top-0 right-0 bg-[#ef4444] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-white">
+                  {totalCartCount}
+                </span>
+              )}
             </Link>
 
             {/* User Profile Avatar */}

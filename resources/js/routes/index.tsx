@@ -8,6 +8,7 @@ import ShopsPage from "../view/shops/index.js";
 import ProductDetailPage from "../view/product-detail/index.js";
 import AboutPage from "../view/about/index.js";
 import ContactPage from "../view/contact/index.js";
+import CartPage from "../view/cart/index.js";
 import employeeRoutes from "./customer/index.js";
 import managerRoutes from "./manager/index.js";
 
@@ -53,6 +54,14 @@ const routes = [
             {
                 path: "/contact-us",
                 element: <ContactPage />
+            },
+            {
+                path: "/cart",
+                element: <CartPage />
+            },
+            {
+                path: "/shipping",
+                element: <CartPage />
             },
         ]
     },
