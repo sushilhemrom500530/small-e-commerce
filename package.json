@@ -5,8 +5,6 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc -b && vite build",
-        "seeder": "php artisan db:seed",
-        "seed": "php artisan db:seed",
         "seed:fresh": "php artisan migrate:fresh --seed"
     },
     "dependencies": {

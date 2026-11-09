@@ -129,15 +129,13 @@ DB_PASSWORD=your_password
 Create the database in your database engine if it doesn't already exist.
 
 ### 5. Run Database Migrations & Seeders
-This creates the schema and seeds demo accounts (admin, shop owners, customers, categories, shops, and products). You can run this via **`npm run seeder`** (Node.js convention) or artisan:
+This creates the schema and seeds demo accounts (admin, shop owners, customers, categories, shops, and products):
 
 ```bash
-# Option A (Convenient Node.js command):
-npm run seeder
-
-# Option B (Fresh migration + seed):
+# Using npm script:
 npm run seed:fresh
-# or
+
+# Or using Laravel Artisan:
 php artisan migrate:fresh --seed
 ```
 
@@ -157,9 +155,9 @@ The application is now live at: **`http://127.0.0.1:8000`**
 
 ---
 
-## Demo & Test Credentials
+## 🔑 Demo & Test Credentials
 
-Running **`npm run seeder`** automatically outputs and seeds the following demo credentials:
+The database seeder automatically creates the following demo credentials:
 
 | Role | Name | Email | Password | Assigned Shop / Role Details |
 | :--- | :--- | :--- | :--- | :--- |
