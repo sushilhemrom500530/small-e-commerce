@@ -117,7 +117,7 @@ export default function ShopOwnerDashboard() {
 
                                 <Link
                                     to="/shop-owner/dashboard/my-shop"
-                                    className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-[#4353ff] hover:bg-[#3234a8] text-white text-xs sm:text-sm font-semibold shadow-md shadow-[#4353ff]/20 transition-all cursor-pointer mt-1"
+                                    className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs sm:text-sm font-semibold shadow-md shadow-primary/20 transition-all cursor-pointer mt-1"
                                 >
                                     Manage Shop
                                 </Link>
@@ -135,7 +135,7 @@ export default function ShopOwnerDashboard() {
                             </h2>
                             <Link
                                 to="/shop-owner/dashboard/orders"
-                                className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-[#4353ff] hover:text-[#3234a8] transition-colors"
+                                className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-primary hover:text-primary-hover transition-colors"
                             >
                                 <span>View All</span>
                                 <ArrowRight className="w-3.5 h-3.5" />

@@ -82,7 +82,7 @@ export default function ManageProducts() {
 
                 <Link
                     to={addProductLink}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#4353ff] hover:bg-[#3234a8] text-white text-sm font-semibold shadow-md shadow-[#4353ff]/20 transition-all cursor-pointer w-fit"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white text-sm font-semibold shadow-md shadow-primary/20 transition-all cursor-pointer w-fit"
                 >
                     <Plus className="w-4 h-4" />
                     <span>Add Product</span>
@@ -99,7 +99,7 @@ export default function ManageProducts() {
                         placeholder="Search products..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-[#4353ff]"
+                        className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
                     />
                 </div>
 
@@ -151,7 +151,7 @@ export default function ManageProducts() {
                                             <button
                                                 type="button"
                                                 onClick={() => message.info(`Editing ${item.name}`)}
-                                                className="w-8 h-8 rounded-lg bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center transition-colors cursor-pointer"
+                                                className="w-8 h-8 rounded-lg bg-primary hover:bg-primary-hover text-white flex items-center justify-center transition-colors cursor-pointer"
                                                 aria-label="Edit"
                                             >
                                                 <Edit2 className="w-3.5 h-3.5" />
@@ -187,7 +187,7 @@ export default function ManageProducts() {
                         onClick={() => setCurrentPage(1)}
                         className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                             currentPage === 1
-                                ? "bg-[#4353ff] text-white shadow-sm"
+                                ? "bg-primary text-white shadow-sm"
                                 : "text-slate-600 hover:bg-slate-100"
                         }`}
                     >
@@ -198,7 +198,7 @@ export default function ManageProducts() {
                         onClick={() => setCurrentPage(2)}
                         className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                             currentPage === 2
-                                ? "bg-[#4353ff] text-white shadow-sm"
+                                ? "bg-primary text-white shadow-sm"
                                 : "text-slate-600 hover:bg-slate-100"
                         }`}
                     >

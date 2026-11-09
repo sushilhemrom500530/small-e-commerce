@@ -147,7 +147,7 @@ export default function CreateSalesContent() {
                             </div>
 
                             <div className="flex justify-between items-end mt-1">
-                                <div className="font-bold text-blue-600">
+                                <div className="font-bold text-primary">
                                     ${(item.price * item.quantity).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </div>
 
@@ -240,7 +240,7 @@ export default function CreateSalesContent() {
                         <Input
                             placeholder="Search products..."
                             prefix={<Search className="w-4 h-4 text-gray-400" />}
-                            className="h-11 rounded-xl bg-gray-50 border-transparent hover:border-blue-200 focus:border-blue-500 focus:bg-white transition-all"
+                            className="h-11 rounded-xl bg-gray-50 border-transparent hover:border-primary/30 focus:border-primary focus:bg-white transition-all"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             allowClear

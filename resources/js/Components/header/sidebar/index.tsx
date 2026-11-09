@@ -62,7 +62,7 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
                             onClick={() => setNavOpened(false)}
                             className="flex items-center gap-3 group"
                         >
-                            <div className="w-10 h-10 rounded-xl bg-[#4353ff]/10 flex items-center justify-center text-[#4353ff] transition-transform group-hover:scale-105">
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary transition-transform group-hover:scale-105">
                                 <ShoppingCart className="w-5 h-5" />
                             </div>
                             <div className="flex flex-col">
@@ -102,8 +102,8 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
                                     onClick={() => setNavOpened(false)}
                                     className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${
                                         isActive
-                                            ? "bg-[#4353ff] text-white shadow-md shadow-[#4353ff]/20"
-                                            : "text-slate-600 hover:text-[#4353ff] hover:bg-slate-50"
+                                            ? "bg-primary text-white shadow-md shadow-primary/20"
+                                            : "text-slate-600 hover:text-primary hover:bg-slate-50"
                                     }`}
                                 >
                                     {Icon && (
@@ -111,7 +111,7 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
                                             className={`w-5 h-5 shrink-0 transition-colors ${
                                                 isActive
                                                     ? "text-white"
-                                                    : "text-slate-400 group-hover:text-[#4353ff]"
+                                                    : "text-slate-400 group-hover:text-primary"
                                             }`}
                                         />
                                     )}

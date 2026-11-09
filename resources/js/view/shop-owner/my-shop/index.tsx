@@ -70,7 +70,7 @@ export default function MyShopPage() {
                                 required
                                 value={shopName}
                                 onChange={(e) => setShopName(e.target.value)}
-                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#4353ff]"
+                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-primary"
                             />
                         </div>
 
@@ -83,7 +83,7 @@ export default function MyShopPage() {
                                 required
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
-                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#4353ff]"
+                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-primary"
                             />
                         </div>
 
@@ -96,7 +96,7 @@ export default function MyShopPage() {
                                 required
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
-                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#4353ff]"
+                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-primary"
                             />
                         </div>
 
@@ -109,7 +109,7 @@ export default function MyShopPage() {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#4353ff]"
+                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-primary"
                             />
                         </div>
                     </div>
@@ -123,7 +123,7 @@ export default function MyShopPage() {
                             required
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
-                            className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#4353ff]"
+                            className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-primary"
                         />
                     </div>
 
@@ -131,7 +131,7 @@ export default function MyShopPage() {
                         <button
                             type="submit"
                             disabled={isSaving}
-                            className="px-6 py-2.5 rounded-xl bg-[#4353ff] hover:bg-[#3234a8] text-white font-semibold text-sm shadow-md shadow-[#4353ff]/20 transition-all cursor-pointer flex items-center gap-2"
+                            className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-sm shadow-md shadow-primary/20 transition-all cursor-pointer flex items-center gap-2"
                         >
                             <CheckCircle2 className="w-4 h-4" />
                             <span>{isSaving ? "Saving Changes..." : "Save Changes"}</span>

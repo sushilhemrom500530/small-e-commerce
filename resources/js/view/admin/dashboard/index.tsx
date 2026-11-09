@@ -100,7 +100,7 @@ export default function Dashboard() {
                             </h2>
                             <Link
                                 to="/admin/dashboard/shops"
-                                className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-[#4353ff] hover:text-[#3234a8] transition-colors"
+                                className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-primary hover:text-primary-hover transition-colors"
                             >
                                 <span>View All</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -173,12 +173,12 @@ export default function Dashboard() {
                                     >
                                         <stop
                                             offset="0%"
-                                            stopColor="#3b82f6"
+                                            stopColor="var(--primary, #4353ff)"
                                             stopOpacity="0.25"
                                         />
                                         <stop
                                             offset="100%"
-                                            stopColor="#3b82f6"
+                                            stopColor="var(--primary, #4353ff)"
                                             stopOpacity="0.0"
                                         />
                                     </linearGradient>
@@ -228,7 +228,7 @@ export default function Dashboard() {
                                        C 190 110, 220 95, 270 85 
                                        C 320 75, 360 40, 400 25"
                                     fill="none"
-                                    stroke="#3b82f6"
+                                    stroke="var(--primary, #4353ff)"
                                     strokeWidth="3"
                                     strokeLinecap="round"
                                 />
@@ -248,7 +248,7 @@ export default function Dashboard() {
                                             cy={pt.cy}
                                             r="4.5"
                                             fill="#ffffff"
-                                            stroke="#3b82f6"
+                                            stroke="var(--primary, #4353ff)"
                                             strokeWidth="2.5"
                                         />
                                         <text

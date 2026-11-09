@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function Logo({ className }: { className?: string }) {
   return (
     <Link to="/" className={`inline-flex items-center gap-2.5 group ${className || ''}`}>
-      <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-xs group-hover:bg-blue-700 transition-colors">
+      <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-xs group-hover:bg-primary-hover transition-colors">
         <svg
           viewBox="0 0 24 24"
           fill="none"

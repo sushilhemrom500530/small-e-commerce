@@ -52,15 +52,15 @@ export default function ProductDetailPage() {
       {/* Breadcrumb Navigation */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-3">
         <nav className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 font-medium">
-          <Link to="/" className="hover:text-blue-600 transition-colors">
+          <Link to="/" className="hover:text-primary transition-colors">
             Home
           </Link>
           <span>›</span>
-          <Link to="/shop" className="hover:text-blue-600 transition-colors">
+          <Link to="/shop" className="hover:text-primary transition-colors">
             Shop
           </Link>
           <span>›</span>
-          <Link to="/shop" className="hover:text-blue-600 transition-colors">
+          <Link to="/shop" className="hover:text-primary transition-colors">
             Electronics
           </Link>
           <span>›</span>
@@ -84,7 +84,7 @@ export default function ProductDetailPage() {
                       key={thumb.id}
                       onClick={() => setSelectedImage(thumb.id)}
                       className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl border p-1 bg-white flex items-center justify-center overflow-hidden transition-all cursor-pointer ${active
-                        ? "border-blue-600 ring-2 ring-blue-500/20 shadow-xs"
+                        ? "border-primary ring-2 ring-primary/20 shadow-xs"
                         : "border-gray-200 hover:border-gray-300"
                         }`}
                     >
@@ -158,7 +158,7 @@ export default function ProductDetailPage() {
                   "Long Battery Life",
                 ].map((feat) => (
                   <div key={feat} className="flex items-center gap-2.5 text-sm font-medium text-gray-800">
-                    <CheckCircle2 className="w-4.5 h-4.5 text-[#2563eb]" />
+                    <CheckCircle2 className="w-4.5 h-4.5 text-primary" />
                     <span>{feat}</span>
                   </div>
                 ))}
@@ -193,7 +193,7 @@ export default function ProductDetailPage() {
                   onClick={handleAddToCart}
                   className={`flex-1 min-w-[180px] font-semibold py-3 px-6 rounded-xl shadow-sm transition-all text-sm text-center flex items-center justify-center gap-2 cursor-pointer ${addedToast
                     ? "bg-emerald-600 text-white shadow-emerald-500/20"
-                    : "bg-[#2563eb] hover:bg-blue-700 text-white shadow-blue-500/20"
+                    : "bg-primary hover:bg-primary-hover text-white shadow-primary/20"
                     }`}
                 >
                   {addedToast ? (

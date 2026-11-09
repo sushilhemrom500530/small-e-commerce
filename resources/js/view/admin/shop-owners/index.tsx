@@ -44,7 +44,7 @@ export default function ShopOwnersManagement() {
                 </div>
                 <Button
                     type="primary"
-                    className="!bg-[#4353ff] hover:!bg-[#3234a8] !rounded-xl !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white w-fit cursor-pointer"
+                    className="!bg-primary hover:!bg-primary-hover !rounded-xl !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white w-fit cursor-pointer"
                 >
                     <Plus className="w-4 h-4" />
                     <span>Add Shop Owner</span>
@@ -59,7 +59,7 @@ export default function ShopOwnersManagement() {
                         placeholder="Search owners or shops..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-[#4353ff]"
+                        className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
                     />
                 </div>
 

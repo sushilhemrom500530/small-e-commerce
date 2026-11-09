@@ -170,7 +170,7 @@ export default function Login() {
                             label="Email Address"
                             placeholder="Enter your email"
                             icon={<User className="w-[18px] h-[18px] text-slate-400 mr-2 shrink-0" />}
-                            className="!mb-0 !rounded-xl !border-slate-200 !bg-white hover:!border-[#4345c9] focus:!border-[#4345c9] text-sm !py-2.5 !px-3.5 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
+                            className="!mb-0 !rounded-xl !border-slate-200 !bg-white hover:!border-primary focus:!border-primary text-sm !py-2.5 !px-3.5 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
                             rules={[
                                 {
                                     required: true,
@@ -190,7 +190,7 @@ export default function Login() {
                             label="Password"
                             placeholder="Enter your password"
                             icon={<Lock className="w-[18px] h-[18px] text-slate-400 mr-2 shrink-0" />}
-                            className="!rounded-xl !border-slate-200 !bg-white hover:!border-[#4345c9] focus:!border-[#4345c9] text-sm !py-2.5 !px-3.5 !mb-0 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
+                            className="!rounded-xl !border-slate-200 !bg-white hover:!border-primary focus:!border-primary text-sm !py-2.5 !px-3.5 !mb-0 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
                             rules={[
                                 {
                                     required: true,
@@ -209,12 +209,12 @@ export default function Login() {
                                 type="checkbox"
                                 name="remember"
                                 placeholder="Remember me"
-                                className="!mb-0 text-slate-600 text-xs sm:text-[13px] font-normal [&_.ant-checkbox-checked_.ant-checkbox-inner]:!bg-[#4345c9] [&_.ant-checkbox-checked_.ant-checkbox-inner]:!border-[#4345c9] cursor-pointer"
+                                className="!mb-0 text-slate-600 text-xs sm:text-[13px] font-normal [&_.ant-checkbox-checked_.ant-checkbox-inner]:!bg-primary [&_.ant-checkbox-checked_.ant-checkbox-inner]:!border-primary cursor-pointer"
                             />
 
                             <Link
                                 to="#auth/forgot-password"
-                                className="text-xs sm:text-[13px] font-medium text-[#4345c9] hover:text-[#3234a8] hover:underline transition-colors"
+                                className="text-xs sm:text-[13px] font-medium text-primary hover:text-primary-hover hover:underline transition-colors"
                             >
                                 Forgot password?
                             </Link>
@@ -226,7 +226,7 @@ export default function Login() {
                             type="primary"
                             size="large"
                             loading={isLoading}
-                            className="w-full !h-11 sm:!h-12 !rounded-xl !bg-[#4345c9] hover:!bg-[#3537b0] !text-white font-semibold text-sm sm:text-base shadow-lg shadow-[#4345c9]/25 transition-all mb-6 cursor-pointer border-none"
+                            className="w-full !h-11 sm:!h-12 !rounded-xl !bg-primary hover:!bg-primary-hover !text-white font-semibold text-sm sm:text-base shadow-lg shadow-primary/25 transition-all mb-6 cursor-pointer border-none"
                         >
                             Login
                         </Button>
@@ -236,7 +236,7 @@ export default function Login() {
                             Don't have an account?{" "}
                             <Link
                                 to="/auth/register"
-                                className="font-bold text-[#4345c9] hover:text-[#3234a8] hover:underline transition-colors ml-1"
+                                className="font-bold text-primary hover:text-primary-hover hover:underline transition-colors ml-1"
                             >
                                 Register
                             </Link>

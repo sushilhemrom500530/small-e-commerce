@@ -82,7 +82,7 @@ export default function Header({ navOpened, setNavOpened }: HeaderProps) {
                     <input
                         type="text"
                         placeholder="Search..."
-                        className="w-full pl-9 pr-3.5 py-1.5 sm:py-2 text-xs sm:text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-[#4353ff] focus:bg-white transition-all"
+                        className="w-full pl-9 pr-3.5 py-1.5 sm:py-2 text-xs sm:text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary focus:bg-white transition-all"
                     />
                 </div>
             </div>

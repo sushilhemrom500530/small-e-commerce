@@ -87,7 +87,7 @@ export default function CartPage() {
         {cartItems.length === 0 ? (
           /* Empty Cart State */
           <div className="bg-white rounded-3xl border border-gray-200/80 p-8 sm:p-14 text-center w-full">
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 mb-5">
+            <div className="w-20 h-20 mx-auto rounded-3xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-5">
               <ShoppingCart className="w-10 h-10" />
             </div>
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
@@ -100,7 +100,7 @@ export default function CartPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 to="/shop"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
               >
                 Explore Shops <ArrowRight className="w-4 h-4" />
               </Link>
@@ -149,7 +149,7 @@ export default function CartPage() {
                     <div>
                       <Link
                         to={`/product/${item.id}`}
-                        className="text-base sm:text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors leading-snug"
+                        className="text-base sm:text-lg font-bold text-gray-900 hover:text-primary transition-colors leading-snug"
                       >
                         {item.name}
                       </Link>
@@ -250,15 +250,15 @@ export default function CartPage() {
               {/* Value Propositions Strip */}
               <div className="pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 text-xs text-gray-600 font-medium">
-                  <Truck className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                  <Truck className="w-4 h-4 text-primary flex-shrink-0" />
                   <span>Free shipping over $50</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 text-xs text-gray-600 font-medium">
-                  <ShieldCheck className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                  <ShieldCheck className="w-4 h-4 text-primary flex-shrink-0" />
                   <span>100% Secure Checkout</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 text-xs text-gray-600 font-medium">
-                  <RotateCcw className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                  <RotateCcw className="w-4 h-4 text-primary flex-shrink-0" />
                   <span>30-Day Easy Returns</span>
                 </div>
               </div>
@@ -297,7 +297,7 @@ export default function CartPage() {
                 <button
                   type="button"
                   onClick={handleCheckout}
-                  className="w-full bg-[#2563eb] hover:bg-blue-700 text-white font-semibold py-3.5 px-4 rounded-xl shadow-sm shadow-blue-500/20 text-center transition-colors text-sm flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3.5 px-4 rounded-xl shadow-sm shadow-primary/20 text-center transition-colors text-sm flex items-center justify-center gap-2 cursor-pointer"
                 >
                   Proceed to Checkout
                 </button>
@@ -305,7 +305,7 @@ export default function CartPage() {
                 <div className="pt-2 text-center">
                   <Link
                     to="/shop"
-                    className="text-xs text-gray-500 hover:text-blue-600 font-medium transition-colors inline-flex items-center gap-1"
+                    className="text-xs text-gray-500 hover:text-primary font-medium transition-colors inline-flex items-center gap-1"
                   >
                     ← Continue Shopping
                   </Link>

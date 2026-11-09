@@ -81,7 +81,7 @@ export default function AddProduct() {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="Product Name"
-                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#4353ff] transition-all"
+                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-primary transition-all"
                             />
                         </div>
 
@@ -96,7 +96,7 @@ export default function AddProduct() {
                                 value={price}
                                 onChange={(e) => setPrice(e.target.value)}
                                 placeholder="Price in USD"
-                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#4353ff] transition-all"
+                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-primary transition-all"
                             />
                         </div>
 
@@ -111,7 +111,7 @@ export default function AddProduct() {
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="High quality wireless headphones..."
-                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#4353ff] transition-all resize-none"
+                                className="w-full px-4 py-2.5 sm:py-3 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-primary transition-all resize-none"
                             />
                         </div>
 
@@ -139,7 +139,7 @@ export default function AddProduct() {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full py-3 sm:py-3.5 px-6 rounded-xl bg-[#4353ff] hover:bg-[#3234a8] text-white font-semibold text-sm sm:text-base shadow-md shadow-[#4353ff]/25 transition-all cursor-pointer flex items-center justify-center gap-2"
+                                className="w-full py-3 sm:py-3.5 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-sm sm:text-base shadow-md shadow-primary/25 transition-all cursor-pointer flex items-center justify-center gap-2"
                             >
                                 <CheckCircle2 className="w-4 h-4" />
                                 <span>{isSubmitting ? "Adding Product..." : "Add Product"}</span>

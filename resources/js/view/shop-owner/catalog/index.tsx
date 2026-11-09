@@ -85,7 +85,7 @@ export default function ProductCatalog() {
                     placeholder="Search products..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 shadow-2xs focus:outline-none focus:border-[#4353ff]"
+                    className="w-full pl-9 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 shadow-2xs focus:outline-none focus:border-primary"
                 />
             </div>
 
@@ -125,7 +125,7 @@ export default function ProductCatalog() {
                                     className={`w-full py-2.5 px-4 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md ${
                                         isAdded
                                             ? "bg-emerald-600 text-white shadow-emerald-600/20"
-                                            : "bg-[#4353ff] hover:bg-[#3234a8] text-white shadow-[#4353ff]/20"
+                                            : "bg-primary hover:bg-primary-hover text-white shadow-primary/20"
                                     }`}
                                 >
                                     {isAdded ? (

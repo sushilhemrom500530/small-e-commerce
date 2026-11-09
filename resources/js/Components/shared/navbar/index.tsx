@@ -43,12 +43,12 @@ export default function Navbar() {
                   className={`relative inline-flex flex-col items-center py-1 text-[15px] transition-colors ${
                     active
                       ? "text-gray-900 font-semibold"
-                      : "text-gray-600 hover:text-blue-600 font-medium"
+                      : "text-gray-600 hover:text-primary font-medium"
                   }`}
                 >
                   <span>{item.label}</span>
                   {active && (
-                    <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#2563eb] rounded-full" />
+                    <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-primary rounded-full" />
                   )}
                 </Link>
               );
@@ -66,14 +66,14 @@ export default function Navbar() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search products..."
-                className="w-48 lg:w-60 pl-9 pr-3 py-1.5 text-xs sm:text-sm bg-[#fbfbfb] border border-gray-200/90 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all"
+                className="w-48 lg:w-60 pl-9 pr-3 py-1.5 text-xs sm:text-sm bg-[#fbfbfb] border border-gray-200/90 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary focus:bg-white transition-all"
               />
             </div>
 
             {/* Shopping Cart Icon with Badge */}
             <Link
               to="/cart"
-              className="relative p-1.5 text-gray-700 hover:text-blue-600 rounded-full hover:bg-gray-100 transition-colors"
+              className="relative p-1.5 text-gray-700 hover:text-primary rounded-full hover:bg-gray-100 transition-colors"
               aria-label="Shopping Cart"
             >
               <ShoppingCart className="w-5 h-5 text-gray-700" strokeWidth={1.8} />
@@ -87,7 +87,7 @@ export default function Navbar() {
             {/* User Profile Avatar */}
             <Link
               to="/auth/login"
-              className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 hover:text-blue-600 hover:border-blue-400 transition-colors"
+              className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 hover:text-primary hover:border-primary transition-colors"
               aria-label="User Account"
             >
               <User className="w-4.5 h-4.5 text-slate-700" strokeWidth={1.8} />
@@ -115,7 +115,7 @@ export default function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
-              className="w-full pl-9 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full pl-9 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
             />
           </div>
 
@@ -128,7 +128,7 @@ export default function Navbar() {
                   to={item.href || "/"}
                   className={`px-3 py-2 rounded-lg text-base font-medium transition-colors ${
                     active
-                      ? "bg-blue-50 text-blue-600 font-semibold"
+                      ? "bg-primary/10 text-primary font-semibold"
                       : "text-gray-700 hover:bg-gray-50"
                   }`}
                 >
