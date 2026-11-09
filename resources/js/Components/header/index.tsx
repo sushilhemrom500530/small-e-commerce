@@ -16,6 +16,15 @@ export default function Header({ navOpened, setNavOpened }: HeaderProps) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const isShopOwner =
+        user?.role === "shop_owner" ||
+        user?.role === "manager" ||
+        window.location.pathname.startsWith("/shop-owner") ||
+        window.location.pathname.startsWith("/manager");
+
+    const defaultRoleName = isShopOwner ? "Shop Owner" : "Admin";
+    const profilePath = isShopOwner ? "/shop-owner/dashboard/profile" : "/admin/dashboard/profile";
+
     const handleLogout = () => {
         dispatch(logout());
         navigate("/auth/login");
@@ -27,10 +36,10 @@ export default function Header({ navOpened, setNavOpened }: HeaderProps) {
             label: (
                 <div className="flex flex-col py-1 px-2 cursor-default">
                     <span className="font-bold text-slate-800 text-sm">
-                        {user?.fullName || "Admin"}
+                        {user?.fullName || defaultRoleName}
                     </span>
                     <span className="text-xs text-slate-500">
-                        {user?.email || "admin@example.com"}
+                        {user?.email || (isShopOwner ? "owner@techworld.com" : "admin@example.com")}
                     </span>
                 </div>
             ),
@@ -41,7 +50,7 @@ export default function Header({ navOpened, setNavOpened }: HeaderProps) {
         {
             key: "profile",
             icon: <UserIcon className="w-4 h-4 text-slate-500" />,
-            label: <Link to="/admin/dashboard/profile">Profile</Link>,
+            label: <Link to={profilePath}>Profile</Link>,
         },
         {
             type: "divider",
@@ -109,7 +118,7 @@ export default function Header({ navOpened, setNavOpened }: HeaderProps) {
                             className="w-8 h-8 rounded-full object-cover ring-1 ring-slate-200"
                         />
                         <span className="hidden sm:inline font-semibold text-slate-700 text-sm">
-                            {user?.fullName || "Admin"}
+                            {user?.fullName || defaultRoleName}
                         </span>
                         <ChevronDown className="w-4 h-4 text-slate-400 hidden sm:inline" />
                     </button>

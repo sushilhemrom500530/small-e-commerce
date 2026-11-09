@@ -8,6 +8,7 @@ import {
   UserRound,
   PackagePlus,
   ShoppingCart,
+  BookOpen,
 } from "lucide-react";
 import { TbMatrix, TbBulb } from "react-icons/tb";
 import { MdDashboardCustomize } from "react-icons/md";
@@ -69,31 +70,69 @@ export const sidebarMenus = {
     },
   ],
 
-  manager: [
+  shop_owner: [
     {
       label: "Dashboard",
-      href: "/manager/dashboard",
+      href: "/shop-owner/dashboard",
       icon: LayoutDashboard,
     },
     {
-      label: "Products",
-      href: "/manager/dashboard/products",
+      label: "My Shop",
+      href: "/shop-owner/dashboard/my-shop",
+      icon: Store,
+    },
+    {
+      label: "Catalog",
+      href: "/shop-owner/dashboard/catalog",
+      icon: BookOpen,
+    },
+    {
+      label: "My Products",
+      href: "/shop-owner/dashboard/products",
       icon: Package,
     },
     {
-      label: "Add Product",
-      href: "/manager/dashboard/product/add",
-      icon: PackagePlus,
-    },
-    {
-      label: "Create Sale",
-      href: "/manager/dashboard/sales/create",
+      label: "Orders",
+      href: "/shop-owner/dashboard/orders",
       icon: ShoppingCart,
     },
     {
-      label: "Profile",
-      href: "/manager/dashboard/profile",
-      icon: UserRound,
+      label: "Settings",
+      href: "/shop-owner/dashboard/profile",
+      icon: Settings,
+    },
+  ],
+
+  manager: [
+    {
+      label: "Dashboard",
+      href: "/shop-owner/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      label: "My Shop",
+      href: "/shop-owner/dashboard/my-shop",
+      icon: Store,
+    },
+    {
+      label: "Catalog",
+      href: "/shop-owner/dashboard/catalog",
+      icon: BookOpen,
+    },
+    {
+      label: "My Products",
+      href: "/shop-owner/dashboard/products",
+      icon: Package,
+    },
+    {
+      label: "Orders",
+      href: "/shop-owner/dashboard/orders",
+      icon: ShoppingCart,
+    },
+    {
+      label: "Settings",
+      href: "/shop-owner/dashboard/profile",
+      icon: Settings,
     },
   ],
 

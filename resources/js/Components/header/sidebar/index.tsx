@@ -24,8 +24,18 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
         navigate("/auth/login");
     };
 
-    const role = user?.role || "admin";
-    const menuLinks = (sidebarMenus as Record<string, MenuItem[]>)[role] || (sidebarMenus as Record<string, MenuItem[]>)["admin"] || [];
+    const isShopOwner =
+        user?.role === "shop_owner" ||
+        user?.role === "manager" ||
+        location.pathname.startsWith("/shop-owner") ||
+        location.pathname.startsWith("/manager");
+
+    const brandTitle = isShopOwner ? "ShopEase" : "E-Commerce";
+    const brandRole = isShopOwner ? "Shop Owner" : "Admin";
+    const homeLink = isShopOwner ? "/shop-owner/dashboard" : "/admin/dashboard";
+
+    const roleKey = isShopOwner ? "shop_owner" : "admin";
+    const menuLinks = (sidebarMenus as Record<string, MenuItem[]>)[roleKey] || (sidebarMenus as Record<string, MenuItem[]>)["admin"] || [];
 
     return (
         <>
@@ -48,7 +58,7 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
                     {/* Brand Header */}
                     <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
                         <Link
-                            to="/admin/dashboard"
+                            to={homeLink}
                             onClick={() => setNavOpened(false)}
                             className="flex items-center gap-3 group"
                         >
@@ -57,10 +67,10 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
                             </div>
                             <div className="flex flex-col">
                                 <span className="font-extrabold text-[#0f172a] text-sm tracking-tight leading-tight">
-                                    E-Commerce
+                                    {brandTitle}
                                 </span>
                                 <span className="font-semibold text-slate-500 text-xs leading-tight">
-                                    Admin
+                                    {brandRole}
                                 </span>
                             </div>
                         </Link>
@@ -82,7 +92,8 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
                             const Icon = item.icon;
                             const isActive =
                                 location.pathname === item.href ||
-                                (item.href === "/admin/dashboard" && location.pathname === "/admin");
+                                (item.href === "/admin/dashboard" && location.pathname === "/admin") ||
+                                (item.href === "/shop-owner/dashboard" && (location.pathname === "/shop-owner" || location.pathname === "/manager"));
 
                             return (
                                 <Link

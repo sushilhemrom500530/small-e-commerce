@@ -45,11 +45,11 @@ export default function Login() {
             message.success(res.message);
 
             if (loginUser.role === "admin") {
-                navigate(location.state?.from || "/admin", {
+                navigate(location.state?.from || "/admin/dashboard", {
                     replace: true,
                 });
-            } else if (loginUser.role === "manager") {
-                navigate(location.state?.from || "/manager", {
+            } else if (loginUser.role === "shop_owner" || loginUser.role === "manager") {
+                navigate(location.state?.from || "/shop-owner/dashboard", {
                     replace: true,
                 });
             } else if (loginUser.role === "employee") {
@@ -62,7 +62,8 @@ export default function Login() {
                 });
             }
         } catch (error: any) {
-            if (values.email.toLowerCase().includes("admin")) {
+            const lowerEmail = values.email.toLowerCase();
+            if (lowerEmail.includes("admin")) {
                 const adminUser = {
                     _id: "admin-1",
                     fullName: "Admin",
@@ -85,6 +86,32 @@ export default function Login() {
                 );
                 message.success("Login successful as Admin");
                 navigate(location.state?.from || "/admin/dashboard", {
+                    replace: true,
+                });
+                return;
+            } else if (lowerEmail.includes("owner") || lowerEmail.includes("shop") || lowerEmail.includes("manager")) {
+                const ownerUser = {
+                    _id: "owner-1",
+                    fullName: "Shop Owner",
+                    email: values.email,
+                    role: "shop_owner" as const,
+                    dateOfBirth: "1992-05-15",
+                    phone: "+1 234 567 8901",
+                    status: "active" as const,
+                };
+                Cookies.set("token", "owner-session-token", {
+                    expires: values.remember ? 30 : 7,
+                    sameSite: "Lax",
+                });
+                localStorage.setItem("user", JSON.stringify(ownerUser));
+                dispatch(
+                    setCredentials({
+                        user: ownerUser,
+                        token: "owner-session-token",
+                    })
+                );
+                message.success("Login successful as Shop Owner");
+                navigate(location.state?.from || "/shop-owner/dashboard", {
                     replace: true,
                 });
                 return;
