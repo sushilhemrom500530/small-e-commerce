@@ -76,11 +76,12 @@ export const authApi = baseApi.injectEndpoints({
                 method: "POST",
             }),
         }),
-        getMyProfile: builder.query<IUser, void>({
+        getMyProfile: builder.query<any, void>({
             query: () => ({
-                url: "/user/get-my-profile",
+                url: "/auth/me",
                 method: "GET",
             }),
+            transformResponse: (response: any) => response?.results || response?.data || response,
             providesTags: ["user"],
         }),
     }),

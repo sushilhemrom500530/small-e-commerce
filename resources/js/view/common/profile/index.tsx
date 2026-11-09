@@ -7,25 +7,31 @@ type UserStatus = "active" | "inactive" | "pending" | string;
 interface UserProfileProps {
     userData: {
         _id?: any;
-        fullName: string;
-        email: string;
+        fullName?: string;
+        name?: string;
+        email?: string;
         role?: UserRole;
         profileUrl?: string;
         status?: UserStatus;
         createdAt?: Date | string;
         updatedAt?: Date | string;
+        shop?: {
+            id?: number;
+            name?: string;
+            slug?: string;
+        };
+        shopName?: string;
     };
 }
 
 export default function ViewProfile({ userData }: UserProfileProps) {
-    const {
-        fullName,
-        email,
-        role = "User",
-        profileUrl,
-        status = "active",
-        createdAt,
-    } = userData || {};
+    const fullName = userData?.fullName || userData?.name || "User";
+    const email = userData?.email || "";
+    const rawRole = userData?.role || "user";
+    const role = rawRole.replace(/_/g, " ");
+    const profileUrl = userData?.profileUrl;
+    const status = userData?.status || "active";
+    const createdAt = userData?.createdAt;
 
     const getStatusBadge = (status: UserStatus) => {
         switch (status?.toLowerCase()) {

@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             '_id' => (string) $this->id,
             'id' => (string) $this->id,
             'name' => (string) ($this->name ?? ''),
+            'fullName' => (string) ($this->name ?? ''),
             'email' => (string) $this->email,
             'profileUrl' => (string) ($this->profile_url ?? ''),
             'role' => (string) $this->role,
@@ -26,13 +27,13 @@ class UserResource extends JsonResource
             'address' => (string) ($this->address ?? ''),
             'gender' => $this->gender,
             'isDeleted' => (bool) $this->is_deleted,
-            'status' => (string) $this->status,
+            'status' => (string) ($this->status ?? 'active'),
             'isVerified' => (bool) $this->is_verified,
             'isProfileCompleted' => (bool) $this->is_profile_completed,
             'provider' => $this->provider,
             'providerId' => $this->provider_id,
-            'createdAt' => $this->created_at?->toISOString() ?? $this->created_at,
-            'updatedAt' => $this->updated_at?->toISOString() ?? $this->updated_at,
+            'createdAt' => $this->created_at?->toISOString() ?? (string) $this->created_at,
+            'updatedAt' => $this->updated_at?->toISOString() ?? (string) $this->updated_at,
         ];
 
         if ($this->role === 'shop_owner' || $this->role === 'provider') {

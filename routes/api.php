@@ -69,8 +69,12 @@ Route::prefix('auth')->group(function () {
         ->middleware('jwt.auth:admin,shop_owner,customer');
 });
 
-// Authenticated current user shortcut
+// Authenticated current user shortcut & compatibility routes
 Route::get('/me', [AuthController::class, 'me'])
+    ->middleware('jwt.auth:admin,shop_owner,customer');
+Route::get('/user/get-my-profile', [AuthController::class, 'me'])
+    ->middleware('jwt.auth:admin,shop_owner,customer');
+Route::get('/users/get-my-profile', [AuthController::class, 'me'])
     ->middleware('jwt.auth:admin,shop_owner,customer');
 
 /*
