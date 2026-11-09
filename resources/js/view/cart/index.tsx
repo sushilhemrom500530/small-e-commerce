@@ -75,7 +75,7 @@ export default function CartPage() {
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {checkoutStep && (
-          <div className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between shadow-2xs">
+          <div className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
               <div>
@@ -95,7 +95,7 @@ export default function CartPage() {
 
         {cartItems.length === 0 ? (
           /* Empty Cart State */
-          <div className="bg-white rounded-3xl border border-gray-200/80 p-8 sm:p-14 text-center max-w-xl mx-auto shadow-sm">
+          <div className="bg-white rounded-3xl border border-gray-200/80 p-8 sm:p-14 text-center max-w-xl mx-auto">
             <div className="w-20 h-20 mx-auto rounded-3xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 mb-5">
               <ShoppingCart className="w-10 h-10" />
             </div>
@@ -109,7 +109,7 @@ export default function CartPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 to="/shop"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm shadow-sm"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
               >
                 Explore Shops <ArrowRight className="w-4 h-4" />
               </Link>
@@ -125,7 +125,7 @@ export default function CartPage() {
         ) : (
           /* Two Column Grid: Items List & Order Summary */
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
+
             {/* Left: Cart Items List */}
             <div className="lg:col-span-8 space-y-4">
               <div className="flex items-center justify-between pb-1">
@@ -144,7 +144,7 @@ export default function CartPage() {
               {cartItems.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white rounded-2xl border border-gray-200/80 p-4 sm:p-5 shadow-2xs hover:shadow-sm transition-shadow flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className="bg-white rounded-2xl border border-gray-200/80 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
                   {/* Product Details (Image + Name + Tags) */}
                   <div className="flex items-center gap-4">
@@ -196,12 +196,12 @@ export default function CartPage() {
                   {/* Pricing, Quantity Counter, Total, Remove */}
                   <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100">
                     {/* Unit Price Badge */}
-                    <div className="bg-[#f0f5fc] text-gray-900 font-bold px-3 py-1.5 rounded-xl text-sm border border-blue-100/60 shadow-2xs">
+                    <div className="bg-[#f0f5fc] text-gray-900 font-bold px-3 py-1.5 rounded-xl text-sm border border-blue-100/60">
                       ${item.price.toFixed(2)}
                     </div>
 
                     {/* Quantity Selector */}
-                    <div className="inline-flex items-center border border-gray-200/90 rounded-xl bg-white shadow-2xs">
+                    <div className="inline-flex items-center border border-gray-200/90 rounded-xl bg-white">
                       <button
                         type="button"
                         onClick={() =>
@@ -258,15 +258,15 @@ export default function CartPage() {
 
               {/* Value Propositions Strip */}
               <div className="pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 shadow-2xs text-xs text-gray-600 font-medium">
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 text-xs text-gray-600 font-medium">
                   <Truck className="w-4 h-4 text-blue-600 flex-shrink-0" />
                   <span>Free shipping over $50</span>
                 </div>
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 shadow-2xs text-xs text-gray-600 font-medium">
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 text-xs text-gray-600 font-medium">
                   <ShieldCheck className="w-4 h-4 text-blue-600 flex-shrink-0" />
                   <span>100% Secure Checkout</span>
                 </div>
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 shadow-2xs text-xs text-gray-600 font-medium">
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 text-xs text-gray-600 font-medium">
                   <RotateCcw className="w-4 h-4 text-blue-600 flex-shrink-0" />
                   <span>30-Day Easy Returns</span>
                 </div>
@@ -275,7 +275,7 @@ export default function CartPage() {
 
             {/* Right: Order Summary Card */}
             <div className="lg:col-span-4 sticky top-24">
-              <div className="bg-white rounded-2xl border border-gray-200/80 p-6 shadow-2xs space-y-5">
+              <div className="bg-white rounded-2xl border border-gray-200/80 p-6 space-y-5">
                 <h2 className="text-lg font-bold text-gray-900 tracking-tight">
                   Order Summary
                 </h2>
