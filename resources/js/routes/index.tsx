@@ -6,6 +6,7 @@ import adminRoutes from './admin/index.jsx';
 import HomePage from "../view/home/index.js";
 import ShopsPage from "../view/shops/index.js";
 import ProductDetailPage from "../view/product-detail/index.js";
+import AboutPage from "../view/about/index.js";
 import employeeRoutes from "./customer/index.js";
 import managerRoutes from "./manager/index.js";
 
@@ -35,6 +36,14 @@ const routes = [
             {
                 path: "/product/:id",
                 element: <ProductDetailPage />
+            },
+            {
+                path: "/about",
+                element: <AboutPage />
+            },
+            {
+                path: "/about-us",
+                element: <AboutPage />
             },
         ]
     },
