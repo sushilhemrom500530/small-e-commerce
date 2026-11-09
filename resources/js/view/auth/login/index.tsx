@@ -68,10 +68,9 @@ export default function Login() {
 
     return (
         <div className="min-h-screen bg-[#f0f3fa] flex items-center justify-center p-4 sm:p-6 lg:p-8">
-            {/* Split Card Container */}
-            <div className="w-full max-w-[760px] bg-white rounded-3xl shadow-2xl shadow-indigo-100/60 border border-slate-100/80 overflow-hidden flex flex-col md:flex-row">
-                
-                {/* Left Side: Brand Panel */}
+
+            <div className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl shadow-indigo-100/60 border border-slate-100/80 overflow-hidden flex flex-col md:flex-row">
+
                 <div className="w-full md:w-1/2 bg-gradient-to-b from-[#e1ebfd] via-[#ecf1fe] to-[#f5f6ff] p-8 sm:p-10 flex flex-col items-center justify-center text-center select-none">
                     <div className="w-full flex items-center justify-center mb-5">
                         <img
@@ -90,7 +89,7 @@ export default function Login() {
                     </p>
                 </div>
 
-                {/* Right Side: Login Form Panel */}
+
                 <div className="w-full md:w-1/2 bg-white p-8 sm:p-11 flex flex-col justify-center">
                     <div className="text-center mb-7">
                         <h1 className="text-2xl sm:text-[27px] font-black text-[#0f172a] tracking-tight mb-1.5">
@@ -108,12 +107,14 @@ export default function Login() {
                         autoComplete="off"
                         requiredMark={false}
                         initialValues={{ remember: false }}
+                        className="[&_.ant-form-item-label>label]:!text-slate-700 [&_.ant-form-item-label>label]:!font-semibold [&_.ant-form-item-label>label]:!text-sm [&_.ant-form-item-label]:!pb-1.5"
                     >
-                        {/* Email Field with FormField */}
+
                         <FormField
                             type="email"
                             name="email"
-                            placeholder="Email Address"
+                            label="Email Address"
+                            placeholder="Enter your email"
                             icon={<User className="w-[18px] h-[18px] text-slate-400 mr-2 shrink-0" />}
                             className="!rounded-xl !border-slate-200 !bg-white hover:!border-[#4345c9] focus:!border-[#4345c9] text-sm !py-2.5 !px-3.5 mb-4 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
                             rules={[
@@ -132,7 +133,8 @@ export default function Login() {
                         <FormField
                             type="password"
                             name="password"
-                            placeholder="Password"
+                            label="Password"
+                            placeholder="Enter your password"
                             icon={<Lock className="w-[18px] h-[18px] text-slate-400 mr-2 shrink-0" />}
                             className="!rounded-xl !border-slate-200 !bg-white hover:!border-[#4345c9] focus:!border-[#4345c9] text-sm !py-2.5 !px-3.5 mb-4 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
                             rules={[
