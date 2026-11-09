@@ -7,7 +7,12 @@ export const baseApi = createApi({
         baseUrl: import.meta.env.VITE_API_URL || import.meta.env.VITE_PUBLIC_URL || "/api/v1",
         credentials: "include",
         prepareHeaders: (headers: any) => {
-            const token = Cookies.get("token") || Cookies.get("authToken");
+            const token =
+                Cookies.get("token") ||
+                Cookies.get("authToken") ||
+                (typeof window !== "undefined"
+                    ? localStorage.getItem("token") || localStorage.getItem("authToken")
+                    : null);
             if (token) {
                 headers.set("authorization", `Bearer ${token}`);
             }

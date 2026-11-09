@@ -58,10 +58,13 @@ class AuthController extends Controller
         $response = $this->sendResponse($result, 'Login successfully.', 200);
 
         $response->headers->setCookie(
-            new Cookie('refreshToken', $result['refreshToken'], time() + (365 * 86400), '/', null, $isProduction, true, false, Cookie::SAMESITE_LAX)
+            new Cookie('token', $result['token'], time() + (30 * 86400), '/', null, false, false, false, Cookie::SAMESITE_LAX)
         );
         $response->headers->setCookie(
-            new Cookie('token', $result['token'], time() + 86400, '/', null, $isProduction, true, false, Cookie::SAMESITE_LAX)
+            new Cookie('authToken', $result['token'], time() + (30 * 86400), '/', null, false, false, false, Cookie::SAMESITE_LAX)
+        );
+        $response->headers->setCookie(
+            new Cookie('refreshToken', $result['refreshToken'], time() + (365 * 86400), '/', null, false, true, false, Cookie::SAMESITE_LAX)
         );
 
         return $response;

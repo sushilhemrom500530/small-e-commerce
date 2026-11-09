@@ -138,37 +138,20 @@ export interface IInitialState {
     isAuthenticated: boolean;
 }
 
-const storedToken = Cookies.get("token") || null;
-const storedUser = localStorage.getItem("user");
-const parsedUser: IUser | null = storedUser ? JSON.parse(storedUser) : null;
-
-const defaultDevAdmin: IUser = {
-    _id: "admin-1",
-    fullName: "Admin",
-    email: "admin@gmail.com",
-    role: "admin",
-    dateOfBirth: "1990-01-01",
-    phone: "+1 234 567 8900",
-    status: "active",
-};
-
-const defaultDevShopOwner: IUser = {
-    _id: "owner-1",
-    fullName: "Shop Owner",
-    email: "shopowner@gmail.com",
-    role: "shop_owner",
-    dateOfBirth: "1992-05-15",
-    phone: "+1 234 567 8901",
-    status: "active",
-};
-
-const isAdminRoute = typeof window !== "undefined" && window.location.pathname.startsWith("/admin");
-const isShopOwnerRoute =
-    typeof window !== "undefined" &&
-    (window.location.pathname.startsWith("/shop-owner") || window.location.pathname.startsWith("/manager"));
+const storedToken =
+    (typeof window !== "undefined"
+        ? Cookies.get("token") || Cookies.get("authToken") || localStorage.getItem("token") || localStorage.getItem("authToken")
+        : null) || null;
+const storedUser = typeof window !== "undefined" ? localStorage.getItem("user") : null;
+let parsedUser: IUser | null = null;
+try {
+    parsedUser = storedUser ? JSON.parse(storedUser) : null;
+} catch {
+    parsedUser = null;
+}
 
 export const initialState: IInitialState = {
-    user: parsedUser || (isAdminRoute ? defaultDevAdmin : isShopOwnerRoute ? defaultDevShopOwner : null),
-    token: storedToken || (isAdminRoute || isShopOwnerRoute ? "dev-session-token" : null),
-    isAuthenticated: !!storedToken && !!parsedUser ? true : (isAdminRoute || isShopOwnerRoute),
+    user: parsedUser,
+    token: storedToken,
+    isAuthenticated: !!storedToken && !!parsedUser,
 };

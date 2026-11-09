@@ -44,10 +44,17 @@ export default function Login() {
 
             if (token) {
                 Cookies.set("token", token, {
+                    path: "/",
                     expires: values.remember ? 30 : 7,
-                    secure: import.meta.env.PROD,
                     sameSite: "Lax",
                 });
+                Cookies.set("authToken", token, {
+                    path: "/",
+                    expires: values.remember ? 30 : 7,
+                    sameSite: "Lax",
+                });
+                localStorage.setItem("token", token);
+                localStorage.setItem("authToken", token);
             }
 
             if (loginUser) {
