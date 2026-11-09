@@ -17,7 +17,7 @@ export interface CartState {
   shippingFee: number;
 }
 
-const DEFAULT_ITEM: CartItem = {
+export const DEFAULT_CART_ITEM: CartItem = {
   id: "wireless-headphones-1",
   name: "Wireless Headphones",
   price: 89.99,
@@ -31,18 +31,17 @@ const DEFAULT_ITEM: CartItem = {
 const loadInitialState = (): CartState => {
   try {
     const saved = localStorage.getItem("shopease_cart");
-    if (saved) {
+    if (saved !== null) {
       const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         return { items: parsed, shippingFee: 0 };
       }
     }
   } catch {
     // ignore json error
   }
-  // Default seeded item matching mockup reference
   return {
-    items: [DEFAULT_ITEM],
+    items: [],
     shippingFee: 0,
   };
 };

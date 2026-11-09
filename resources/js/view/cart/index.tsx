@@ -15,13 +15,14 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import PageBanner from "../../Components/shared/page-banner/index.js";
-import ContactBannerMap from "../../Components/shared/page-banner/contact-map.js";
+import CartBannerGraphic from "../../Components/shared/page-banner/cart-graphic.js";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks.js";
 import {
   updateQuantity,
   removeFromCart,
   addToCart,
   clearCart,
+  DEFAULT_CART_ITEM,
 } from "../../redux/cartSlice.js";
 
 export default function CartPage() {
@@ -45,18 +46,7 @@ export default function CartPage() {
   };
 
   const handleResetSample = () => {
-    dispatch(
-      addToCart({
-        id: "wireless-headphones-1",
-        name: "Wireless Headphones",
-        price: 89.99,
-        originalPrice: 120.0,
-        image: "/images/product-headphone-main@2x.jpg",
-        quantity: 1,
-        specs: ["Bluetooth 5.0", "Noise Cancellation", "Long Battery"],
-        shopName: "Tech World",
-      })
-    );
+    dispatch(addToCart(DEFAULT_CART_ITEM));
   };
 
   return (
@@ -70,7 +60,7 @@ export default function CartPage() {
           { label: "Cart" },
         ]}
         gradient="bg-gradient-to-r from-[#0b1e36] via-[#0d2544] to-[#12335c]"
-        rightElement={<ContactBannerMap />}
+        rightElement={<CartBannerGraphic />}
       />
 
       {/* Main Content Area */}
