@@ -5,13 +5,15 @@ namespace App\Models;
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -90,5 +92,29 @@ class User extends Authenticatable
     public function isClient(): bool
     {
         return $this->isCustomer();
+    }
+
+    /**
+     * Shops owned by this user (for shop_owner role).
+     */
+    public function shops(): HasMany
+    {
+        return $this->hasMany(Shop::class, 'owner_id');
+    }
+
+    /**
+     * Products created by this user in the shared catalog.
+     */
+    public function createdProducts(): HasMany
+    {
+        return $this->hasMany(Product::class, 'created_by');
+    }
+
+    /**
+     * Get the primary shop owned by this user.
+     */
+    public function ownedShop(): ?Shop
+    {
+        return $this->shops()->first();
     }
 }
