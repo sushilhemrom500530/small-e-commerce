@@ -1,92 +1,270 @@
-import {
-    Package,
-    DollarSign,
-    TriangleAlert,
-    ShoppingCart,
-    TrendingUp,
-} from "lucide-react";
-import { SalesSummary, StatCard } from '../../../Components/reuseable/common-card/index.js';
-import { useGetAdminStatsQuery } from "../../../redux/features/dashboard/index.js";
-import LowStockTable from "../../../Components/dashboard/low-stock-table/index.js";
-import Loading from "../../../Components/reuseable/loading/index.js";
+import { useState } from "react";
+import { Store, Package, Users, ShoppingCart, ArrowRight, ChevronDown } from "lucide-react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store.js";
+import { Link } from "react-router-dom";
 
+interface ShopItem {
+    name: string;
+    owner: string;
+    status: "Active" | "Pending" | "Inactive";
+}
+
+const recentShops: ShopItem[] = [
+    { name: "Tech World", owner: "John Doe", status: "Active" },
+    { name: "Fashion Hub", owner: "Sarah Khan", status: "Active" },
+    { name: "Gadget Store", owner: "Mike Ross", status: "Active" },
+    { name: "Electro Plus", owner: "Emma Watson", status: "Active" },
+];
 
 export default function Dashboard() {
-    const { data, isLoading, error } = useGetAdminStatsQuery();
     const { user } = useSelector((state: RootState) => state.auth);
-    const stats = data?.data;
+    const [timeRange, setTimeRange] = useState("6 Months");
 
-    if (isLoading) {
-        return <Loading title="Loading Dashboard..." />;
-    }
-
-    if (error) {
-        return <div>Something went wrong.</div>;
-    }
+    const statCards = [
+        {
+            title: "Total Shops",
+            value: "5",
+            icon: Store,
+            iconColor: "text-purple-600",
+            iconBg: "bg-purple-50",
+        },
+        {
+            title: "Total Products",
+            value: "120",
+            icon: Package,
+            iconColor: "text-emerald-500",
+            iconBg: "bg-emerald-50",
+        },
+        {
+            title: "Shop Owners",
+            value: "8",
+            icon: Users,
+            iconColor: "text-blue-500",
+            iconBg: "bg-blue-50",
+        },
+        {
+            title: "Total Orders",
+            value: "245",
+            icon: ShoppingCart,
+            iconColor: "text-amber-500",
+            iconBg: "bg-amber-50",
+        },
+    ];
 
     return (
-        <div>
-            <div className="space-y-8">
-                {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-900">
-                            Welcome Back, {user?.fullName}
-                        </h1>
+        <div className="space-y-6">
+            {/* Header Greeting */}
+            <div>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0c1b3a] tracking-tight">
+                    Dashboard
+                </h1>
+                <p className="mt-1 text-sm text-slate-500 font-normal">
+                    Welcome back, {user?.fullName || "Admin"}!
+                </p>
+            </div>
 
-                        <p className="mt-1 text-gray-500">
-                            Inventory & Sales Overview
-                        </p>
-                    </div>
-                    {
-                        user?.role !== "employee" && <div className="md:text-right">
-                            <p className="text-sm text-gray-500">
-                                Tuesday
+            {/* 4 Stat Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {statCards.map((stat, idx) => {
+                    const Icon = stat.icon;
+                    return (
+                        <div
+                            key={idx}
+                            className="bg-white rounded-2xl p-5 border border-slate-100 shadow-xs hover:shadow-md transition-shadow"
+                        >
+                            <div
+                                className={`w-11 h-11 rounded-xl ${stat.iconBg} flex items-center justify-center ${stat.iconColor} mb-4`}
+                            >
+                                <Icon className="w-5 h-5" />
+                            </div>
+                            <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                                {stat.title}
                             </p>
-
-                            <h3 className="font-semibold">
-                                July 07, 2026
-                            </h3>
+                            <h2 className="text-2xl sm:text-3xl font-black text-[#0c1b3a] tracking-tight mt-1">
+                                {stat.value}
+                            </h2>
                         </div>
-                    }
+                    );
+                })}
+            </div>
 
-                </div>
+            {/* Bottom Row: Recent Shops & Sales Overview */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Recent Shops */}
+                <div className="lg:col-span-7 bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                            <h2 className="text-base sm:text-lg font-bold text-[#0c1b3a]">
+                                Recent Shops
+                            </h2>
+                            <Link
+                                to="/admin/dashboard/shops"
+                                className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-primary hover:text-primary-hover transition-colors"
+                            >
+                                <span>View All</span>
+                                <ArrowRight className="w-3.5 h-3.5" />
+                            </Link>
+                        </div>
 
-                {/* Stats */}
-                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                    <StatCard
-                        title="Products"
-                        amount={stats?.totalProducts ?? 0}
-                        icon={<Package className="w-6 h-6 text-blue-600" />}
-                    />
-                    {
-                        user?.role !== "employee" && <StatCard
-                            title="Sales"
-                            amount={stats?.totalSales ?? 0}
-                            icon={<DollarSign className="w-6 h-6 text-green-600" />}
-                        />
-                    }
-
-
-                    <StatCard
-                        title="Low Stock"
-                        amount={stats?.lowStockProducts ?? 0}
-                        icon={<TriangleAlert className="w-6 h-6 text-orange-500" />}
-                    />
-                </div>
-
-                {/* Tables */}
-                <div className="grid gap-6 xl:grid-cols-3">
-                    <div className="xl:col-span-2">
-                        <LowStockTable products={stats?.recentProducts || []} />
+                        {/* Table */}
+                        <div className="overflow-x-auto mt-2">
+                            <table className="w-full text-left">
+                                <thead>
+                                    <tr className="border-b border-slate-100 text-xs font-semibold text-slate-400">
+                                        <th className="py-3 font-semibold">Shop Name</th>
+                                        <th className="py-3 font-semibold">Owner</th>
+                                        <th className="py-3 font-semibold text-right sm:text-left">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-50 text-sm">
+                                    {recentShops.map((shop, idx) => (
+                                        <tr key={idx} className="hover:bg-slate-50/60 transition-colors">
+                                            <td className="py-3.5 font-semibold text-slate-800">
+                                                {shop.name}
+                                            </td>
+                                            <td className="py-3.5 text-slate-500 font-normal">
+                                                {shop.owner}
+                                            </td>
+                                            <td className="py-3.5 text-right sm:text-left">
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60">
+                                                    {shop.status}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    {
-                        user?.role !== "employee" && <SalesSummary totalRevenue={stats?.totalRevenue ?? 0} />
-                    }
                 </div>
 
+                {/* Sales Overview */}
+                <div className="lg:col-span-5 bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div className="flex items-center justify-between pb-4">
+                            <h2 className="text-base sm:text-lg font-bold text-[#0c1b3a]">
+                                Sales Overview
+                            </h2>
+                            <div className="relative inline-block text-xs">
+                                <button
+                                    type="button"
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 font-medium hover:bg-slate-50 shadow-2xs transition-colors cursor-pointer"
+                                >
+                                    <span>{timeRange}</span>
+                                    <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Interactive Area Line Chart */}
+                        <div className="w-full pt-3 pb-2">
+                            <svg
+                                viewBox="0 0 420 180"
+                                className="w-full h-auto overflow-visible select-none"
+                            >
+                                <defs>
+                                    <linearGradient
+                                        id="salesGradient"
+                                        x1="0"
+                                        y1="0"
+                                        x2="0"
+                                        y2="1"
+                                    >
+                                        <stop
+                                            offset="0%"
+                                            stopColor="var(--primary, #4353ff)"
+                                            stopOpacity="0.25"
+                                        />
+                                        <stop
+                                            offset="100%"
+                                            stopColor="var(--primary, #4353ff)"
+                                            stopOpacity="0.0"
+                                        />
+                                    </linearGradient>
+                                </defs>
+
+                                {/* Dotted Horizontal Grid lines */}
+                                <line
+                                    x1="20"
+                                    y1="40"
+                                    x2="400"
+                                    y2="40"
+                                    stroke="#f1f5f9"
+                                    strokeDasharray="4 4"
+                                />
+                                <line
+                                    x1="20"
+                                    y1="90"
+                                    x2="400"
+                                    y2="90"
+                                    stroke="#f1f5f9"
+                                    strokeDasharray="4 4"
+                                />
+                                <line
+                                    x1="20"
+                                    y1="140"
+                                    x2="400"
+                                    y2="140"
+                                    stroke="#f1f5f9"
+                                    strokeDasharray="4 4"
+                                />
+
+                                {/* Area Fill */}
+                                <path
+                                    d="M 20 140 
+                                       C 70 135, 110 120, 150 115 
+                                       C 190 110, 220 95, 270 85 
+                                       C 320 75, 360 40, 400 25 
+                                       L 400 150 
+                                       L 20 150 Z"
+                                    fill="url(#salesGradient)"
+                                />
+
+                                {/* Smooth Curve Line */}
+                                <path
+                                    d="M 20 140 
+                                       C 70 135, 110 120, 150 115 
+                                       C 190 110, 220 95, 270 85 
+                                       C 320 75, 360 40, 400 25"
+                                    fill="none"
+                                    stroke="var(--primary, #4353ff)"
+                                    strokeWidth="3"
+                                    strokeLinecap="round"
+                                />
+
+                                {/* Nodes */}
+                                {[
+                                    { cx: 20, cy: 140, label: "Jan" },
+                                    { cx: 96, cy: 128, label: "Feb" },
+                                    { cx: 172, cy: 112, label: "Mar" },
+                                    { cx: 248, cy: 92, label: "Apr" },
+                                    { cx: 324, cy: 68, label: "May" },
+                                    { cx: 400, cy: 25, label: "Jun" },
+                                ].map((pt, i) => (
+                                    <g key={i}>
+                                        <circle
+                                            cx={pt.cx}
+                                            cy={pt.cy}
+                                            r="4.5"
+                                            fill="#ffffff"
+                                            stroke="var(--primary, #4353ff)"
+                                            strokeWidth="2.5"
+                                        />
+                                        <text
+                                            x={pt.cx}
+                                            y="170"
+                                            textAnchor="middle"
+                                            className="text-[11px] fill-slate-400 font-medium"
+                                        >
+                                            {pt.label}
+                                        </text>
+                                    </g>
+                                ))}
+                            </svg>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

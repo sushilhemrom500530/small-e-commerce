@@ -16,7 +16,7 @@ export default function HeroSection() {
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold tracking-tight leading-[1.12]">
               <span className="block text-[#0a163a]">Smart Shopping</span>
-              <span className="block text-[#2563eb] mt-1.5">Better Living</span>
+              <span className="block text-primary mt-1.5">Better Living</span>
             </h1>
 
             {/* Subtitle */}
@@ -28,7 +28,7 @@ export default function HeroSection() {
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Link
                 to="/shop"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold bg-[#2563eb] text-white hover:bg-blue-700 shadow-sm shadow-blue-500/20 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary-hover shadow-sm shadow-primary/20 transition-colors"
               >
                 Shop Now
                 <ArrowRight className="w-4 h-4" />

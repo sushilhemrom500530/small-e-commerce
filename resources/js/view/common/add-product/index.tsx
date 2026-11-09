@@ -59,7 +59,7 @@ export default function AddProductContent() {
                                 name="productImage"
                                 required
                                 accept=".png,.jpg,.jpeg"
-                                fileUploadClass="!h-64 bg-gray-50 hover:border-blue-500 hover:bg-blue-50/50 transition-all border-dashed rounded-xl"
+                                fileUploadClass="!h-64 bg-gray-50 hover:border-primary hover:bg-primary/10 transition-all border-dashed rounded-xl"
                             />
                         </div>
                     </div>

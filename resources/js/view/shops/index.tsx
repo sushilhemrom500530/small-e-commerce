@@ -170,11 +170,11 @@ export default function ShopsPage() {
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
                     className={`flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-left cursor-pointer ${active
-                      ? "bg-blue-50 text-[#2563eb] font-semibold shadow-2xs"
+                      ? "bg-primary/10 text-primary font-semibold shadow-2xs"
                       : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                       }`}
                   >
-                    <Icon className={`w-4 h-4 ${active ? "text-[#2563eb]" : "text-gray-500"}`} />
+                    <Icon className={`w-4 h-4 ${active ? "text-primary" : "text-gray-500"}`} />
                     <span>{cat.name}</span>
                   </button>
                 );
@@ -194,7 +194,7 @@ export default function ShopsPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search shops..."
-                  className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm bg-white border border-gray-200/90 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm bg-white border border-gray-200/90 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
                 />
               </div>
 
@@ -203,7 +203,7 @@ export default function ShopsPage() {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="appearance-none bg-white border border-gray-200/90 rounded-xl px-4 py-2 pr-9 text-xs sm:text-sm font-medium text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+                    className="appearance-none bg-white border border-gray-200/90 rounded-xl px-4 py-2 pr-9 text-xs sm:text-sm font-medium text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
                   >
                     <option value="popular">Sort by: Popular</option>
                     <option value="rating">Sort by: Top Rated</option>
@@ -251,7 +251,7 @@ export default function ShopsPage() {
                     <div className="mt-3.5">
                       <Link
                         to={`/shops/${shop.slug}`}
-                        className="inline-flex items-center justify-center px-4 py-1.5 bg-[#2563eb] hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs"
+                        className="inline-flex items-center justify-center px-4 py-1.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs"
                       >
                         Visit Shop
                       </Link>

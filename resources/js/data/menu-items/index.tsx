@@ -1,9 +1,14 @@
 import {
   LayoutDashboard,
-  UserRound,
+  Store,
   Package,
+  Users,
+  UserPlus,
+  Settings,
+  UserRound,
   PackagePlus,
   ShoppingCart,
+  BookOpen,
 } from "lucide-react";
 import { TbMatrix, TbBulb } from "react-icons/tb";
 import { MdDashboardCustomize } from "react-icons/md";
@@ -39,57 +44,95 @@ export const sidebarMenus = {
       icon: LayoutDashboard,
     },
     {
+      label: "Shops",
+      href: "/admin/dashboard/shops",
+      icon: Store,
+    },
+    {
       label: "Products",
       href: "/admin/dashboard/products",
       icon: Package,
     },
     {
-      label: "Add Product",
-      href: "/admin/dashboard/product/add",
-      icon: PackagePlus,
+      label: "Shop Owners",
+      href: "/admin/dashboard/shop-owners",
+      icon: Users,
     },
     {
-      label: "Create Sale",
-      href: "/admin/dashboard/sales/create",
+      label: "Users",
+      href: "/admin/dashboard/users",
+      icon: UserPlus,
+    },
+    {
+      label: "Settings",
+      href: "/admin/dashboard/profile",
+      icon: Settings,
+    },
+  ],
+
+  shop_owner: [
+    {
+      label: "Dashboard",
+      href: "/shop-owner/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      label: "My Shop",
+      href: "/shop-owner/dashboard/my-shop",
+      icon: Store,
+    },
+    {
+      label: "Catalog",
+      href: "/shop-owner/dashboard/catalog",
+      icon: BookOpen,
+    },
+    {
+      label: "My Products",
+      href: "/shop-owner/dashboard/products",
+      icon: Package,
+    },
+    {
+      label: "Orders",
+      href: "/shop-owner/dashboard/orders",
       icon: ShoppingCart,
     },
     {
-      label: "Sales History",
-      href: "/admin/dashboard/sales/history",
-      icon: FaHistory,
-    },
-    {
-      label: "Profile",
-      href: "/admin/dashboard/profile",
-      icon: UserRound,
+      label: "Settings",
+      href: "/shop-owner/dashboard/profile",
+      icon: Settings,
     },
   ],
 
   manager: [
     {
       label: "Dashboard",
-      href: "/manager/dashboard",
+      href: "/shop-owner/dashboard",
       icon: LayoutDashboard,
     },
     {
-      label: "Products",
-      href: "/manager/dashboard/products",
+      label: "My Shop",
+      href: "/shop-owner/dashboard/my-shop",
+      icon: Store,
+    },
+    {
+      label: "Catalog",
+      href: "/shop-owner/dashboard/catalog",
+      icon: BookOpen,
+    },
+    {
+      label: "My Products",
+      href: "/shop-owner/dashboard/products",
       icon: Package,
     },
     {
-      label: "Add Product",
-      href: "/manager/dashboard/product/add",
-      icon: PackagePlus,
-    },
-    {
-      label: "Create Sale",
-      href: "/manager/dashboard/sales/create",
+      label: "Orders",
+      href: "/shop-owner/dashboard/orders",
       icon: ShoppingCart,
     },
     {
-      label: "Profile",
-      href: "/manager/dashboard/profile",
-      icon: UserRound,
+      label: "Settings",
+      href: "/shop-owner/dashboard/profile",
+      icon: Settings,
     },
   ],
 

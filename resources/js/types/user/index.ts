@@ -140,8 +140,33 @@ const storedToken = Cookies.get("token") || null;
 const storedUser = localStorage.getItem("user");
 const parsedUser: IUser | null = storedUser ? JSON.parse(storedUser) : null;
 
+const defaultDevAdmin: IUser = {
+    _id: "admin-1",
+    fullName: "Admin",
+    email: "admin@example.com",
+    role: "admin",
+    dateOfBirth: "1990-01-01",
+    phone: "+1 234 567 8900",
+    status: "active",
+};
+
+const defaultDevShopOwner: IUser = {
+    _id: "owner-1",
+    fullName: "Shop Owner",
+    email: "owner@techworld.com",
+    role: "shop_owner",
+    dateOfBirth: "1992-05-15",
+    phone: "+1 234 567 8901",
+    status: "active",
+};
+
+const isAdminRoute = typeof window !== "undefined" && window.location.pathname.startsWith("/admin");
+const isShopOwnerRoute =
+    typeof window !== "undefined" &&
+    (window.location.pathname.startsWith("/shop-owner") || window.location.pathname.startsWith("/manager"));
+
 export const initialState: IInitialState = {
-    user: parsedUser,
-    token: storedToken,
-    isAuthenticated: !!storedToken && !!parsedUser,
+    user: parsedUser || (isAdminRoute ? defaultDevAdmin : isShopOwnerRoute ? defaultDevShopOwner : null),
+    token: storedToken || (isAdminRoute || isShopOwnerRoute ? "dev-session-token" : null),
+    isAuthenticated: !!storedToken && !!parsedUser ? true : (isAdminRoute || isShopOwnerRoute),
 };

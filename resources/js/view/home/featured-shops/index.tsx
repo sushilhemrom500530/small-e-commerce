@@ -57,7 +57,7 @@ export default function FeaturedShops() {
           </h2>
           <Link
             to="/shops"
-            className="text-sm font-semibold text-[#2563eb] hover:text-blue-700 inline-flex items-center gap-1 group transition-colors"
+            className="text-sm font-semibold text-primary hover:text-primary-hover inline-flex items-center gap-1 group transition-colors"
           >
             View All Shops
             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -96,7 +96,7 @@ export default function FeaturedShops() {
                 <div className="mt-3">
                   <Link
                     to={`/shops/${shop.slug}`}
-                    className="inline-flex items-center justify-center px-3.5 py-1.5 bg-[#2563eb] hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs"
+                    className="inline-flex items-center justify-center px-3.5 py-1.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs"
                   >
                     Visit Shop
                   </Link>

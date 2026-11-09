@@ -56,7 +56,7 @@ export default function ContactPage() {
             <div className="space-y-4 pt-2">
               {/* Phone */}
               <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-[#2563eb] flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0">
                   <Phone className="w-4.5 h-4.5" />
                 </div>
                 <span className="text-sm font-semibold text-gray-800">
@@ -66,7 +66,7 @@ export default function ContactPage() {
 
               {/* Email */}
               <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-[#2563eb] flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0">
                   <Mail className="w-4.5 h-4.5" />
                 </div>
                 <span className="text-sm font-semibold text-gray-800">
@@ -76,7 +76,7 @@ export default function ContactPage() {
 
               {/* Address */}
               <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-[#2563eb] flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0">
                   <MapPin className="w-4.5 h-4.5" />
                 </div>
                 <span className="text-sm font-semibold text-gray-800">
@@ -97,7 +97,7 @@ export default function ContactPage() {
                   key={item.id}
                   href={`#${item.id}`}
                   aria-label={item.label}
-                  className="w-8 h-8 rounded-full bg-[#2563eb] hover:bg-blue-700 text-white flex items-center justify-center transition-colors "
+                  className="w-8 h-8 rounded-full bg-primary hover:bg-primary-hover text-white flex items-center justify-center transition-colors "
                 >
                   {item.icon}
                 </a>
@@ -128,7 +128,7 @@ export default function ContactPage() {
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Your Name"
                       required
-                      className="w-full border border-gray-200/90 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
+                      className="w-full border border-gray-200/90 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all bg-white"
                     />
                   </div>
 
@@ -140,7 +140,7 @@ export default function ContactPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Your Email"
                       required
-                      className="w-full border border-gray-200/90 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
+                      className="w-full border border-gray-200/90 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all bg-white"
                     />
                   </div>
 
@@ -152,7 +152,7 @@ export default function ContactPage() {
                       placeholder="Your Message"
                       required
                       rows={5}
-                      className="w-full border border-gray-200/90 rounded-xl px-4 py-3 text-xs sm:text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none bg-white"
+                      className="w-full border border-gray-200/90 rounded-xl px-4 py-3 text-xs sm:text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all resize-none bg-white"
                     />
                   </div>
 
@@ -160,7 +160,7 @@ export default function ContactPage() {
                   <div className="pt-1">
                     <button
                       type="submit"
-                      className="w-full bg-[#2563eb] hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors text-sm cursor-pointer"
+                      className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-6 rounded-xl transition-colors text-sm cursor-pointer"
                     >
                       Send Message
                     </button>

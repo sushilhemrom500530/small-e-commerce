@@ -125,7 +125,7 @@ export default function ProductsContent() {
                         <Button
                             type="text"
                             size="small"
-                            icon={<Eye className="w-4 h-4 text-blue-600" />}
+                            icon={<Eye className="w-4 h-4 text-primary" />}
                             onClick={() => handleView(record)}
                         />
                     </Tooltip>
