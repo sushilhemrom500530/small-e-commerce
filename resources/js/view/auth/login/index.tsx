@@ -235,7 +235,7 @@ export default function Login() {
                         <div className="text-center text-xs sm:text-[13px] text-slate-500 font-normal">
                             Don't have an account?{" "}
                             <Link
-                                to="/auth/register"
+                                to="#auth/register"
                                 className="font-bold text-primary hover:text-primary-hover hover:underline transition-colors ml-1"
                             >
                                 Register
