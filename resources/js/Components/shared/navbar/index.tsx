@@ -1,213 +1,139 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown, X } from "lucide-react";
-import { RiMenu3Fill } from "react-icons/ri";
+import { Search, ShoppingCart, User, Menu, X } from "lucide-react";
 import Logo from "../logo/index.js";
 import { navLinks, type MenuItem } from "../../../data/menu-items/index.js";
 
-
-const Navbar = () => {
+export default function Navbar() {
   const { pathname } = useLocation();
-
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [lang, setLang] = useState<"EN" | "FR">("EN");
-  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
-  const [contactOpen, setContactOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen((prev) => !prev);
-  };
-
-  useEffect(() => {
-    setMounted(true);
-
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!menuOpen && !contactOpen) return;
-
-    const html = document.documentElement;
-    const previous = html.style.overflow;
-
-    html.style.overflow = "hidden";
-
-    return () => {
-      html.style.overflow = previous;
-    };
-  }, [menuOpen, contactOpen]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const isActive = (href?: string) => {
-    return !!href && pathname === href;
+    if (!href) return false;
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
   };
 
-  const navContainerClass = `
-    sticky inset-0 w-full z-50 transition-all duration-300
-    ${isScrolled
-      ? "bg-white/90 backdrop-blur-md shadow-md py-3"
-      : "bg-white/90 py-4"
-    }
-  `;
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   return (
-    <>
-      <nav className={navContainerClass}>
-        <div className="container mx-auto flex items-center justify-between px-6">
-          {/* Logo */}
-          <Logo />
-
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((item: MenuItem) =>
-              item.submenu ? (
-                <div key={item.label} className="relative group">
-                  <button className="flex items-center gap-1 text-base font-medium text-black/90 hover:text-secondary transition-colors cursor-pointer">
-                    {item.label}
-
-                    <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
-                  </button>
-
-                  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200">
-                    <div className="min-w-[220px] rounded-xl bg-white shadow-xl ring-1 ring-black/5 overflow-hidden py-1">
-                      {item.submenu.map((sub) => (
-                        <Link
-                          key={sub.label}
-                          to={sub.href}
-                          className="block px-4 py-2.5 text-sm font-medium text-black/90 hover:text-secondary transition-colors"
-                        >
-                          {sub.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <Link
-                  key={item.label}
-                  to={item.href!}
-                  className={`text-base font-medium transition-colors ${isActive(item.href)
-                    ? "text-secondary"
-                    : "text-black/90 hover:text-secondary"
-                    }`}
-                >
-                  {item.label}
-                </Link>
-              )
-            )}
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 gap-4">
+          
+          {/* Left: Brand Logo */}
+          <div className="flex-shrink-0">
+            <Logo />
           </div>
 
-          {/* Right Side */}
-          <div className="flex items-center gap-4">
-            <Link to="/auth/login">
-              <button className="font-medium text-sm px-6 py-2 rounded-full bg-secondary hover:bg-primary text-white transition-colors cursor-pointer">
-                Sign In
-              </button>
+          {/* Center: Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center space-x-9">
+            {navLinks.map((item: MenuItem) => {
+              const active = isActive(item.href);
+              return (
+                <Link
+                  key={item.label}
+                  to={item.href || "/"}
+                  className={`relative inline-flex flex-col items-center py-1 text-[15px] transition-colors ${
+                    active
+                      ? "text-gray-900 font-semibold"
+                      : "text-gray-600 hover:text-blue-600 font-medium"
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {active && (
+                    <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#2563eb] rounded-full" />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Right: Search, Cart, Profile */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            
+            {/* Search Input Bar */}
+            <div className="relative hidden sm:flex items-center">
+              <Search className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products..."
+                className="w-48 lg:w-60 pl-9 pr-3 py-1.5 text-xs sm:text-sm bg-[#fbfbfb] border border-gray-200/90 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all"
+              />
+            </div>
+
+            {/* Shopping Cart Icon with Badge */}
+            <Link
+              to="/cart"
+              className="relative p-1.5 text-gray-700 hover:text-blue-600 rounded-full hover:bg-gray-100 transition-colors"
+              aria-label="Shopping Cart"
+            >
+              <ShoppingCart className="w-5 h-5 text-gray-700" strokeWidth={1.8} />
+              <span className="absolute top-0 right-0 bg-[#ef4444] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-white">
+                1
+              </span>
             </Link>
 
-            <button
-              className="lg:hidden text-black/90 hover:text-secondary transition-colors flex items-center justify-center cursor-pointer"
-              onClick={toggleMenu}
-              aria-label="Open Menu"
+            {/* User Profile Avatar */}
+            <Link
+              to="/auth/login"
+              className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 hover:text-blue-600 hover:border-blue-400 transition-colors"
+              aria-label="User Account"
             >
-              <RiMenu3Fill size={24} />
+              <User className="w-4.5 h-4.5 text-slate-700" strokeWidth={1.8} />
+            </Link>
+
+            {/* Mobile Hamburger Toggle */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
-      </nav>
+      </div>
 
-      {/* Overlay */}
-      {menuOpen && (
-        <div
-          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
-          onClick={toggleMenu}
-        />
-      )}
-
-      {/* Mobile Sidebar */}
-      <div className="fixed inset-0 z-[999] overflow-x-hidden pointer-events-none lg:hidden">
-        <aside
-          onClick={(e) => e.stopPropagation()}
-          className={`pointer-events-auto absolute top-0 right-0 w-72 h-full bg-white shadow-xl transition-transform duration-300
-          ${menuOpen ? "translate-x-0" : "translate-x-full"}`}
-        >
-          <div className="flex items-center justify-between py-4 px-5 border-b border-white/10">
-            <Logo />
-
-            <button
-              onClick={toggleMenu}
-              className="text-black/90 hover:text-secondary transition-colors cursor-pointer"
-            >
-              <X className="w-8 h-8 border border-white/20 rounded-full p-1.5" />
-            </button>
+      {/* Mobile Menu Drawer */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-gray-100 bg-white px-4 pt-3 pb-6 space-y-3">
+          <div className="relative mb-3">
+            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-2.5 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search products..."
+              className="w-full pl-9 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            />
           </div>
 
-          <div className="flex flex-col p-5 gap-2">
-            {navLinks.map((item: MenuItem) =>
-              item.submenu ? (
-                <div key={item.label}>
-                  <button
-                    onClick={() =>
-                      setOpenSubmenu((prev) =>
-                        prev === item.label ? null : item.label
-                      )
-                    }
-                    className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-base font-medium text-black/90 hover:text-secondary transition-colors cursor-pointer"
-                  >
-                    {item.label}
-
-                    <ChevronDown
-                      className={`w-4 h-4 transition-transform ${openSubmenu === item.label ? "rotate-180" : ""
-                        }`}
-                    />
-                  </button>
-
-                  {openSubmenu === item.label && (
-                    <div className="ml-3 mt-1 flex flex-col border-l border-white/10">
-                      {item.submenu.map((sub) => (
-                        <Link
-                          key={sub.label}
-                          to={sub.href}
-                          onClick={() => setMenuOpen(false)}
-                          className="px-4 py-2 text-sm  text-black/90 transition-colors"
-                        >
-                          {sub.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ) : (
+          <div className="flex flex-col space-y-1">
+            {navLinks.map((item: MenuItem) => {
+              const active = isActive(item.href);
+              return (
                 <Link
                   key={item.label}
-                  to={item.href!}
-                  onClick={() => setMenuOpen(false)}
-                  className={`px-3 py-2.5 rounded-lg text-base font-medium transition-colors hover:text-secondary ${isActive(item.href)
-                    ? "text-secondary"
-                    : "text-black/90 "
-                    }`}
+                  to={item.href || "/"}
+                  className={`px-3 py-2 rounded-lg text-base font-medium transition-colors ${
+                    active
+                      ? "bg-blue-50 text-blue-600 font-semibold"
+                      : "text-gray-700 hover:bg-gray-50"
+                  }`}
                 >
                   {item.label}
                 </Link>
-              )
-            )}
+              );
+            })}
           </div>
-        </aside>
-      </div>
-
-      {/* Placeholder during initial render */}
-      {!mounted && <span className="hidden" />}
-    </>
+        </div>
+      )}
+    </header>
   );
-};
-
-export default Navbar;
+}

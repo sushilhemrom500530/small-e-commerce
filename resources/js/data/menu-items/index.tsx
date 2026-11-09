@@ -119,19 +119,19 @@ export const sidebarMenus = {
 
 export const navLinks: MenuItem[] = [
   {
-    label: "Products",
-    href: "/products",
+    label: "Home",
+    href: "/",
   },
   {
-    label: "Services",
-    href: "/services",
+    label: "Shop",
+    href: "/shop",
   },
   {
-    label: "About Us",
-    href: "/about-us",
+    label: "About",
+    href: "/about",
   },
   {
-    label: "Contact Us",
-    href: "/contact-us",
+    label: "Contact",
+    href: "/contact",
   },
 ];

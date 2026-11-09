@@ -1,102 +1,103 @@
-import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
-import { FaInstagram, FaXTwitter } from "react-icons/fa6";
+import { FaFacebookF, FaLinkedinIn, FaInstagram, FaXTwitter } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import Logo from "../logo/index.js";
 
 export default function Footer() {
-  // link data
-  const footerData = [
+  const footerSections = [
     {
-      title: "About us",
-      data: [
-        { id: 1, title: "Home", href: "/" },
-        { id: 2, title: "Blog", href: "#blog" },
-        { id: 3, title: "Contact", href: "#contact" },
-        { id: 4, title: "Why Choose Us", href: "#why-choose-us" },
-      ]
-    },
-    {
-      title: "Services",
-      data: [
-        { id: 1, title: "Monetize", href: "#monetize" },
-        { id: 2, title: "Advertise", href: "#advertise" },
-        { id: 3, title: "Tour Support", href: "#tour-support" },
-        { id: 4, title: "Api Integration", href: "#api-integration" },
+      title: "Shop & Categories",
+      links: [
+        { label: "Electronics & Tech", href: "/shops/tech-world" },
+        { label: "Fashion & Apparel", href: "/shops/fashion-hub" },
+        { label: "Home & Decor", href: "/shops/home-decor" },
+        { label: "Beauty & Personal Care", href: "/shops/beauty-zone" },
       ],
     },
     {
-      title: "Others",
-      data: [
-        { id: 1, title: "Cookies", href: "/cookies" },
-        { id: 2, title: "Privacy Policy", href: "/privacy-policy" },
-        { id: 3, title: "Terms & Conditions", href: "/terms-conditions" },
+      title: "Customer Service",
+      links: [
+        { label: "Track Your Order", href: "/orders" },
+        { label: "Shipping Policy", href: "/shipping" },
+        { label: "Easy Returns & Refunds", href: "/returns" },
+        { label: "Help & FAQ", href: "/faq" },
       ],
-    }
-  ]
-  // for logo icons
-  const iconsData = [
-    { id: 1, href: "#facebook", icon: <FaFacebookF size={18} /> },
-    { id: 2, href: "#linkedin", icon: <FaLinkedinIn size={18} /> },
-    { id: 3, href: "#twitter", icon: <FaXTwitter size={18} /> },
-    { id: 4, href: "#instagram", icon: <FaInstagram size={18} /> },
+    },
+    {
+      title: "Company",
+      links: [
+        { label: "About ShopEase", href: "/about" },
+        { label: "Partner with Us", href: "/auth/login" },
+        { label: "Privacy Policy", href: "/privacy" },
+        { label: "Terms of Service", href: "/terms" },
+      ],
+    },
   ];
+
+  const socialLinks = [
+    { id: 1, href: "#facebook", icon: <FaFacebookF size={14} />, label: "Facebook" },
+    { id: 2, href: "#twitter", icon: <FaXTwitter size={14} />, label: "Twitter" },
+    { id: 3, href: "#instagram", icon: <FaInstagram size={14} />, label: "Instagram" },
+    { id: 4, href: "#linkedin", icon: <FaLinkedinIn size={14} />, label: "LinkedIn" },
+  ];
+
   return (
-    <div className=" text-black dark:text-[#C7C7C7] w-full h-auto mx-h-[387px] pt-24 pb-6">
-      <div className=" custom-container">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center gap-10">
-          <div>
-            {/* logo  */}
-            <div>
-              <Logo />
-              <p className="text-[16px] mt-3 text-black dark:text-[#C7C7C7]">Explore our platform&apos;s features and see how we can help boost your productivity with a guided tour.</p>
+    <footer className="bg-slate-900 text-slate-300 border-t border-slate-800 pt-16 pb-12 mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+          
+          {/* Brand info */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center">
+              <Logo className="text-white brightness-125" />
             </div>
-            <div className="flex gap-5 mt-14">
-              {iconsData?.map((item) => {
-                return (
-                  <Link
-                    to={item?.href}
-                    key={item?.id}
-                    className="w-8 h-8 p-2 border border-rose-600 hover:bg-rose-600 dark:text-white hover:text-white [transition:0.5s] rounded-full flex items-center justify-center"
-                  >
-                    <span>{item?.icon}</span>
-                  </Link>
-                );
-              })}
+            <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
+              ShopEase connects smart shoppers with curated trusted shops offering top-quality products, competitive pricing, and fast delivery.
+            </p>
+            <div className="flex items-center gap-3 pt-2">
+              {socialLinks.map((item) => (
+                <a
+                  key={item.id}
+                  href={item.href}
+                  aria-label={item.label}
+                  className="w-8 h-8 rounded-full bg-slate-800 hover:bg-[#2563eb] text-slate-300 hover:text-white flex items-center justify-center transition-colors"
+                >
+                  {item.icon}
+                </a>
+              ))}
             </div>
           </div>
-          {/* about us  */}
-          {
-            footerData?.map((item, index) => (
-              <div key={index}>
-                <h3 className="text-[1.5rem] font-semibold uppercase text-black dark:text-white mb-5">
-                  {item?.title}
-                </h3>
-                <div className="flex flex-col gap-3">
-                  {item?.data?.map((nav) => {
-                    return (
-                      <div key={nav?.id}>
-                        <Link
-                          to={nav?.href}
-                          className="hover:text-rose-600 [transition:0.5s] text-[16px]"
-                        >
-                          {nav?.title}
-                        </Link>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))
-          }
 
+          {/* Nav links */}
+          {footerSections.map((section) => (
+            <div key={section.title}>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-4">
+                {section.title}
+              </h4>
+              <ul className="space-y-2.5 text-sm">
+                {section.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      to={link.href}
+                      className="text-slate-400 hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-        <div className="mt-10">
-          <div className="w-full rounded-full h-[1px] bg-gray-500" ></div>
-          <p className="text-[14px] text-center pt-6 text-gray-800 dark:text-gray-400">
-            Tour. 2024. All rights reserved.
-          </p>
+
+        <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+          <p>© {new Date().getFullYear()} ShopEase Inc. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <Link to="/privacy" className="hover:text-slate-300 transition-colors">Privacy</Link>
+            <Link to="/terms" className="hover:text-slate-300 transition-colors">Terms</Link>
+            <Link to="/contact" className="hover:text-slate-300 transition-colors">Support</Link>
+          </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }

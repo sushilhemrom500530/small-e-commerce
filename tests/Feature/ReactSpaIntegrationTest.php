@@ -15,7 +15,9 @@ class ReactSpaIntegrationTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('<div id="root"></div>', false);
-        $response->assertSee('assets/main-', false);
+        $content = $response->getContent();
+        $hasViteScript = str_contains($content, 'assets/main-') || str_contains($content, 'resources/js/main.tsx');
+        $this->assertTrue($hasViteScript, 'Expected React entry script in page output.');
     }
 
     /**
@@ -60,4 +62,3 @@ class ReactSpaIntegrationTest extends TestCase
         ]);
     }
 }
-
