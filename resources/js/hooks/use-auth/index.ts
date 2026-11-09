@@ -317,12 +317,19 @@ export function useAuthService() {
     }, []);
 
     const logoutUser = () => {
-        // Remove token cookie
+        // Remove token cookies & storage
+        Cookies.remove("token", { path: "/" });
+        Cookies.remove("authToken", { path: "/" });
         Cookies.remove("token");
-        message.success("User Logout Successfully")
-        // Redirect to login
+        Cookies.remove("authToken");
+        if (typeof window !== "undefined") {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+            localStorage.removeItem("authToken");
+        }
+        message.success("User Logout Successfully");
         navigate("/auth/login");
-    }
+    };
 
     return { register, login, forgotPassword, verifyOtp, verifyUserEmail, resetPassword, loading, logoutUser, resendOtp, getMe };
 }

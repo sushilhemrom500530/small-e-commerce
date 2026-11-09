@@ -27,6 +27,26 @@ const baseQueryWithToast: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQuer
     const result = await rawBaseQuery(args, api, extraOptions);
 
     if (result.error) {
+        if (result.error.status === 401) {
+            Cookies.remove("token", { path: "/" });
+            Cookies.remove("authToken", { path: "/" });
+            Cookies.remove("token");
+            Cookies.remove("authToken");
+            if (typeof window !== "undefined") {
+                localStorage.removeItem("token");
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("user");
+                if (
+                    window.location.pathname.startsWith("/admin") ||
+                    window.location.pathname.startsWith("/shop-owner") ||
+                    window.location.pathname.startsWith("/manager") ||
+                    window.location.pathname.startsWith("/dashboard")
+                ) {
+                    window.location.href = "/auth/login";
+                }
+            }
+        }
+
         const errorData = result.error.data as any;
         let errorMessage = "An unexpected error occurred. Please try again.";
 

@@ -18,12 +18,20 @@ export default function Navbar() {
   const user = useAppSelector((state) => state.auth?.user);
   const isAuthenticated = useAppSelector((state) => state.auth?.isAuthenticated);
 
+  const token =
+    Cookies.get("token") ||
+    Cookies.get("authToken") ||
+    (typeof window !== "undefined"
+      ? localStorage.getItem("token") || localStorage.getItem("authToken")
+      : null);
+
   const hasDashboard =
+    Boolean(token) &&
     isAuthenticated &&
     user &&
     (user.role === "admin" || user.role === "shop_owner" || user.role === "manager");
 
-  const dashboardLink = !isAuthenticated || !user
+  const dashboardLink = !token || !isAuthenticated || !user
     ? "/auth/login"
     : user.role === "admin"
       ? "/admin/dashboard"
@@ -34,8 +42,15 @@ export default function Navbar() {
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     dispatch(logout());
+    Cookies.remove("token", { path: "/" });
+    Cookies.remove("authToken", { path: "/" });
     Cookies.remove("token");
-    localStorage.removeItem("user");
+    Cookies.remove("authToken");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      localStorage.removeItem("authToken");
+    }
   };
 
   const isActive = (href?: string) => {
