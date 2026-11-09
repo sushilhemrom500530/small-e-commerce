@@ -110,3 +110,4 @@ export default function ShopsManagement() {
         </div>
     );
 }
+
