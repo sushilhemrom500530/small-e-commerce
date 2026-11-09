@@ -32,8 +32,9 @@ export default function ContactPage() {
           { label: "Home", href: "/" },
           { label: "Contact Us" },
         ]}
-        backgroundImage="/images/contact-banner-blend.png"
+        backgroundImage="/images/contact-banner-hd.png"
         imageAlt="World map and location pins"
+        gradient="bg-gradient-to-r from-[#0d274a] via-[#12335f] to-[#1c4780]"
       />
 
       {/* Main Content: Info & Form */}

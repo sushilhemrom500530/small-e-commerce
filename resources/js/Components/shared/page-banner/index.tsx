@@ -14,6 +14,7 @@ export interface PageBannerProps {
   imageAlt?: string;
   rightElement?: React.ReactNode;
   className?: string;
+  gradient?: string;
 }
 
 export default function PageBanner({
@@ -24,26 +25,28 @@ export default function PageBanner({
   imageAlt = "Banner background",
   rightElement,
   className = "",
+  gradient,
 }: PageBannerProps) {
+  const bgGradient =
+    gradient ||
+    "bg-gradient-to-r from-[#12315b] via-[#173c6e] to-[#204c86]";
+
   return (
     <section
-      className={`relative overflow-hidden bg-gradient-to-r from-[#102a4b] via-[#16355e] to-[#214380] text-white py-10 sm:py-14 select-none ${className}`}
+      className={`relative overflow-hidden ${bgGradient} text-white py-7 sm:py-9 select-none ${className}`}
     >
-      {/* Background Graphic on Right with Seamless Gradient Blending */}
+      {/* Background Graphic on Right with Seamless Fade */}
       {backgroundImage && (
-        <div className="absolute right-0 top-0 bottom-0 w-3/5 sm:w-1/2 lg:w-3/5 pointer-events-none overflow-hidden flex justify-end">
+        <div className="absolute right-0 top-0 bottom-0 w-3/4 sm:w-2/3 lg:w-3/5 pointer-events-none overflow-hidden flex justify-end">
           <img
             src={backgroundImage}
             alt={imageAlt}
-            className="w-full h-full object-cover object-right"
+            className="w-full h-full object-cover object-right select-none"
           />
-          {/* Multi-stage linear gradient fade from solid navy into transparent image */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#102a4b] via-[#102a4b]/70 to-transparent" />
-          <div className="absolute inset-0 bg-[#102a4b]/20 mix-blend-multiply" />
         </div>
       )}
 
-      {/* Optional custom right element (e.g. vector art or custom graphic) */}
+      {/* Optional custom right element (e.g. vector art for Shops) */}
       {!backgroundImage && rightElement && (
         <div className="absolute right-0 top-0 bottom-0 w-1/2 pointer-events-none overflow-hidden flex items-center justify-end pr-8 sm:pr-14">
           {rightElement}
@@ -52,13 +55,13 @@ export default function PageBanner({
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-xl sm:max-w-2xl">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+        <div className="max-w-xl">
+          <h1 className="text-2xl sm:text-3xl lg:text-[34px] font-bold tracking-tight text-white leading-tight">
             {title}
           </h1>
 
           {description && (
-            <p className="mt-2 sm:mt-2.5 text-sm sm:text-base text-blue-100/90 font-normal leading-relaxed">
+            <p className="mt-1.5 text-xs sm:text-sm lg:text-[15px] text-blue-100 font-normal leading-relaxed">
               {description}
             </p>
           )}
@@ -66,13 +69,17 @@ export default function PageBanner({
           {breadcrumbs.length > 0 && (
             <nav
               aria-label="Breadcrumb"
-              className="mt-3.5 flex items-center gap-2 text-xs sm:text-sm text-blue-200/90 font-medium"
+              className="mt-3 flex items-center gap-2 text-xs sm:text-[13px] text-blue-200/90 font-medium"
             >
               {breadcrumbs.map((crumb, idx) => {
                 const isLast = idx === breadcrumbs.length - 1;
                 return (
                   <React.Fragment key={crumb.label + idx}>
-                    {idx > 0 && <span className="text-blue-300/70 select-none">›</span>}
+                    {idx > 0 && (
+                      <span className="text-blue-300/80 font-normal select-none">
+                        &gt;
+                      </span>
+                    )}
                     {crumb.href && !isLast ? (
                       <Link
                         to={crumb.href}
@@ -81,7 +88,9 @@ export default function PageBanner({
                         {crumb.label}
                       </Link>
                     ) : (
-                      <span className="text-white font-medium">{crumb.label}</span>
+                      <span className="text-white font-medium">
+                        {crumb.label}
+                      </span>
                     )}
                   </React.Fragment>
                 );
@@ -93,4 +102,3 @@ export default function PageBanner({
     </section>
   );
 }
-

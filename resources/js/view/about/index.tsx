@@ -12,8 +12,9 @@ export default function AboutPage() {
           { label: "Home", href: "/" },
           { label: "About Us" },
         ]}
-        backgroundImage="/images/about-banner-blend.png"
+        backgroundImage="/images/about-banner-hd.png"
         imageAlt="ShopEase Team Collaborating"
+        gradient="bg-gradient-to-r from-[#173766] via-[#1c4176] to-[#244f8b]"
       />
 
       {/* Main Content Area */}
