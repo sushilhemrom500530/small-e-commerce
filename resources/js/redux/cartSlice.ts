@@ -104,3 +104,4 @@ export const { addToCart, updateQuantity, removeFromCart, clearCart } =
 
 const cartReducer: Reducer<CartState> = cartSlice.reducer;
 export default cartReducer;
+
