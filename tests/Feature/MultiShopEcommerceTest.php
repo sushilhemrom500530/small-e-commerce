@@ -167,3 +167,4 @@ class MultiShopEcommerceTest extends TestCase
         $this->assertNotContains('Unassigned Product', $names);
     }
 }
+
