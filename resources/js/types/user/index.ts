@@ -145,7 +145,7 @@ const parsedUser: IUser | null = storedUser ? JSON.parse(storedUser) : null;
 const defaultDevAdmin: IUser = {
     _id: "admin-1",
     fullName: "Admin",
-    email: "admin@example.com",
+    email: "admin@gmail.com",
     role: "admin",
     dateOfBirth: "1990-01-01",
     phone: "+1 234 567 8900",
@@ -155,7 +155,7 @@ const defaultDevAdmin: IUser = {
 const defaultDevShopOwner: IUser = {
     _id: "owner-1",
     fullName: "Shop Owner",
-    email: "owner@techworld.com",
+    email: "shopowner@gmail.com",
     role: "shop_owner",
     dateOfBirth: "1992-05-15",
     phone: "+1 234 567 8901",

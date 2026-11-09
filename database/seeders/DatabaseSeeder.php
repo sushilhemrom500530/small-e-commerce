@@ -18,11 +18,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $defaultPassword = Hash::make('password123');
+        $defaultPassword = Hash::make('12345678');
 
         // 1. Seed System Admin
         $admin = User::updateOrCreate(
-            ['email' => 'admin@example.com'],
+            ['email' => 'admin@gmail.com'],
             [
                 'name' => 'Super Administrator',
                 'password' => $defaultPassword,
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
 
         // 2. Seed Shop Owners
         $techOwner = User::updateOrCreate(
-            ['email' => 'tech_owner@example.com'],
+            ['email' => 'shopowner@gmail.com'],
             [
                 'name' => 'John Tech',
                 'password' => $defaultPassword,
@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
         );
 
         $fashionOwner = User::updateOrCreate(
-            ['email' => 'fashion_owner@example.com'],
+            ['email' => 'shopper@gmail.com'],
             [
                 'name' => 'Sarah Fashion',
                 'password' => $defaultPassword,
@@ -312,12 +312,12 @@ class DatabaseSeeder extends Seeder
             $this->command->table(
                 ['Role', 'Full Name', 'Email', 'Password', 'Assigned Store / Info'],
                 [
-                    ['System Admin', 'Super Administrator', 'admin@example.com', 'password123', 'Full Administrative Access'],
-                    ['Shop Owner', 'John Tech', 'tech_owner@example.com', 'password123', 'Shop: Tech World'],
-                    ['Shop Owner', 'Sarah Fashion', 'fashion_owner@example.com', 'password123', 'Shop: Fashion Hub'],
-                    ['Customer', 'Alice Customer', 'customer@example.com', 'password123', 'Verified Storefront Customer'],
-                    ['Customer', 'John Doe', 'john.customer@example.com', 'password123', 'Verified Storefront Customer'],
-                    ['Customer', 'Emily Watson', 'emily.customer@example.com', 'password123', 'Verified Storefront Customer'],
+                    ['System Admin', 'Super Administrator', 'admin@gmail.com', '12345678', 'Full Administrative Access'],
+                    ['Shop Owner', 'John Tech', 'shopowner@gmail.com', '12345678', 'Shop: Tech World'],
+                    ['Shop Owner', 'Sarah Fashion', 'shopper@gmail.com', '12345678', 'Shop: Fashion Hub'],
+                    ['Customer', 'Alice Customer', 'customer@example.com', '12345678', 'Verified Storefront Customer'],
+                    ['Customer', 'John Doe', 'john.customer@example.com', '12345678', 'Verified Storefront Customer'],
+                    ['Customer', 'Emily Watson', 'emily.customer@example.com', '12345678', 'Verified Storefront Customer'],
                 ]
             );
             $this->command->newLine();

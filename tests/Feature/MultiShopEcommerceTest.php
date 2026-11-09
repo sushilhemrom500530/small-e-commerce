@@ -39,24 +39,24 @@ class MultiShopEcommerceTest extends TestCase
 
         $this->admin = User::factory()->create([
             'role' => UserRole::Admin->value,
-            'email' => 'admin@test.com',
-            'password' => Hash::make('password123'),
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('12345678'),
             'is_verified' => true,
             'status' => 'active',
         ]);
 
         $this->ownerA = User::factory()->create([
             'role' => UserRole::ShopOwner->value,
-            'email' => 'ownerA@test.com',
-            'password' => Hash::make('password123'),
+            'email' => 'shopowner@gmail.com',
+            'password' => Hash::make('12345678'),
             'is_verified' => true,
             'status' => 'active',
         ]);
 
         $this->ownerB = User::factory()->create([
             'role' => UserRole::ShopOwner->value,
-            'email' => 'ownerB@test.com',
-            'password' => Hash::make('password123'),
+            'email' => 'shopper@gmail.com',
+            'password' => Hash::make('12345678'),
             'is_verified' => true,
             'status' => 'active',
         ]);
@@ -98,8 +98,8 @@ class MultiShopEcommerceTest extends TestCase
     public function test_admin_authentication_via_login_api(): void
     {
         $response = $this->postJson('/api/v1/auth/login', [
-            'email' => 'admin@test.com',
-            'password' => 'password123',
+            'email' => 'admin@gmail.com',
+            'password' => '12345678',
         ]);
 
         $response->assertStatus(200);

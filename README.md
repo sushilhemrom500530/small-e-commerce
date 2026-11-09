@@ -12,7 +12,7 @@ The system enables system administrators to manage shops and master products, wh
 
 ---
 
-## 🌟 Key Functional Features
+## Key Functional Features
 
 ### 1. Admin Panel
 * **Secure Authentication & RBAC**: Dedicated administrative role (`admin`) with protected routes.
@@ -37,7 +37,7 @@ The system enables system administrators to manage shops and master products, wh
 
 ---
 
-## 🏗️ Architecture & Database Design
+## Architecture & Database Design
 
 ### Database ERD / Schema
 
@@ -73,7 +73,7 @@ The system enables system administrators to manage shops and master products, wh
 
 ---
 
-## 📋 System Requirements
+## System Requirements
 
 * **PHP**: `>= 8.2` or `8.3`
 * **Composer**: `>= 2.2`
@@ -83,7 +83,7 @@ The system enables system administrators to manage shops and master products, wh
 
 ---
 
-## 🚀 Step-by-Step Installation & Setup
+## Step-by-Step Installation & Setup
 
 ### 1. Clone the Repository
 ```bash
@@ -157,22 +157,22 @@ The application is now live at: **`http://127.0.0.1:8000`**
 
 ---
 
-## 🔑 Demo & Test Credentials
+## Demo & Test Credentials
 
 Running **`npm run seeder`** automatically outputs and seeds the following demo credentials:
 
 | Role | Name | Email | Password | Assigned Shop / Role Details |
 | :--- | :--- | :--- | :--- | :--- |
-| **System Admin** | Super Administrator | `admin@example.com` | `password123` | Master Administrative Access |
-| **Shop Owner 1** | John Tech | `tech_owner@example.com` | `password123` | Shop: **Tech World** |
-| **Shop Owner 2** | Sarah Fashion | `fashion_owner@example.com` | `password123` | Shop: **Fashion Hub** |
-| **Customer 1** | Alice Customer | `customer@example.com` | `password123` | Verified Storefront Customer |
-| **Customer 2** | John Doe | `john.customer@example.com` | `password123` | Verified Storefront Customer |
-| **Customer 3** | Emily Watson | `emily.customer@example.com` | `password123` | Verified Storefront Customer |
+| **System Admin** | Super Administrator | `admin@gmail.com` | `12345678` | Master Administrative Access |
+| **Shop Owner 1** | John Tech | `shopowner@gmail.com` | `12345678` | Shop: **Tech World** |
+| **Shop Owner 2** | Sarah Fashion | `shopper@gmail.com` | `12345678` | Shop: **Fashion Hub** |
+| **Customer 1** | Alice Customer | `customer@example.com` | `12345678` | Verified Storefront Customer |
+| **Customer 2** | John Doe | `john.customer@example.com` | `12345678` | Verified Storefront Customer |
+| **Customer 3** | Emily Watson | `emily.customer@example.com` | `12345678` | Verified Storefront Customer |
 
 ---
 
-## 🧪 Verification & Assessment Walkthrough
+## Verification & Assessment Walkthrough
 
 ### 1. Run Automated Test Suite
 Execute the comprehensive PHPUnit feature test suite covering all functional requirements:
@@ -195,7 +195,7 @@ php artisan test --compact
 4. **Notice**: The product `Stainless Steel Smart Thermos` (which exists in the master catalog but has not been assigned to any shop) is **completely hidden** from both storefronts.
 
 #### Step B: Shop Owner Shared Catalog & Custom Listing
-1. Log in as `fashion_owner@example.com` (`password123`) at `http://localhost:8000/auth/login`.
+1. Log in as `shopper@gmail.com` or `shopowner@gmail.com` (`12345678`) at `http://localhost:8000/auth/login`.
 2. Go to **Catalog** (`/shop-owner/dashboard/catalog`).
 3. Find an unadded product (e.g., `Stainless Steel Smart Thermos`) and click **"Add to My Shop"**.
 4. Set your custom price (e.g., `৳1,850`) and custom description.
@@ -208,7 +208,7 @@ php artisan test --compact
 
 ---
 
-## 📂 Project Directory Structure
+## Project Directory Structure
 
 ```
 ├── app/
@@ -252,7 +252,7 @@ php artisan test --compact
 
 ---
 
-## 📬 Contact & Submission
+## Contact & Submission
 
 * **Recipient**: `career@csnbangladesh.com`
 * **Assessment**: CSN Bangladesh Ltd — Small E-commerce Management
