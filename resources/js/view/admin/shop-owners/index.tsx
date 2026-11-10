@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Users, Plus, Search, Mail, Phone, Store } from "lucide-react";
-import { Button, Modal, Form, Input, message } from "antd";
+import { Button, Modal, Form, message } from "antd";
+import FormField from "../../../Components/form/index.js";
 import {
     useGetAdminShopOwnersQuery,
     useCreateAdminShopOwnerMutation,
@@ -50,7 +51,7 @@ export default function ShopOwnersManagement() {
                 </Button>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-xs">
+            <div className="bg-white rounded-2xl p-6 border border-slate-100">
                 <div className="flex items-center justify-between gap-4 pb-5 border-b border-slate-100">
                     <div className="relative w-full max-w-xs">
                         <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -149,35 +150,66 @@ export default function ShopOwnersManagement() {
                 centered
             >
                 <Form form={form} layout="vertical" onFinish={handleCreateOwner} className="mt-4">
-                    <Form.Item name="name" label="Full Name" rules={[{ required: true, message: "Name is required" }]}>
-                        <Input placeholder="e.g. Michael Smith" className="rounded-xl py-2" />
-                    </Form.Item>
+                    <FormField
+                        type="text"
+                        name="name"
+                        label="Full Name"
+                        placeholder="e.g. Michael Smith"
+                        required
+                        rules={[{ required: true, message: "Name is required" }]}
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                    <Form.Item name="email" label="Email Address" rules={[{ required: true, type: "email", message: "Valid email is required" }]}>
-                        <Input placeholder="owner@store.com" className="rounded-xl py-2" />
-                    </Form.Item>
+                    <FormField
+                        type="email"
+                        name="email"
+                        label="Email Address"
+                        placeholder="owner@store.com"
+                        required
+                        rules={[{ required: true, type: "email", message: "Valid email is required" }]}
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                    <Form.Item name="password" label="Password" rules={[{ required: true, min: 6, message: "Min 6 characters" }]}>
-                        <Input.Password placeholder="••••••••" className="rounded-xl py-2" />
-                    </Form.Item>
+                    <FormField
+                        type="password"
+                        name="password"
+                        label="Password"
+                        placeholder="••••••••"
+                        required
+                        rules={[{ required: true, min: 6, message: "Min 6 characters" }]}
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                    <Form.Item name="phoneNumber" label="Phone Number">
-                        <Input placeholder="+8801700000000" className="rounded-xl py-2" />
-                    </Form.Item>
+                    <FormField
+                        type="tel"
+                        name="phoneNumber"
+                        label="Phone Number"
+                        placeholder="+8801700000000"
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                    <Form.Item name="shopName" label="Assign New Shop Name (Optional)">
-                        <Input placeholder="e.g. Galaxy Electronics" className="rounded-xl py-2" />
-                    </Form.Item>
+                    <FormField
+                        type="text"
+                        name="shopName"
+                        label="Assign New Shop Name (Optional)"
+                        placeholder="e.g. Galaxy Electronics"
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
                     <div className="flex justify-end gap-3 mt-6">
-                        <Button onClick={() => setIsCreateOpen(false)} className="rounded-xl h-10 px-4">
+                        <Button onClick={() => setIsCreateOpen(false)} className="!rounded-md h-10 px-4">
                             Cancel
                         </Button>
                         <Button
                             type="primary"
                             htmlType="submit"
                             loading={isCreating}
-                            className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold"
+                            className="!bg-primary hover:!bg-primary-hover !rounded-md h-10 px-6 text-white font-semibold"
                         >
                             Create Account
                         </Button>

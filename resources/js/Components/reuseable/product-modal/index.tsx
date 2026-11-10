@@ -51,39 +51,33 @@ export default function ProductModal({
     // Dynamic Title & Subtitle based on role and mode
     const resolvedTitle =
         title ||
-        (isShopOwner
-            ? isEdit
+        (mode === "create"
+            ? "Create New Product"
+            : isShopOwner
                 ? "Customize Product in Your Shop"
-                : "Create New Product"
-            : isEdit
-                ? "Edit Catalog Product"
-                : "Add Product to Shared Catalog");
+                : "Edit Catalog Product");
 
     const resolvedSubtitle =
         subtitle ||
         (isEdit
-            ? initialData?.name
-            : isShopOwner
-                ? "Enters Shared Catalog + Automatically listed in your shop"
-                : "Available for all shop owners to list in their stores");
+            ? initialData?.name || "Update product details"
+            : "Enters Shared Catalog + Automatically listed in your shop");
 
     const resolvedDescription =
         description ||
-        (isShopOwner
-            ? isEdit
+        (mode === "create"
+            ? "Products created by you will become available in the Shared Catalog for other shop owners and listed in your shop."
+            : isShopOwner
                 ? "Changes made here customize this listing for your shop's storefront. The global catalog item remains intact."
-                : "Products created by you will become available in the Shared Catalog for other shop owners and listed in your shop."
-            : "Manage product details in the shared catalog accessible across all stores.");
+                : "Manage product details in the shared catalog accessible across all stores.");
 
     const resolvedSubmitText =
         submitText ||
-        (isShopOwner
-            ? isEdit
+        (mode === "create"
+            ? "Create & List Product"
+            : isShopOwner
                 ? "Save Listing"
-                : "Create & List Product"
-            : isEdit
-                ? "Save Changes"
-                : "Add to Catalog");
+                : "Save Changes");
 
     useEffect(() => {
         if (open) {
@@ -132,7 +126,7 @@ export default function ProductModal({
                     <Button
                         onClick={onCancel}
                         disabled={loading}
-                        className="rounded-xl h-10 px-5 font-medium text-slate-600 hover:text-slate-800"
+                        className="!rounded-md h-10 px-5 font-medium text-slate-600 hover:text-slate-800"
                     >
                         Cancel
                     </Button>
@@ -140,7 +134,7 @@ export default function ProductModal({
                         type="primary"
                         loading={loading}
                         onClick={() => form.submit()}
-                        className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold shadow-xs"
+                        className="!bg-primary hover:!bg-primary-hover !rounded-md h-10 px-6 text-white font-semibold"
                     >
                         {resolvedSubmitText}
                     </Button>
@@ -155,11 +149,11 @@ export default function ProductModal({
                     label="Product Name"
                     placeholder="e.g. Mechanical Gaming Keyboard RGB"
                     required
-                    colorClass="rounded-xl"
+                    colorClass="!rounded-md"
                     className="!mb-3.5"
                 />
 
-                <div className={`grid grid-cols-1 ${isShopOwner ? "sm:grid-cols-2" : ""} gap-3 sm:gap-4`}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <FormField
                         type="select"
                         name="categoryId"
@@ -167,21 +161,19 @@ export default function ProductModal({
                         placeholder="Select a category"
                         options={categoryOptions}
                         allowClear
-                        colorClass="rounded-xl"
+                        colorClass="!rounded-md"
                         className="!mb-3.5"
                     />
 
-                    {isShopOwner && (
-                        <FormField
-                            type="number"
-                            name="price"
-                            label="Your Selling Price (৳ BDT)"
-                            placeholder="e.g. 4500"
-                            required
-                            colorClass="rounded-xl"
-                            className="!mb-3.5"
-                        />
-                    )}
+                    <FormField
+                        type="number"
+                        name="price"
+                        label="Your Selling Price (৳ BDT)"
+                        placeholder="e.g. 4500"
+                        required={mode === "create" || isShopOwner}
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
                 </div>
                 <FormField
                     type="textarea"
@@ -197,20 +189,16 @@ export default function ProductModal({
                             : "Full product specifications and details..."
                     }
                     rows={3}
-                    colorClass="rounded-xl"
+                    colorClass="!rounded-md"
                     className="!mb-3.5"
                 />
 
                 <FormField
                     type="text"
                     name="thumbnail"
-                    label={
-                        isShopOwner
-                            ? "Thumbnail URL (Leave blank to use default)"
-                            : "Master Thumbnail URL"
-                    }
+                    label="Thumbnail URL (Leave blank to use default)"
                     placeholder="https://example.com/product-image.jpg"
-                    colorClass="rounded-xl"
+                    colorClass="!rounded-md"
                     className="!mb-3.5"
                 />
 

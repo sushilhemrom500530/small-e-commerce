@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\Shop;
+use App\Models\ShopProduct;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,7 +20,7 @@ class AdminProductController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Product::with(['category', 'creator']);
+        $query = Product::with(['category', 'creator', 'shopProducts']);
 
         if ($search = $request->query('search', $request->query('searchTerm'))) {
             $query->where(function ($q) use ($search) {
@@ -71,6 +73,8 @@ class AdminProductController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'description' => 'nullable|string',
             'thumbnail' => 'nullable|string',
+            'price' => 'nullable|numeric|min:0',
+            'details' => 'nullable|string',
         ]);
 
         $product = Product::create([
@@ -81,8 +85,27 @@ class AdminProductController extends Controller
             'thumbnail' => $validated['thumbnail'] ?? null,
         ]);
 
+        if (isset($validated['price'])) {
+            $user = $request->user();
+            $shop = $user?->shops()->first() ?? Shop::first();
+            if ($shop) {
+                ShopProduct::firstOrCreate(
+                    [
+                        'shop_id' => $shop->id,
+                        'product_id' => $product->id,
+                    ],
+                    [
+                        'price' => $validated['price'],
+                        'details' => $validated['details'] ?? $validated['description'] ?? null,
+                        'thumbnail' => $validated['thumbnail'] ?? null,
+                        'is_active' => true,
+                    ]
+                );
+            }
+        }
+
         return $this->sendResponse(
-            new ProductResource($product->load(['category', 'creator'])),
+            new ProductResource($product->load(['category', 'creator', 'shopProducts'])),
             'Product added to shared catalog successfully.',
             201
         );
@@ -94,7 +117,7 @@ class AdminProductController extends Controller
     public function show(Product $product): JsonResponse
     {
         return $this->sendResponse(
-            new ProductResource($product->load(['category', 'creator'])),
+            new ProductResource($product->load(['category', 'creator', 'shopProducts'])),
             'Product details retrieved successfully.'
         );
     }
@@ -110,6 +133,8 @@ class AdminProductController extends Controller
             'category_id' => 'sometimes|nullable|exists:categories,id',
             'description' => 'nullable|string',
             'thumbnail' => 'nullable|string',
+            'price' => 'nullable|numeric|min:0',
+            'details' => 'nullable|string',
         ]);
 
         if (isset($validated['name'])) {
@@ -130,8 +155,27 @@ class AdminProductController extends Controller
 
         $product->save();
 
+        if (isset($validated['price'])) {
+            $user = $request->user();
+            $shop = $user?->shops()->first() ?? Shop::first();
+            if ($shop) {
+                ShopProduct::updateOrCreate(
+                    [
+                        'shop_id' => $shop->id,
+                        'product_id' => $product->id,
+                    ],
+                    [
+                        'price' => $validated['price'],
+                        'details' => $validated['details'] ?? $validated['description'] ?? null,
+                        'thumbnail' => $validated['thumbnail'] ?? $product->thumbnail,
+                        'is_active' => true,
+                    ]
+                );
+            }
+        }
+
         return $this->sendResponse(
-            new ProductResource($product->load(['category', 'creator'])),
+            new ProductResource($product->load(['category', 'creator', 'shopProducts'])),
             'Product updated successfully.'
         );
     }

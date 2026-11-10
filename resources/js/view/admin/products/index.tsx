@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus, Search, Edit2, Trash2, Package } from "lucide-react";
-import { Button, Select, message } from "antd";
+import { Button, Input, Select, message } from "antd";
 import {
     useGetAdminProductsQuery,
     useCreateAdminProductMutation,
@@ -85,7 +85,7 @@ export default function ManageProducts() {
                 <Button
                     type="primary"
                     onClick={handleOpenCreate}
-                    className="!bg-primary hover:!bg-primary-hover !rounded-xl !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white"
+                    className="!bg-primary hover:!bg-primary-hover !rounded-md !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white"
                 >
                     <Plus className="w-4 h-4" />
                     <span>Add New Product</span>
@@ -96,26 +96,28 @@ export default function ManageProducts() {
                 <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-slate-100">
                     <div className="flex items-center gap-3 w-full sm:w-auto">
                         <div className="relative w-full sm:w-72">
-                            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                            <input
+                            <Input
                                 type="text"
+                                prefix={<Search className="w-4 h-4 text-slate-400" />}
+                                size="large"
                                 placeholder="Search products..."
                                 value={searchTerm}
                                 onChange={(e) => {
                                     setSearchTerm(e.target.value);
                                     setPage(1);
                                 }}
-                                className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
+                                className="!rounded-md"
                             />
                         </div>
                         <Select
                             placeholder="All Categories"
                             allowClear
+                            size="large"
                             onChange={(val) => {
                                 setSelectedCategory(val);
                                 setPage(1);
                             }}
-                            className="w-44 !rounded-xl"
+                            className="w-44 !rounded-md"
                         >
                             {categories.map((c) => (
                                 <Select.Option key={c.id} value={c.id}>
@@ -231,6 +233,7 @@ export default function ManageProducts() {
                 initialData={editingProduct ? {
                     name: editingProduct.name,
                     categoryId: editingProduct.categoryId,
+                    price: editingProduct.price ?? undefined,
                     description: editingProduct.description,
                     thumbnail: editingProduct.thumbnail,
                 } : null}
