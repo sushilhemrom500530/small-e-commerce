@@ -8,6 +8,7 @@ import {
     useGetAdminProductsQuery,
     useGetAdminShopOwnersQuery,
 } from "../../../redux/features/ecommerce/index.js";
+import Loading from "../../../Components/reuseable/loading/index.js";
 
 export default function Dashboard() {
     const { user } = useSelector((state: RootState) => state.auth);
@@ -20,6 +21,10 @@ export default function Dashboard() {
     const shops = shopsData?.results || [];
     const products = productsData?.results || [];
     const owners = ownersData?.results || [];
+
+    if (isShopsLoading && isProductsLoading && isOwnersLoading) {
+        return <Loading title="Loading dashboard metrics..." className="h-[50vh]" />;
+    }
 
     const statCards = [
         {

@@ -6,6 +6,7 @@ import {
     useGetMyShopProfileQuery,
     useUpdateMyShopProfileMutation,
 } from "../../../redux/features/ecommerce/index.js";
+import Loading from "../../../Components/reuseable/loading/index.js";
 
 export default function MyShopPage() {
     const { data, isLoading } = useGetMyShopProfileQuery();
@@ -34,11 +35,7 @@ export default function MyShopPage() {
     };
 
     if (isLoading) {
-        return (
-            <div className="py-20 text-center text-slate-400 font-medium">
-                Loading shop profile...
-            </div>
-        );
+        return <Loading title="Loading shop profile..." className="h-[50vh]" />;
     }
 
     return (

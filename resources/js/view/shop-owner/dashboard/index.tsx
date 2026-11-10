@@ -7,6 +7,7 @@ import {
     useGetMyShopProductsQuery,
     useGetShopCatalogQuery
 } from "../../../redux/features/ecommerce/index.js";
+import Loading from "../../../Components/reuseable/loading/index.js";
 
 export default function ShopOwnerDashboard() {
     const { user } = useSelector((state: RootState) => state.auth);
@@ -18,6 +19,10 @@ export default function ShopOwnerDashboard() {
     const shop = shopData?.results;
     const myProducts = productsData?.results || [];
     const catalogProducts = catalogData?.results || [];
+
+    if (isShopLoading && isProductsLoading) {
+        return <Loading title="Loading shop dashboard..." className="h-[50vh]" />;
+    }
 
     const statCards = [
         {

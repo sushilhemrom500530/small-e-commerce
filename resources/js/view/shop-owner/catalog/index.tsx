@@ -3,6 +3,7 @@ import { Search, Check, Plus, Package } from "lucide-react";
 import { Button, Form, message, Select } from "antd";
 import ResponsiveModal from "../../../Components/reuseable/responsive-modal/index.js";
 import FormField from "../../../Components/form/index.js";
+import Loading from "../../../Components/reuseable/loading/index.js";
 import {
     useGetShopCatalogQuery,
     useAddCatalogToShopMutation,
@@ -97,8 +98,8 @@ export default function ProductCatalog() {
 
             {/* Catalog Grid */}
             {isLoading ? (
-                <div className="py-20 text-center text-slate-400 font-medium">
-                    Loading shared catalog...
+                <div className="bg-white rounded-2xl border border-slate-100 p-8">
+                    <Loading title="Loading shared catalog..." />
                 </div>
             ) : catalog.length === 0 ? (
                 <div className="py-20 text-center text-slate-400 bg-white rounded-2xl border border-slate-100">

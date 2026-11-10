@@ -6,6 +6,7 @@ import {
     useCreateAdminShopOwnerMutation,
     type IShopOwner,
 } from "../../../redux/features/ecommerce/index.js";
+import Loading from "../../../Components/reuseable/loading/index.js";
 
 export default function ShopOwnersManagement() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -80,8 +81,8 @@ export default function ShopOwnersManagement() {
                         <tbody className="divide-y divide-slate-50 text-sm">
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan={5} className="py-10 text-center text-slate-400">
-                                        Loading shop owners...
+                                    <td colSpan={5} className="py-8 text-center">
+                                        <Loading title="Loading shop owners..." className="min-h-[180px]" />
                                     </td>
                                 </tr>
                             ) : owners.length === 0 ? (

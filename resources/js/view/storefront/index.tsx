@@ -16,6 +16,7 @@ import {
     useGetCategoriesQuery,
 } from "../../redux/features/ecommerce/index.js";
 import type { IShopProduct } from "../../redux/features/ecommerce/index.js";
+import Loading from "../../Components/reuseable/loading/index.js";
 
 export default function StorefrontPage() {
     const { slug } = useParams<{ slug: string }>();
@@ -52,10 +53,7 @@ export default function StorefrontPage() {
     if (isShopLoading) {
         return (
             <div className="min-h-screen bg-slate-50 flex items-center justify-center py-20">
-                <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                    <p className="text-sm font-medium text-slate-600">Loading storefront...</p>
-                </div>
+                <Loading title="Loading storefront..." />
             </div>
         );
     }

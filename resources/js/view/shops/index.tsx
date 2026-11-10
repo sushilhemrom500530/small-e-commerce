@@ -10,6 +10,7 @@ import {
   ShieldCheck
 } from "lucide-react";
 import { useGetStoreShopsQuery } from "../../redux/features/ecommerce/index.js";
+import Loading from "../../Components/reuseable/loading/index.js";
 
 export default function ShopsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -86,10 +87,8 @@ export default function ShopsPage() {
 
         {/* Shops Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6 h-64 animate-pulse" />
-            ))}
+          <div className="bg-white rounded-3xl border border-slate-200/90 p-12">
+            <Loading title="Loading partner shops..." />
           </div>
         ) : shops.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Store, Plus, Search, Trash2, ExternalLink } from "lucide-react";
 import { Button, Modal, Form, Input, Select, message, Popconfirm } from "antd";
 import { Link } from "react-router-dom";
+import Loading from "../../../Components/reuseable/loading/index.js";
 import {
     useGetAdminShopsQuery,
     useCreateAdminShopMutation,
@@ -104,8 +105,8 @@ export default function ShopsManagement() {
                         <tbody className="divide-y divide-slate-50 text-sm">
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan={6} className="py-10 text-center text-slate-400">
-                                        Loading shops...
+                                    <td colSpan={6} className="py-8 text-center">
+                                        <Loading title="Loading shops..." className="min-h-[180px]" />
                                     </td>
                                 </tr>
                             ) : shops.length === 0 ? (
