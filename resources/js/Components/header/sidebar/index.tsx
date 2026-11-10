@@ -85,37 +85,37 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
                     </div>
 
                     {/* Navigation Items */}
-                        <nav className="py-4 space-y-1">
-                            {menuLinks.map((item: MenuItem, index: number) => {
-                                const Icon = item.icon;
-                                const isActive =
-                                    location.pathname === item.href ||
-                                    (item.href === "/admin/dashboard" && location.pathname === "/admin") ||
-                                    (item.href === "/shop-owner/dashboard" && (location.pathname === "/shop-owner" || location.pathname === "/manager"));
+                    <nav className="py-4 space-y-1">
+                        {menuLinks.map((item: MenuItem, index: number) => {
+                            const Icon = item.icon;
+                            const isActive =
+                                location.pathname === item.href ||
+                                (item.href === "/admin/dashboard" && location.pathname === "/admin") ||
+                                (item.href === "/shop-owner/dashboard" && (location.pathname === "/shop-owner" || location.pathname === "/manager"));
 
-                                return (
-                                    <Link
-                                        key={index}
-                                        to={item.href || "#"}
-                                        onClick={() => setNavOpened(false)}
+                            return (
+                                <Link
+                                    key={index}
+                                    to={item.href || "#"}
+                                    onClick={() => setNavOpened(false)}
                                     className={`flex items-center gap-3.5 px-6 py-3 text-sm font-semibold transition-all duration-200 group ${isActive
-                                            ? "border-r-2 border-primary text-primary bg-primary/10"
-                                            : "!text-slate-600 hover:!text-primary hover:bg-slate-50"
-                                            }`}
-                                    >
-                                        {Icon && (
-                                            <Icon
-                                                className={`w-5 h-5 shrink-0 transition-colors ${isActive
-                                                        ? "text-primary"
-                                                        : "!text-slate-400 group-hover:!text-primary"
+                                        ? "border-r-2 border-primary text-primary bg-primary/10"
+                                        : "!text-slate-600 hover:!text-primary hover:bg-slate-50"
+                                        }`}
+                                >
+                                    {Icon && (
+                                        <Icon
+                                            className={`w-5 h-5 shrink-0 transition-colors ${isActive
+                                                ? "text-primary"
+                                                : "!text-slate-400 group-hover:!text-primary"
                                                 }`}
-                                            />
-                                        )}
-                                        <span className="truncate">{item.label}</span>
-                                    </Link>
-                                );
-                            })}
-                        </nav>
+                                        />
+                                    )}
+                                    <span className="truncate">{item.label}</span>
+                                </Link>
+                            );
+                        })}
+                    </nav>
                 </div>
 
                 {/* Bottom Section: View Storefront & Logout */}
