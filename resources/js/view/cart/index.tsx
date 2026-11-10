@@ -102,7 +102,7 @@ export default function CartPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 to="/shop"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover !text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
               >
                 Explore Shops <ArrowRight className="w-4 h-4" />
               </Link>

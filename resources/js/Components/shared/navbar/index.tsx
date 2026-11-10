@@ -188,7 +188,7 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/auth/login"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-primary hover:text-white border border-slate-200 transition-colors text-xs font-semibold text-slate-700"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-primary hover:!text-white border border-slate-200 transition-colors text-xs font-semibold text-slate-700"
               >
                 <User className="w-3.5 h-3.5" />
                 <span>Sign In</span>
