@@ -63,17 +63,6 @@ export default function ShopOwnerDashboard() {
                         Welcome back, <strong className="text-slate-800">{user?.fullName || user?.name || "Shop Owner"}</strong>! Manage your catalog and storefront.
                     </p>
                 </div>
-
-                {shop && (
-                    <Link
-                        to={`/shops/${shop.slug}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition-colors self-start shadow-xs"
-                    >
-                        <ExternalLink className="w-3.5 h-3.5" /> View Public Storefront
-                    </Link>
-                )}
             </div>
 
             {/* Stat Cards */}
