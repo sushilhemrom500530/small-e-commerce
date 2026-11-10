@@ -177,7 +177,7 @@ export default function Login() {
             <div className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl shadow-indigo-100/60 border border-slate-100/80 overflow-hidden flex flex-col md:flex-row">
 
                 <div className="w-full md:w-1/2 bg-gradient-to-b from-[#e1ebfd] via-[#ecf1fe] to-[#f5f6ff] p-8 sm:p-10 flex flex-col items-center justify-center text-center select-none">
-                    <div className="w-full flex items-center justify-center mb-5">
+                    <div className="w-full flex items-center justify-center mb-5 hidden md:block">
                         <img
                             src="/images/auth-bags-transparent.png"
                             alt="E-Commerce Management"
@@ -221,7 +221,7 @@ export default function Login() {
                             label="Email Address"
                             placeholder="Enter your email"
                             icon={<User className="w-[18px] h-[18px] text-slate-400 mr-2 shrink-0" />}
-                            className="!mb-0 !rounded-xl !border-slate-200 !bg-white hover:!border-primary focus:!border-primary text-sm !py-2.5 !px-3.5 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
+                            className="!rounded-md"
                             rules={[
                                 {
                                     required: true,
@@ -241,7 +241,7 @@ export default function Login() {
                             label="Password"
                             placeholder="Enter your password"
                             icon={<Lock className="w-[18px] h-[18px] text-slate-400 mr-2 shrink-0" />}
-                            className="!rounded-xl !border-slate-200 !bg-white hover:!border-primary focus:!border-primary text-sm !py-2.5 !px-3.5 !mb-0 [&_input]:placeholder:!text-slate-400 [&_input]:!text-slate-700"
+                            className="!rounded-md"
                             rules={[
                                 {
                                     required: true,
@@ -277,7 +277,7 @@ export default function Login() {
                             type="primary"
                             size="large"
                             loading={isLoading}
-                            className="w-full !h-11 sm:!h-12 !rounded-xl !bg-primary hover:!bg-primary-hover !text-white font-semibold text-sm sm:text-base shadow-lg shadow-primary/25 transition-all mb-6 cursor-pointer border-none"
+                            className="w-full !h-11 sm:!h-12 !rounded-md !bg-primary hover:!bg-primary-hover !text-white font-semibold text-sm sm:text-base shadow-lg shadow-primary/25 transition-all mb-6 cursor-pointer border-none"
                         >
                             Login
                         </Button>
