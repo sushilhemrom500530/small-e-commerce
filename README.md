@@ -235,11 +235,3 @@ Follow these step-by-step verification flows to evaluate all functional requirem
 └── tests/Feature/
     └── MultiShopEcommerceTest.php    # Verification test suite
 ```
-
----
-
-## Contact & Submission
-
-* **Recipient**: `career@csnbangladesh.com`
-* **Assessment**: CSN Bangladesh Ltd — Small E-commerce Management
-* **Author**: Sushil Hemrom
