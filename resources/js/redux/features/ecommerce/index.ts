@@ -24,6 +24,9 @@ export interface ICatalogProduct {
     name: string;
     description?: string | null;
     thumbnail?: string | null;
+    price?: number | null;
+    rating?: number | null;
+    reviewsCount?: number | null;
     categoryId?: number | null;
     categoryName?: string | null;
     categorySlug?: string | null;
@@ -275,6 +278,23 @@ export const ecommerceApi = baseApi.injectEndpoints({
             providesTags: ["category"],
         }),
 
+        // Public All Products
+        getAllProducts: builder.query<{ results: ICatalogProduct[]; meta?: IMeta }, { search?: string; categoryId?: number; category?: string; page?: number; limit?: number } | void>({
+            query: (params) => ({
+                url: "/products",
+                method: "GET",
+                params: params || {},
+            }),
+            providesTags: ["product"],
+        }),
+        getProductDetail: builder.query<{ results: ICatalogProduct }, string | number>({
+            query: (id) => ({
+                url: `/products/${id}`,
+                method: "GET",
+            }),
+            providesTags: ["product"],
+        }),
+
         // Customer Storefront
         getStoreShops: builder.query<{ results: IShop[]; meta?: IMeta }, { search?: string; page?: number; limit?: number } | void>({
             query: (params) => ({
@@ -347,6 +367,8 @@ export const {
     useGetMyShopProfileQuery,
     useUpdateMyShopProfileMutation,
     useGetCategoriesQuery,
+    useGetAllProductsQuery,
+    useGetProductDetailQuery,
     useGetStoreShopsQuery,
     useGetStoreShopQuery,
     useGetStoreShopProductsQuery,

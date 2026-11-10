@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { message } from "antd";
 import {
   Star,
@@ -14,8 +14,10 @@ import {
 } from "lucide-react";
 import { useAppDispatch } from "../../redux/hooks.js";
 import { addToCart } from "../../redux/cart-slice/index.js";
+import { useGetProductDetailQuery } from "../../redux/features/ecommerce/index.js";
 
 export default function ProductDetailPage() {
+  const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(1);
@@ -24,21 +26,34 @@ export default function ProductDetailPage() {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [addedToast, setAddedToast] = useState(false);
 
+  const { data: apiData } = useGetProductDetailQuery(id || "", { skip: !id });
+
+  const product = apiData?.results;
+  const productName = product?.name || "Wireless Headphones";
+  const productCategory = product?.categoryName || "Electronics";
+  const productPrice = typeof product?.price === "number" ? product.price : 89.99;
+  const originalPrice = productPrice * 1.25;
+  const productThumbnail = product?.thumbnail || "/images/product-headphone-main@2x.jpg";
+  const productDesc =
+    product?.description ||
+    "Experience premium sound quality with our wireless headphones. Perfect for work, travel, and everyday use.";
+  const shopName = product?.creatorName ? `${product.creatorName}'s Shop` : "Tech World";
+
   const handleAddToCart = () => {
     dispatch(
       addToCart({
-        id: "wireless-headphones-1",
-        name: "Wireless Headphones",
-        price: 89.99,
-        originalPrice: 120.0,
-        image: "/images/product-headphone-main@2x.jpg",
+        id: String(id || "wireless-headphones-1"),
+        name: productName,
+        price: productPrice,
+        originalPrice: originalPrice,
+        image: productThumbnail,
         quantity,
         specs: ["Bluetooth 5.0", "Noise Cancellation", "Long Battery"],
-        shopName: "Tech World",
+        shopName: shopName,
       })
     );
     setAddedToast(true);
-    message.success("Added to cart successfully!");
+    message.success(`"${productName}" added to cart!`);
     setTimeout(() => setAddedToast(false), 3000);
   };
 
@@ -63,10 +78,10 @@ export default function ProductDetailPage() {
           </Link>
           <span>›</span>
           <Link to="/shop" className="hover:text-primary transition-colors">
-            Electronics
+            {productCategory}
           </Link>
           <span>›</span>
-          <span className="text-gray-900 font-semibold">Wireless Headphones</span>
+          <span className="text-gray-900 font-semibold">{productName}</span>
         </nav>
       </div>
 
@@ -103,9 +118,9 @@ export default function ProductDetailPage() {
               {/* Main Image Stage */}
               <div className="flex-1 bg-[#f0f5fc] rounded-2xl p-6 sm:p-8 flex items-center justify-center min-h-[320px] sm:min-h-[400px]">
                 <img
-                  src="/images/product-headphone-main@2x.jpg"
-                  alt="Wireless Headphones"
-                  className="w-full max-w-[340px] h-auto object-contain select-none drop-shadow-sm"
+                  src={productThumbnail}
+                  alt={productName}
+                  className="w-full max-w-[340px] max-h-[340px] h-auto object-contain select-none drop-shadow-sm"
                 />
               </div>
             </div>
@@ -116,7 +131,7 @@ export default function ProductDetailPage() {
               {/* Title & Stock Badge */}
               <div className="flex items-start justify-between gap-4">
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  Wireless Headphones
+                  {productName}
                 </h1>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex-shrink-0">
                   <span className="text-emerald-500">✦</span> In Stock
@@ -130,26 +145,26 @@ export default function ProductDetailPage() {
                     <span key={i} className="text-base">★</span>
                   ))}
                 </div>
-                <span className="font-bold text-gray-900">4.8</span>
-                <span className="text-gray-400 text-xs">(1,250 reviews)</span>
+                <span className="font-bold text-gray-900">{product?.rating || 4.8}</span>
+                <span className="text-gray-400 text-xs">({product?.reviewsCount || "1,250"} reviews)</span>
               </div>
 
               {/* Price Row */}
               <div className="flex items-center gap-3">
                 <span className="text-3xl sm:text-4xl font-black text-gray-900">
-                  $89.99
+                  ${productPrice.toFixed(2)}
                 </span>
                 <span className="text-base sm:text-lg text-gray-400 line-through">
-                  $120.00
+                  ${originalPrice.toFixed(2)}
                 </span>
                 <span className="bg-rose-50 text-rose-600 text-xs font-bold px-2.5 py-1 rounded-md">
-                  25% OFF
+                  20% OFF
                 </span>
               </div>
 
               {/* Short Description */}
               <p className="text-sm sm:text-base text-gray-600 leading-relaxed font-normal">
-                Experience premium sound quality with our wireless headphones. Perfect for work, travel, and everyday use.
+                {productDesc}
               </p>
 
               {/* Feature Highlights */}
@@ -285,7 +300,7 @@ export default function ProductDetailPage() {
             <div className="py-5 text-sm text-gray-600 leading-relaxed">
               {activeTab === "description" && (
                 <p>
-                  Enjoy crystal clear sound and comfortable design. These wireless headphones are perfect for music lovers, professionals, and travelers.
+                  {productDesc}
                 </p>
               )}
               {activeTab === "specifications" && (

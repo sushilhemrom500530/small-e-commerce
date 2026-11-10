@@ -84,6 +84,8 @@ Route::get('/users/get-my-profile', [AuthController::class, 'me'])
 |--------------------------------------------------------------------------
 */
 Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/products', [StorefrontController::class, 'allProducts']);
+Route::get('/products/{id}', [StorefrontController::class, 'singleProduct']);
 
 /*
 |--------------------------------------------------------------------------

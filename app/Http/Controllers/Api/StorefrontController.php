@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 use App\Http\Resources\ShopProductResource;
 use App\Http\Resources\ShopResource;
+use App\Models\Product;
 use App\Models\Shop;
 use App\Models\ShopProduct;
 use App\Traits\ApiResponse;
@@ -160,6 +162,76 @@ class StorefrontController extends Controller
 
         return $this->sendResponse(
             new ShopProductResource($shopProduct),
+            'Product details retrieved successfully.'
+        );
+    }
+
+    /**
+     * Public Storefront: List all products across the catalog.
+     */
+    public function allProducts(Request $request): JsonResponse
+    {
+        $query = Product::with(['category', 'creator', 'shopProducts']);
+
+        if ($search = $request->query('search', $request->query('searchTerm'))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        if ($categoryId = $request->query('categoryId', $request->query('category_id'))) {
+            $query->where('category_id', $categoryId);
+        }
+
+        if ($categorySlug = $request->query('category')) {
+            $query->whereHas('category', function ($q) use ($categorySlug) {
+                $q->where('slug', $categorySlug);
+            });
+        }
+
+        $limit = (int) $request->query('limit', $request->query('perPage', 10));
+        $page = (int) $request->query('page', $request->query('currentPage', 1));
+        if ($limit <= 0) {
+            $limit = 10;
+        }
+        if ($page <= 0) {
+            $page = 1;
+        }
+
+        $total = $query->count();
+        if ($total > 10) {
+            $paginator = $query->latest('id')->paginate($limit, ['*'], 'page', $page);
+
+            return $this->sendPaginatedResponse(
+                $paginator,
+                'Items retrieved successfully.',
+                200,
+                ProductResource::collection($paginator->items())
+            );
+        }
+
+        $products = $query->latest('id')->get();
+
+        return $this->sendResponse(
+            ProductResource::collection($products),
+            'Operation completed successfully.'
+        );
+    }
+
+    /**
+     * Public Storefront: Get single product detail by ID.
+     */
+    public function singleProduct(int|string $id): JsonResponse
+    {
+        $product = Product::with(['category', 'creator', 'shopProducts'])->find($id);
+
+        if (! $product) {
+            return $this->sendError('Product not found.', 404);
+        }
+
+        return $this->sendResponse(
+            new ProductResource($product),
             'Product details retrieved successfully.'
         );
     }

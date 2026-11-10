@@ -8,6 +8,7 @@ import Index from "../view/error-page/index.js";
 import authRoutes from "./auth/index.js";
 import adminRoutes from './admin/index.jsx';
 import HomePage from "../view/home/index.js";
+import ShopProductsPage from "../view/shop/index.js";
 import ShopsPage from "../view/shops/index.js";
 import StorefrontPage from "../view/storefront/index.js";
 import ProductDetailPage from "../view/product-detail/index.js";
@@ -60,7 +61,7 @@ const routes = [
             },
             {
                 path: "/shop",
-                element: <ShopsPage />
+                element: <ShopProductsPage />
             },
             {
                 path: "/shops",

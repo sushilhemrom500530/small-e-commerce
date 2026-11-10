@@ -23,6 +23,8 @@ class ProductResource extends JsonResource
             'creatorName' => $this->creator?->name,
             'creatorRole' => $this->creator?->role,
             'name' => (string) $this->name,
+            'price' => (float) ($this->shopProducts?->first()?->price ?? 89.99),
+            'rating' => 4.8,
             'description' => $this->description ? (string) $this->description : null,
             'thumbnail' => $this->thumbnail ? (string) $this->thumbnail : null,
             'isAddedToCurrentShop' => $this->when(isset($this->is_added), (bool) $this->is_added),
