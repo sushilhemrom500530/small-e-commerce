@@ -200,6 +200,28 @@ export const ecommerceApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["shopOwner", "shop"],
         }),
+        updateAdminShopOwner: builder.mutation<{ results: IShopOwner }, { id: number; body: any }>({
+            query: ({ id, body }) => ({
+                url: `/admin/shop-owners/${id}`,
+                method: "PUT",
+                body,
+            }),
+            invalidatesTags: ["shopOwner", "shop"],
+        }),
+        toggleAdminShopOwnerStatus: builder.mutation<{ results: IShopOwner }, number>({
+            query: (id) => ({
+                url: `/admin/shop-owners/${id}/status`,
+                method: "PATCH",
+            }),
+            invalidatesTags: ["shopOwner", "shop"],
+        }),
+        deleteAdminShopOwner: builder.mutation<{ results: null }, number>({
+            query: (id) => ({
+                url: `/admin/shop-owners/${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["shopOwner", "shop"],
+        }),
 
         // Shop Owner: Shared Catalog
         getShopCatalog: builder.query<{ results: ICatalogProduct[]; meta?: IMeta }, { search?: string; categoryId?: number; page?: number; limit?: number } | void>({
@@ -358,6 +380,9 @@ export const {
     useDeleteAdminProductMutation,
     useGetAdminShopOwnersQuery,
     useCreateAdminShopOwnerMutation,
+    useUpdateAdminShopOwnerMutation,
+    useToggleAdminShopOwnerStatusMutation,
+    useDeleteAdminShopOwnerMutation,
     useGetShopCatalogQuery,
     useAddCatalogToShopMutation,
     useGetMyShopProductsQuery,

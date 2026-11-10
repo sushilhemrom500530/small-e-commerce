@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { UserPlus, Search, Shield, MoreVertical } from "lucide-react";
-import { Button } from "antd";
+import { Button, Input } from "antd";
 
 interface UserItem {
     id: number;
@@ -42,22 +42,23 @@ export default function UsersManagement() {
                 </div>
                 <Button
                     type="primary"
-                    className="!bg-primary hover:!bg-primary-hover !rounded-xl !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white w-fit cursor-pointer"
+                    className="!bg-primary hover:!bg-primary-hover !rounded-md !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white w-fit cursor-pointer"
                 >
                     <UserPlus className="w-4 h-4" />
                     <span>Invite User</span>
                 </Button>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-xs">
+            <div className="bg-white rounded-2xl p-6 border border-slate-100">
                 <div className="relative w-full max-w-xs pb-5 border-b border-slate-100">
-                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
+                    <Input
                         type="text"
+                        prefix={<Search className="w-4 h-4 text-slate-400" />}
+                        size="large"
                         placeholder="Search users..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
+                        className="!rounded-md"
                     />
                 </div>
 
@@ -79,13 +80,12 @@ export default function UsersManagement() {
                                     <td className="py-4 font-semibold text-slate-800">{user.name}</td>
                                     <td className="py-4 text-slate-500">{user.email}</td>
                                     <td className="py-4">
-                                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                                            user.role === "Admin"
-                                                ? "bg-purple-50 text-purple-700"
-                                                : user.role === "Shop Owner"
+                                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${user.role === "Admin"
+                                            ? "bg-purple-50 text-purple-700"
+                                            : user.role === "Shop Owner"
                                                 ? "bg-blue-50 text-blue-700"
                                                 : "bg-slate-100 text-slate-700"
-                                        }`}>
+                                            }`}>
                                             <Shield className="w-3 h-3" />
                                             {user.role}
                                         </span>

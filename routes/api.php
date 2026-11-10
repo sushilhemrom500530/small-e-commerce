@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AdminProductController;
 use App\Http\Controllers\Api\AdminShopController;
 use App\Http\Controllers\Api\AdminShopOwnerController;
+use App\Http\Controllers\Api\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ShopCatalogController;
@@ -13,9 +14,7 @@ use App\Http\Controllers\Api\StorefrontController;
 use Illuminate\Support\Facades\Route;
 
 /*
-|--------------------------------------------------------------------------
-| Public Authentication Routes
-|--------------------------------------------------------------------------
+ Public Authentication Routes
 */
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:auth.login');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('jwt.optional');
@@ -79,20 +78,14 @@ Route::get('/users/get-my-profile', [AuthController::class, 'me'])
     ->middleware('jwt.auth:admin,shop_owner,customer');
 
 /*
-|--------------------------------------------------------------------------
-| Public Catalog & Categories
-|--------------------------------------------------------------------------
+ Public Catalog & Categories
 */
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/products', [StorefrontController::class, 'allProducts']);
 Route::get('/products/{id}', [StorefrontController::class, 'singleProduct']);
 
 /*
-|--------------------------------------------------------------------------
-| Public Customer Storefront Routes
-|--------------------------------------------------------------------------
-| Strict Requirement: Customers should only see products assigned to a shop.
-| Displays shop-specific prices, thumbnails, and details.
+ Public Customer Storefront Routes
 */
 Route::prefix('store')->group(function () {
     Route::get('/shops', [StorefrontController::class, 'shops']);
@@ -102,41 +95,41 @@ Route::prefix('store')->group(function () {
 });
 
 /*
-|--------------------------------------------------------------------------
-| Admin Panel Routes (Strictly Role: admin)
-|--------------------------------------------------------------------------
+ Admin Panel
 */
 Route::prefix('admin')->middleware('jwt.auth:admin')->group(function () {
-    // 1. Shop Management (CRUD)
+    // Shop Management (CRUD)
     Route::apiResource('shops', AdminShopController::class);
 
-    // 2. Shared Product Catalog Management (CRUD)
+    // Shared Product Catalog Management (CRUD)
     Route::apiResource('products', AdminProductController::class);
 
-    // 3. Shop Owners Management
+    // Shop Owners Management
     Route::get('/shop-owners', [AdminShopOwnerController::class, 'index']);
     Route::post('/shop-owners', [AdminShopOwnerController::class, 'store']);
+    Route::get('/shop-owners/{id}', [AdminShopOwnerController::class, 'show']);
+    Route::put('/shop-owners/{id}', [AdminShopOwnerController::class, 'update']);
+    Route::patch('/shop-owners/{id}/status', [AdminShopOwnerController::class, 'toggleStatus']);
+    Route::delete('/shop-owners/{id}', [AdminShopOwnerController::class, 'destroy']);
 
-    // 4. Categories Management
+    // Categories Management
     Route::post('/categories', [CategoryController::class, 'store']);
 });
 
 /*
-|--------------------------------------------------------------------------
-| Shop Owner Panel Routes (Roles: shop_owner, admin)
-|--------------------------------------------------------------------------
+ Shop Owner Panel
 */
 Route::prefix('shop')->middleware('jwt.auth:shop_owner,admin')->group(function () {
-    // 1. My Shop Profile
+    // My Shop Profile
     Route::get('/my-shop', [ShopProfileController::class, 'show']);
     Route::match(['put', 'patch'], '/my-shop', [ShopProfileController::class, 'update']);
 
-    // 2. Shared Product Catalog Browser
+    // Shared Product Catalog Browser
     Route::get('/catalog', [ShopCatalogController::class, 'index']);
     Route::post('/catalog/{id}/add', [ShopCatalogController::class, 'addToShop']);
     Route::post('/products/{id}/add', [ShopCatalogController::class, 'addToShop']);
 
-    // 3. Shop-Specific Product Listings & Management
+    // Shop-Specific Product Listings & Management
     Route::get('/my-products', [ShopProductController::class, 'index']);
     Route::get('/products', [ShopProductController::class, 'index']);
     Route::post('/products', [ShopProductController::class, 'store']);
@@ -144,7 +137,7 @@ Route::prefix('shop')->middleware('jwt.auth:shop_owner,admin')->group(function (
     Route::match(['put', 'patch'], '/products/{id}', [ShopProductController::class, 'update']);
     Route::delete('/products/{id}', [ShopProductController::class, 'destroy']);
 
-    // 4. Shop Orders Management
+    // Shop Orders Management
     Route::get('/orders', [ShopOrderController::class, 'index']);
     Route::get('/orders/{id}', [ShopOrderController::class, 'show']);
     Route::match(['put', 'patch'], '/orders/{id}/status', [ShopOrderController::class, 'updateStatus']);

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Store, Plus, Search, Trash2, ExternalLink } from "lucide-react";
-import { Button, Modal, Form, Input, Select, message, Popconfirm } from "antd";
+import { Button, Modal, Form, Input, Select, message } from "antd";
 import { Link } from "react-router-dom";
 import Loading from "../../../Components/reuseable/loading/index.js";
+import DeleteConfirmModal from "../../../Components/reuseable/delete-confirm-modal/index.js";
 import {
     useGetAdminShopsQuery,
     useCreateAdminShopMutation,
@@ -14,12 +15,13 @@ import {
 export default function ShopsManagement() {
     const [searchTerm, setSearchTerm] = useState("");
     const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [deletingShop, setDeletingShop] = useState<IShop | null>(null);
     const [form] = Form.useForm();
 
     const { data, isLoading } = useGetAdminShopsQuery({ search: searchTerm });
     const { data: ownersData } = useGetAdminShopOwnersQuery();
     const [createShop, { isLoading: isCreating }] = useCreateAdminShopMutation();
-    const [deleteShop] = useDeleteAdminShopMutation();
+    const [deleteShop, { isLoading: isDeleting }] = useDeleteAdminShopMutation();
 
     const shops: IShop[] = data?.results || [];
     const owners = ownersData?.results || [];
@@ -41,10 +43,12 @@ export default function ShopsManagement() {
         }
     };
 
-    const handleDeleteShop = async (id: number) => {
+    const handleDeleteShop = async () => {
+        if (!deletingShop) return;
         try {
-            await deleteShop(id).unwrap();
+            await deleteShop(deletingShop.id).unwrap();
             message.success("Shop deleted successfully!");
+            setDeletingShop(null);
         } catch (err: any) {
             message.error(err?.data?.message || "Failed to delete shop.");
         }
@@ -64,7 +68,7 @@ export default function ShopsManagement() {
                 <Button
                     type="primary"
                     onClick={() => setIsCreateOpen(true)}
-                    className="!bg-primary hover:!bg-primary-hover !rounded-xl !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white w-fit cursor-pointer"
+                    className="!bg-primary hover:!bg-primary-hover !rounded-md !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white w-fit cursor-pointer"
                 >
                     <Plus className="w-4 h-4" />
                     <span>Create Shop</span>
@@ -72,17 +76,18 @@ export default function ShopsManagement() {
             </div>
 
             {/* Table Container */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-xs">
+            <div className="bg-white rounded-2xl p-6 border border-slate-100">
                 {/* Search Header */}
                 <div className="flex items-center justify-between gap-4 pb-5 border-b border-slate-100">
                     <div className="relative w-full max-w-xs">
-                        <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                        <input
+                        <Input
                             type="text"
+                            prefix={<Search className="w-4 h-4 text-slate-400" />}
+                            size="large"
                             placeholder="Search shops or owners..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
+                            className="!rounded-md"
                         />
                     </div>
                     <span className="text-xs font-semibold text-slate-400">
@@ -153,27 +158,23 @@ export default function ShopsManagement() {
                                             </span>
                                         </td>
                                         <td className="py-4">
-                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                                                shop.status === "active"
-                                                    ? "bg-emerald-50 text-emerald-600 border border-emerald-200/60"
-                                                    : "bg-amber-50 text-amber-600 border border-amber-200/60"
-                                            }`}>
+                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${shop.status === "active"
+                                                ? "bg-emerald-50 text-emerald-600 border border-emerald-200/60"
+                                                : "bg-amber-50 text-amber-600 border border-amber-200/60"
+                                                }`}>
                                                 {shop.status === "active" ? "Active" : "Inactive"}
                                             </span>
                                         </td>
                                         <td className="py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
-                                                <Popconfirm
-                                                    title="Delete this shop?"
-                                                    description="This will delete the shop and all its assigned product listings."
-                                                    onConfirm={() => handleDeleteShop(shop.id)}
-                                                    okText="Yes, Delete"
-                                                    okButtonProps={{ danger: true }}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setDeletingShop(shop)}
+                                                    className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                                                    title="Delete shop"
                                                 >
-                                                    <button className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
-                                                </Popconfirm>
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -232,6 +233,32 @@ export default function ShopsManagement() {
                     </div>
                 </Form>
             </Modal>
+
+            {/* Delete Confirm Modal */}
+            <DeleteConfirmModal
+                open={!!deletingShop}
+                onCancel={() => setDeletingShop(null)}
+                onConfirm={handleDeleteShop}
+                loading={isDeleting}
+                title="Delete Shop"
+                description={
+                    deletingShop ? (
+                        <span>
+                            Are you sure you want to delete <strong>{deletingShop.name}</strong>? This will permanently delete the shop and all its assigned product listings.
+                        </span>
+                    ) : null
+                }
+                itemPreview={
+                    deletingShop
+                        ? {
+                              name: deletingShop.name,
+                              thumbnail: deletingShop.logo,
+                              subtitle: `/store/${deletingShop.slug}`,
+                          }
+                        : undefined
+                }
+                confirmText="Delete Shop"
+            />
         </div>
     );
 }
