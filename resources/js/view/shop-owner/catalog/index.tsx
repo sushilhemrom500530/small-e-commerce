@@ -173,57 +173,96 @@ export default function ProductCatalog() {
             {/* Add to Shop Modal */}
             <Modal
                 title={
-                    <span className="text-lg font-bold text-[#0c1b3a]">
-                        Add "{selectedProduct?.name}" to Your Shop
-                    </span>
+                    <div className="pr-6">
+                        <span className="text-lg font-bold text-[#0c1b3a] block">
+                            Add Product to Your Shop
+                        </span>
+                        <span className="text-xs text-slate-500 font-medium truncate block max-w-md">
+                            {selectedProduct?.name}
+                        </span>
+                    </div>
                 }
                 open={isAddModalOpen}
                 onCancel={() => setIsAddModalOpen(false)}
                 footer={null}
                 centered
+                width="min(640px, 95vw)"
+                style={{ top: "3vh", maxHeight: "90vh" }}
+                styles={{
+                    content: {
+                        maxHeight: "90vh",
+                        display: "flex",
+                        flexDirection: "column",
+                        borderRadius: "1rem",
+                        padding: "1.25rem 1.5rem",
+                    },
+                    body: {
+                        overflow: "hidden",
+                        display: "flex",
+                        flexDirection: "column",
+                        flex: 1,
+                        maxHeight: "calc(90vh - 85px)",
+                    },
+                }}
             >
-                <p className="text-xs text-slate-500 mb-4">
-                    You can set your own shop-specific selling price, custom description, and custom thumbnail without modifying the global product.
-                </p>
-                <Form form={form} layout="vertical" onFinish={handleConfirmAdd}>
-                    <Form.Item
-                        name="price"
-                        label="Your Shop Selling Price (৳ BDT)"
-                        rules={[{ required: true, message: "Please set your selling price" }]}
+                <div className="flex flex-col h-full max-h-[calc(90vh-95px)] min-h-0">
+                    <p className="text-xs text-slate-500 mb-3 shrink-0">
+                        You can set your own shop-specific selling price, custom description, and custom thumbnail without modifying the global product.
+                    </p>
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        onFinish={handleConfirmAdd}
+                        className="flex flex-col flex-1 min-h-0 overflow-hidden"
                     >
-                        <InputNumber
-                            min={0}
-                            className="w-full rounded-xl py-1 text-base font-bold text-slate-800"
-                            placeholder="e.g. 45000"
-                        />
-                    </Form.Item>
+                        <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-1">
+                            <Form.Item
+                                name="price"
+                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Your Shop Selling Price (৳ BDT)</span>}
+                                rules={[{ required: true, message: "Please set your selling price" }]}
+                            >
+                                <InputNumber
+                                    min={0}
+                                    className="w-full rounded-xl py-1 text-base font-bold text-slate-800"
+                                    placeholder="e.g. 45000"
+                                />
+                            </Form.Item>
 
-                    <Form.Item name="details" label="Shop-Specific Custom Details / Promotion">
-                        <Input.TextArea
-                            rows={3}
-                            placeholder="e.g. Exclusive Deal: Includes 1-year local warranty and gift box..."
-                            className="rounded-xl"
-                        />
-                    </Form.Item>
+                            <Form.Item
+                                name="details"
+                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Shop-Specific Custom Details / Promotion</span>}
+                            >
+                                <Input.TextArea
+                                    rows={3}
+                                    placeholder="e.g. Exclusive Deal: Includes 1-year local warranty and gift box..."
+                                    className="rounded-xl text-sm"
+                                />
+                            </Form.Item>
 
-                    <Form.Item name="thumbnail" label="Custom Shop Thumbnail URL (Optional)">
-                        <Input placeholder="Leave blank to use the shared master thumbnail" className="rounded-xl py-2" />
-                    </Form.Item>
+                            <Form.Item
+                                name="thumbnail"
+                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Custom Shop Thumbnail URL (Optional)</span>}
+                            >
+                                <Input placeholder="Leave blank to use the shared master thumbnail" className="rounded-xl py-2 text-sm" />
+                            </Form.Item>
+                        </div>
 
-                    <div className="flex justify-end gap-3 mt-6">
-                        <Button onClick={() => setIsAddModalOpen(false)} className="rounded-xl h-10 px-4">
-                            Cancel
-                        </Button>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            loading={isAdding}
-                            className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold"
-                        >
-                            Confirm & List in Shop
-                        </Button>
-                    </div>
-                </Form>
+                        {/* Pinned Action Buttons */}
+                        <div className="sticky bottom-0 bg-white pt-3 pb-1 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0 mt-3 z-10">
+                            <Button onClick={() => setIsAddModalOpen(false)} className="rounded-xl h-10 px-5 font-medium text-slate-600 hover:text-slate-800">
+                                Cancel
+                            </Button>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                loading={isAdding}
+                                className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold shadow-xs"
+                            >
+                                Confirm & List in Shop
+                            </Button>
+                        </div>
+                    </Form>
+                </div>
             </Modal>
         </div>
     );

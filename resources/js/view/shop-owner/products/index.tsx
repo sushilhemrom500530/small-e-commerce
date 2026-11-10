@@ -230,67 +230,123 @@ export default function ShopOwnerProductsPage() {
             {/* Edit Shop Product Modal */}
             <Modal
                 title={
-                    <span className="text-lg font-bold text-[#0c1b3a]">
-                        Customize Product in Your Shop: {editingProduct?.name}
-                    </span>
+                    <div className="pr-6">
+                        <span className="text-lg font-bold text-[#0c1b3a] block">
+                            Customize Product in Your Shop
+                        </span>
+                        <span className="text-xs text-slate-500 font-medium truncate block max-w-md">
+                            {editingProduct?.name}
+                        </span>
+                    </div>
                 }
                 open={!!editingProduct}
                 onCancel={() => setEditingProduct(null)}
                 footer={null}
                 centered
+                width="min(680px, 95vw)"
+                style={{ top: "3vh", maxHeight: "90vh" }}
+                styles={{
+                    content: {
+                        maxHeight: "90vh",
+                        display: "flex",
+                        flexDirection: "column",
+                        borderRadius: "1rem",
+                        padding: "1.25rem 1.5rem",
+                    },
+                    body: {
+                        overflow: "hidden",
+                        display: "flex",
+                        flexDirection: "column",
+                        flex: 1,
+                        maxHeight: "calc(90vh - 85px)",
+                    },
+                }}
             >
-                <p className="text-xs text-slate-500 mb-4">
-                    Changes made here apply only to your shop's listing. The shared global product remains unaffected.
-                </p>
-                <Form form={form} layout="vertical" onFinish={handleSaveEdit}>
-                    <Form.Item
-                        name="name"
-                        label="Product Name"
-                        rules={[{ required: true, message: "Product name is required" }]}
+                <div className="flex flex-col h-full max-h-[calc(90vh-95px)] min-h-0">
+                    <p className="text-xs text-slate-500 mb-3 shrink-0">
+                        Changes made here apply only to your shop's listing. The shared global product remains unaffected.
+                    </p>
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        onFinish={handleSaveEdit}
+                        className="flex flex-col flex-1 min-h-0 overflow-hidden"
                     >
-                        <Input placeholder="Enter product name..." className="rounded-xl py-2 font-medium text-slate-800" />
-                    </Form.Item>
+                        <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-1">
+                            <Form.Item
+                                name="name"
+                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Product Name</span>}
+                                rules={[{ required: true, message: "Product name is required" }]}
+                            >
+                                <Input placeholder="Enter product name..." className="rounded-xl py-2 font-medium text-slate-800" />
+                            </Form.Item>
 
-                    <Form.Item name="categoryId" label="Category">
-                        <Select placeholder="Select a category" className="rounded-xl" allowClear>
-                            {categories.map((c) => (
-                                <Select.Option key={c.id} value={c.id}>
-                                    {c.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                <Form.Item
+                                    name="categoryId"
+                                    label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Category</span>}
+                                >
+                                    <Select placeholder="Select a category" className="rounded-xl !h-10" allowClear>
+                                        {categories.map((c) => (
+                                            <Select.Option key={c.id} value={c.id}>
+                                                {c.name}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
 
-                    <Form.Item name="price" label="Your Selling Price (৳ BDT)" rules={[{ required: true, message: "Price is required" }]}>
-                        <InputNumber min={0} className="w-full rounded-xl py-1 text-base font-bold text-slate-800" />
-                    </Form.Item>
+                                <Form.Item
+                                    name="price"
+                                    label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Your Selling Price (৳ BDT)</span>}
+                                    rules={[{ required: true, message: "Price is required" }]}
+                                >
+                                    <InputNumber min={0} className="w-full rounded-xl py-1 text-base font-bold text-slate-800" />
+                                </Form.Item>
+                            </div>
 
-                    <Form.Item name="details" label="Shop-Specific Custom Details / Promotion Note">
-                        <Input.TextArea rows={3} placeholder="Customize your description or warranty notes..." className="rounded-xl" />
-                    </Form.Item>
+                            <Form.Item
+                                name="details"
+                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Shop-Specific Custom Details / Promotion Note</span>}
+                            >
+                                <Input.TextArea
+                                    rows={3}
+                                    placeholder="Customize your description or warranty notes..."
+                                    className="rounded-xl text-sm"
+                                />
+                            </Form.Item>
 
-                    <Form.Item name="thumbnail" label="Shop-Specific Custom Thumbnail URL">
-                        <Input placeholder="Leave blank to use global catalog thumbnail" className="rounded-xl py-2" />
-                    </Form.Item>
+                            <Form.Item
+                                name="thumbnail"
+                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Shop-Specific Custom Thumbnail URL</span>}
+                            >
+                                <Input placeholder="Leave blank to use global catalog thumbnail" className="rounded-xl py-2 text-sm" />
+                            </Form.Item>
 
-                    <Form.Item name="isActive" label="Visibility Status in Store" valuePropName="checked">
-                        <Switch checkedChildren="Live" unCheckedChildren="Hidden" />
-                    </Form.Item>
+                            <Form.Item
+                                name="isActive"
+                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Visibility Status in Store</span>}
+                                valuePropName="checked"
+                            >
+                                <Switch checkedChildren="Live" unCheckedChildren="Hidden" />
+                            </Form.Item>
+                        </div>
 
-                    <div className="flex justify-end gap-3 mt-6">
-                        <Button onClick={() => setEditingProduct(null)} className="rounded-xl h-10 px-4">
-                            Cancel
-                        </Button>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            loading={isUpdating}
-                            className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold"
-                        >
-                            Save Listing
-                        </Button>
-                    </div>
-                </Form>
+                        {/* Pinned Action Buttons */}
+                        <div className="sticky bottom-0 bg-white pt-3 pb-1 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0 mt-3 z-10">
+                            <Button onClick={() => setEditingProduct(null)} className="rounded-xl h-10 px-5 font-medium text-slate-600 hover:text-slate-800">
+                                Cancel
+                            </Button>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                loading={isUpdating}
+                                className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold shadow-xs"
+                            >
+                                Save Listing
+                            </Button>
+                        </div>
+                    </Form>
+                </div>
             </Modal>
 
             {/* Create Own Product Modal */}
@@ -300,51 +356,98 @@ export default function ShopOwnerProductsPage() {
                 onCancel={() => setIsCreateModalOpen(false)}
                 footer={null}
                 centered
+                width="min(680px, 95vw)"
+                style={{ top: "3vh", maxHeight: "90vh" }}
+                styles={{
+                    content: {
+                        maxHeight: "90vh",
+                        display: "flex",
+                        flexDirection: "column",
+                        borderRadius: "1rem",
+                        padding: "1.25rem 1.5rem",
+                    },
+                    body: {
+                        overflow: "hidden",
+                        display: "flex",
+                        flexDirection: "column",
+                        flex: 1,
+                        maxHeight: "calc(90vh - 85px)",
+                    },
+                }}
             >
-                <p className="text-xs text-slate-500 mb-4">
-                    Products created by you will become available in the Shared Catalog for other shop owners, and automatically listed in your shop!
-                </p>
-                <Form form={createForm} layout="vertical" onFinish={handleCreateCustomProduct}>
-                    <Form.Item name="name" label="Product Name" rules={[{ required: true, message: "Name is required" }]}>
-                        <Input placeholder="e.g. Handmade Leather Wallet" className="rounded-xl py-2" />
-                    </Form.Item>
+                <div className="flex flex-col h-full max-h-[calc(90vh-95px)] min-h-0">
+                    <p className="text-xs text-slate-500 mb-3 shrink-0">
+                        Products created by you will become available in the Shared Catalog for other shop owners, and automatically listed in your shop!
+                    </p>
+                    <Form
+                        form={createForm}
+                        layout="vertical"
+                        onFinish={handleCreateCustomProduct}
+                        className="flex flex-col flex-1 min-h-0 overflow-hidden"
+                    >
+                        <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-1">
+                            <Form.Item
+                                name="name"
+                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Product Name</span>}
+                                rules={[{ required: true, message: "Name is required" }]}
+                            >
+                                <Input placeholder="e.g. Handmade Leather Wallet" className="rounded-xl py-2 font-medium text-slate-800" />
+                            </Form.Item>
 
-                    <Form.Item name="categoryId" label="Category">
-                        <Select placeholder="Select a category" className="rounded-xl">
-                            {categories.map((c) => (
-                                <Select.Option key={c.id} value={c.id}>
-                                    {c.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                <Form.Item
+                                    name="categoryId"
+                                    label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Category</span>}
+                                >
+                                    <Select placeholder="Select a category" className="rounded-xl !h-10" allowClear>
+                                        {categories.map((c) => (
+                                            <Select.Option key={c.id} value={c.id}>
+                                                {c.name}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
 
-                    <Form.Item name="price" label="Your Shop Selling Price (৳ BDT)" rules={[{ required: true, message: "Price is required" }]}>
-                        <InputNumber min={0} placeholder="e.g. 2500" className="w-full rounded-xl py-1 text-base font-bold text-slate-800" />
-                    </Form.Item>
+                                <Form.Item
+                                    name="price"
+                                    label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Your Shop Selling Price (৳ BDT)</span>}
+                                    rules={[{ required: true, message: "Price is required" }]}
+                                >
+                                    <InputNumber min={0} placeholder="e.g. 2500" className="w-full rounded-xl py-1 text-base font-bold text-slate-800" />
+                                </Form.Item>
+                            </div>
 
-                    <Form.Item name="description" label="Catalog Master Description">
-                        <Input.TextArea rows={3} placeholder="Full product description..." className="rounded-xl" />
-                    </Form.Item>
+                            <Form.Item
+                                name="description"
+                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Catalog Master Description</span>}
+                            >
+                                <Input.TextArea rows={3} placeholder="Full product description..." className="rounded-xl text-sm" />
+                            </Form.Item>
 
-                    <Form.Item name="thumbnail" label="Product Thumbnail URL">
-                        <Input placeholder="https://example.com/image.jpg" className="rounded-xl py-2" />
-                    </Form.Item>
+                            <Form.Item
+                                name="thumbnail"
+                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Product Thumbnail URL</span>}
+                            >
+                                <Input placeholder="https://example.com/image.jpg" className="rounded-xl py-2 text-sm" />
+                            </Form.Item>
+                        </div>
 
-                    <div className="flex justify-end gap-3 mt-6">
-                        <Button onClick={() => setIsCreateModalOpen(false)} className="rounded-xl h-10 px-4">
-                            Cancel
-                        </Button>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            loading={isCreating}
-                            className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold"
-                        >
-                            Create & List Product
-                        </Button>
-                    </div>
-                </Form>
+                        {/* Pinned Action Buttons */}
+                        <div className="sticky bottom-0 bg-white pt-3 pb-1 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0 mt-3 z-10">
+                            <Button onClick={() => setIsCreateModalOpen(false)} className="rounded-xl h-10 px-5 font-medium text-slate-600 hover:text-slate-800">
+                                Cancel
+                            </Button>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                loading={isCreating}
+                                className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold shadow-xs"
+                            >
+                                Create & List Product
+                            </Button>
+                        </div>
+                    </Form>
+                </div>
             </Modal>
         </div>
     );
