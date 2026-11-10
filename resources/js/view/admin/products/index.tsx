@@ -11,6 +11,7 @@ import {
 } from "../../../redux/features/ecommerce/index.js";
 import DeleteConfirmModal from "../../../Components/reuseable/delete-confirm-modal/index.js";
 import ProductModal from "../../../Components/reuseable/product-modal/index.js";
+import Loading from "../../../Components/reuseable/loading/index.js";
 
 export default function ManageProducts() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -134,8 +135,8 @@ export default function ManageProducts() {
                         <tbody className="divide-y divide-slate-50 text-sm">
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan={5} className="py-10 text-center text-slate-400">
-                                        Loading catalog products...
+                                    <td colSpan={5} className="py-8 text-center">
+                                        <Loading title="Loading catalog products..." className="min-h-[180px]" />
                                     </td>
                                 </tr>
                             ) : products.length === 0 ? (

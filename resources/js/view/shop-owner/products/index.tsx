@@ -12,6 +12,7 @@ import {
 } from "../../../redux/features/ecommerce/index.js";
 import ProductModal from "../../../Components/reuseable/product-modal/index.js";
 import DeleteConfirmModal from "../../../Components/reuseable/delete-confirm-modal/index.js";
+import Loading from "../../../Components/reuseable/loading/index.js";
 
 export default function ShopOwnerProductsPage() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -126,8 +127,8 @@ export default function ShopOwnerProductsPage() {
                         <tbody className="divide-y divide-slate-50 text-sm">
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan={6} className="py-10 text-center text-slate-400">
-                                        Loading your shop products...
+                                    <td colSpan={6} className="py-8 text-center">
+                                        <Loading title="Loading your shop products..." className="min-h-[180px]" />
                                     </td>
                                 </tr>
                             ) : products.length === 0 ? (

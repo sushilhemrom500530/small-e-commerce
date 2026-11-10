@@ -148,7 +148,7 @@ export default function ProductModal({
             }
         >
             <Form form={form} layout="vertical" onFinish={handleFormSubmit} className="space-y-1">
-                {/* 1. Product Name via common FormField */}
+
                 <FormField
                     type="text"
                     name="name"
@@ -159,7 +159,6 @@ export default function ProductModal({
                     className="!mb-3.5"
                 />
 
-                {/* 2. Category & Price row via common FormField */}
                 <div className={`grid grid-cols-1 ${isShopOwner ? "sm:grid-cols-2" : ""} gap-3 sm:gap-4`}>
                     <FormField
                         type="select"
@@ -184,8 +183,6 @@ export default function ProductModal({
                         />
                     )}
                 </div>
-
-                {/* 3. Description / Details via common FormField */}
                 <FormField
                     type="textarea"
                     name={isShopOwner && isEdit ? "details" : "description"}
@@ -204,7 +201,6 @@ export default function ProductModal({
                     className="!mb-3.5"
                 />
 
-                {/* 4. Thumbnail URL via common FormField */}
                 <FormField
                     type="text"
                     name="thumbnail"
@@ -218,7 +214,6 @@ export default function ProductModal({
                     className="!mb-3.5"
                 />
 
-                {/* 5. Live in Store Switch via common FormField (Shop Owner listing only) */}
                 {isShopOwner && isEdit && (
                     <FormField
                         type="switch"
