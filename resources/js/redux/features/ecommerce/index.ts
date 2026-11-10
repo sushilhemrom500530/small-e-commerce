@@ -85,6 +85,26 @@ export interface ICategory {
     productsCount?: number;
 }
 
+export interface IOrder {
+    id: number;
+    orderId: string;
+    orderNumber: string;
+    customer: string;
+    customerName: string;
+    customerEmail?: string;
+    customerPhone?: string;
+    shippingAddress?: string;
+    date: string;
+    itemsCount: number;
+    total: string;
+    totalAmount: number;
+    currency: string;
+    status: "Pending" | "Processing" | "Delivered" | "Cancelled" | string;
+    deliveredAt?: string | null;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
 export const ecommerceApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // Admin: Shops
@@ -279,6 +299,24 @@ export const ecommerceApi = baseApi.injectEndpoints({
             }),
             providesTags: ["storefront"],
         }),
+
+        // Shop Owner: Orders
+        getShopOrders: builder.query<{ results: IOrder[] }, { search?: string; status?: string } | void>({
+            query: (params) => ({
+                url: "/shop/orders",
+                method: "GET",
+                params: params || {},
+            }),
+            providesTags: ["order"],
+        }),
+        updateOrderStatus: builder.mutation<{ results: IOrder }, { id: number; status: string }>({
+            query: ({ id, status }) => ({
+                url: `/shop/orders/${id}/status`,
+                method: "PATCH",
+                body: { status },
+            }),
+            invalidatesTags: ["order"],
+        }),
     }),
 });
 
@@ -306,4 +344,6 @@ export const {
     useGetStoreShopQuery,
     useGetStoreShopProductsQuery,
     useGetStoreProductDetailQuery,
+    useGetShopOrdersQuery,
+    useUpdateOrderStatusMutation,
 } = ecommerceApi;

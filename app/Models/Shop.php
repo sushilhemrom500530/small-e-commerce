@@ -55,6 +55,14 @@ class Shop extends Model
     }
 
     /**
+     * Orders placed in this shop.
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'shop_id');
+    }
+
+    /**
      * Products assigned to this shop via shop_products pivot.
      */
     public function products(): BelongsToMany

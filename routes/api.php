@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AdminShopOwnerController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ShopCatalogController;
+use App\Http\Controllers\Api\ShopOrderController;
 use App\Http\Controllers\Api\ShopProductController;
 use App\Http\Controllers\Api\ShopProfileController;
 use App\Http\Controllers\Api\StorefrontController;
@@ -140,4 +141,9 @@ Route::prefix('shop')->middleware('jwt.auth:shop_owner,admin')->group(function (
     Route::get('/products/{id}', [ShopProductController::class, 'show']);
     Route::match(['put', 'patch'], '/products/{id}', [ShopProductController::class, 'update']);
     Route::delete('/products/{id}', [ShopProductController::class, 'destroy']);
+
+    // 4. Shop Orders Management
+    Route::get('/orders', [ShopOrderController::class, 'index']);
+    Route::get('/orders/{id}', [ShopOrderController::class, 'show']);
+    Route::match(['put', 'patch'], '/orders/{id}/status', [ShopOrderController::class, 'updateStatus']);
 });

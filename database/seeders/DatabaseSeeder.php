@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\UserRole;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Models\ShopProduct;
@@ -305,6 +306,104 @@ class DatabaseSeeder extends Seeder
 
         // NOTE: "Stainless Steel Smart Thermos" is deliberately NOT assigned to any shop!
         // This validates requirement: "Products that are not assigned to any shop must not be visible to customers."
+
+        // 8. Seed Shop Orders (Persisted in database for Shop Owners)
+        $ordersData = [
+            [
+                'order_number' => 'ORD-1001',
+                'shop_id' => $techShop->id,
+                'customer_name' => 'Alex Johnson',
+                'customer_email' => 'alex.johnson@example.com',
+                'customer_phone' => '+8801811111111',
+                'shipping_address' => 'House 12, Road 5, Dhanmondi, Dhaka',
+                'items_count' => 2,
+                'total_amount' => 53500.00,
+                'currency' => 'BDT',
+                'status' => 'Pending',
+            ],
+            [
+                'order_number' => 'ORD-1002',
+                'shop_id' => $techShop->id,
+                'customer_name' => 'Jessica Miller',
+                'customer_email' => 'jessica.m@example.com',
+                'customer_phone' => '+8801822222222',
+                'shipping_address' => 'Sector 4, Uttara, Dhaka',
+                'items_count' => 1,
+                'total_amount' => 38500.00,
+                'currency' => 'BDT',
+                'status' => 'Delivered',
+                'delivered_at' => now()->subDays(2),
+            ],
+            [
+                'order_number' => 'ORD-1003',
+                'shop_id' => $techShop->id,
+                'customer_name' => 'Daniel Brown',
+                'customer_email' => 'daniel.b@example.com',
+                'customer_phone' => '+8801833333333',
+                'shipping_address' => 'Block C, Bashundhara R/A, Dhaka',
+                'items_count' => 3,
+                'total_amount' => 13500.00,
+                'currency' => 'BDT',
+                'status' => 'Processing',
+            ],
+            [
+                'order_number' => 'ORD-1004',
+                'shop_id' => $techShop->id,
+                'customer_name' => 'Sophia Taylor',
+                'customer_email' => 'sophia.t@example.com',
+                'customer_phone' => '+8801844444444',
+                'shipping_address' => 'Banani DOHS, Dhaka',
+                'items_count' => 1,
+                'total_amount' => 8500.00,
+                'currency' => 'BDT',
+                'status' => 'Pending',
+            ],
+            [
+                'order_number' => 'ORD-1005',
+                'shop_id' => $techShop->id,
+                'customer_name' => 'David Wilson',
+                'customer_email' => 'david.w@example.com',
+                'customer_phone' => '+8801855555555',
+                'shipping_address' => 'Gulshan 2, Dhaka',
+                'items_count' => 4,
+                'total_amount' => 98000.00,
+                'currency' => 'BDT',
+                'status' => 'Delivered',
+                'delivered_at' => now()->subDay(),
+            ],
+            [
+                'order_number' => 'ORD-2001',
+                'shop_id' => $fashionShop->id,
+                'customer_name' => 'Emma Davis',
+                'customer_email' => 'emma.davis@example.com',
+                'customer_phone' => '+8801866666666',
+                'shipping_address' => 'Mirpur DOHS, Dhaka',
+                'items_count' => 2,
+                'total_amount' => 11700.00,
+                'currency' => 'BDT',
+                'status' => 'Pending',
+            ],
+            [
+                'order_number' => 'ORD-2002',
+                'shop_id' => $fashionShop->id,
+                'customer_name' => 'Liam Smith',
+                'customer_email' => 'liam.s@example.com',
+                'customer_phone' => '+8801877777777',
+                'shipping_address' => 'Chittagong GEC Circle, Chattogram',
+                'items_count' => 1,
+                'total_amount' => 6200.00,
+                'currency' => 'BDT',
+                'status' => 'Delivered',
+                'delivered_at' => now()->subDays(3),
+            ],
+        ];
+
+        foreach ($ordersData as $oData) {
+            Order::updateOrCreate(
+                ['order_number' => $oData['order_number']],
+                $oData
+            );
+        }
 
         if ($this->command) {
             $this->command->newLine();
