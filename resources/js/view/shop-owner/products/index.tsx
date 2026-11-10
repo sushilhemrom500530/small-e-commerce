@@ -13,14 +13,16 @@ import {
 import ProductModal from "../../../Components/reuseable/product-modal/index.js";
 import DeleteConfirmModal from "../../../Components/reuseable/delete-confirm-modal/index.js";
 import Loading from "../../../Components/reuseable/loading/index.js";
+import Pagination from "../../../Components/reuseable/pagination/index.js";
 
 export default function ShopOwnerProductsPage() {
     const [searchTerm, setSearchTerm] = useState("");
+    const [page, setPage] = useState(1);
     const [editingProduct, setEditingProduct] = useState<IShopProduct | null>(null);
     const [deletingProduct, setDeletingProduct] = useState<IShopProduct | null>(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-    const { data, isLoading } = useGetMyShopProductsQuery({ search: searchTerm });
+    const { data, isLoading } = useGetMyShopProductsQuery({ search: searchTerm, page, limit: 10 });
     const { data: catData } = useGetCategoriesQuery();
 
     const [createShopProduct, { isLoading: isCreating }] = useCreateShopProductMutation();
@@ -103,7 +105,10 @@ export default function ShopOwnerProductsPage() {
                             type="text"
                             placeholder="Search listed products..."
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                setPage(1);
+                            }}
                             className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
                         />
                     </div>
@@ -204,6 +209,16 @@ export default function ShopOwnerProductsPage() {
                         </tbody>
                     </table>
                 </div>
+
+                <Pagination
+                    meta={data?.meta}
+                    currentPage={page}
+                    limit={10}
+                    totalResult={data?.meta?.totalResult ?? products.length}
+                    onPageChange={(newPage) => setPage(newPage)}
+                    itemName="products"
+                    className="border-t border-slate-100 mt-2"
+                />
             </div>
 
             {/* Reusable ProductModal for Customizing / Editing */}

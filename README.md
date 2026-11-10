@@ -155,7 +155,7 @@ The application is now live at: **`http://127.0.0.1:8000`**
 
 ---
 
-## 🔑 Demo & Test Credentials
+## Demo & Test Credentials
 
 The database seeder automatically creates the following demo credentials:
 
@@ -170,7 +170,7 @@ The database seeder automatically creates the following demo credentials:
 
 ---
 
-## 🧪 Assessment Walkthrough & Verification Guide
+## Assessment Walkthrough & Verification Guide
 
 Follow these step-by-step verification flows to evaluate all functional requirements:
 

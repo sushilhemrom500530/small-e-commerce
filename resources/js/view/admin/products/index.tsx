@@ -12,10 +12,12 @@ import {
 import DeleteConfirmModal from "../../../Components/reuseable/delete-confirm-modal/index.js";
 import ProductModal from "../../../Components/reuseable/product-modal/index.js";
 import Loading from "../../../Components/reuseable/loading/index.js";
+import Pagination from "../../../Components/reuseable/pagination/index.js";
 
 export default function ManageProducts() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<number | undefined>(undefined);
+    const [page, setPage] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<ICatalogProduct | null>(null);
     const [deletingProduct, setDeletingProduct] = useState<ICatalogProduct | null>(null);
@@ -23,6 +25,8 @@ export default function ManageProducts() {
     const { data, isLoading } = useGetAdminProductsQuery({
         search: searchTerm,
         categoryId: selectedCategory,
+        page,
+        limit: 10,
     });
     const { data: catData } = useGetCategoriesQuery();
 
@@ -97,14 +101,20 @@ export default function ManageProducts() {
                                 type="text"
                                 placeholder="Search products..."
                                 value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onChange={(e) => {
+                                    setSearchTerm(e.target.value);
+                                    setPage(1);
+                                }}
                                 className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
                             />
                         </div>
                         <Select
                             placeholder="All Categories"
                             allowClear
-                            onChange={(val) => setSelectedCategory(val)}
+                            onChange={(val) => {
+                                setSelectedCategory(val);
+                                setPage(1);
+                            }}
                             className="w-44 !rounded-xl"
                         >
                             {categories.map((c) => (
@@ -202,6 +212,16 @@ export default function ManageProducts() {
                         </tbody>
                     </table>
                 </div>
+
+                <Pagination
+                    meta={data?.meta}
+                    currentPage={page}
+                    limit={10}
+                    totalResult={data?.meta?.totalResult ?? products.length}
+                    onPageChange={(newPage) => setPage(newPage)}
+                    itemName="products"
+                    className="border-t border-slate-100 mt-2"
+                />
             </div>
 
             <ProductModal

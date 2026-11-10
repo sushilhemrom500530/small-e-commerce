@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import PageBanner from "../../Components/shared/page-banner/index.js";
+import Pagination from "../../Components/reuseable/pagination/index.js";
+import { useGetStoreShopsQuery } from "../../redux/features/ecommerce/index.js";
 import {
   LayoutGrid,
   Laptop,
@@ -102,8 +104,29 @@ export default function ShopsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("popular");
+  const [page, setPage] = useState(1);
+  const pageSize = 6;
 
-  const filteredShops = allShops.filter((shop) => {
+  const { data: backendData } = useGetStoreShopsQuery({
+    search: searchQuery,
+    page,
+    limit: pageSize,
+  });
+
+  const backendShops: Shop[] = (backendData?.results || []).map((s: any) => ({
+    id: String(s.id),
+    name: s.name,
+    category: s.description || "Trusted Store",
+    categorySlug: "all",
+    rating: 4.8,
+    reviewCount: `${s.productsCount || 0} products`,
+    image: s.logo || "/images/shop-tech-v2.jpg",
+    slug: s.slug,
+  }));
+
+  const activeSourceShops = backendShops.length > 0 ? backendShops : allShops;
+
+  const filteredShops = activeSourceShops.filter((shop) => {
     const matchesCategory =
       selectedCategory === "all" || shop.categorySlug === selectedCategory;
     const matchesSearch =
@@ -111,6 +134,11 @@ export default function ShopsPage() {
       shop.category.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const totalShops = backendData?.meta?.totalResult ?? filteredShops.length;
+  const paginatedShops = backendData?.meta
+    ? filteredShops
+    : filteredShops.slice((page - 1) * pageSize, page * pageSize);
 
   return (
     <div className="w-full bg-[#fbfcfd] min-h-screen">
@@ -168,7 +196,10 @@ export default function ShopsPage() {
                 return (
                   <button
                     key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
+                    onClick={() => {
+                      setSelectedCategory(cat.id);
+                      setPage(1);
+                    }}
                     className={`flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-left cursor-pointer ${active
                       ? "bg-primary/10 text-primary font-semibold shadow-2xs"
                       : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
@@ -192,7 +223,10 @@ export default function ShopsPage() {
                 <input
                   type="text"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setPage(1);
+                  }}
                   placeholder="Search shops..."
                   className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm bg-white border border-gray-200/90 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
                 />
@@ -216,7 +250,7 @@ export default function ShopsPage() {
 
             {/* Shops Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredShops.map((shop) => (
+              {paginatedShops.map((shop) => (
                 <div
                   key={shop.id}
                   className="bg-white rounded-2xl border border-gray-200/80 hover:shadow transition-all duration-200 overflow-hidden flex flex-col"
@@ -261,9 +295,23 @@ export default function ShopsPage() {
               ))}
             </div>
 
-            {filteredShops.length === 0 && (
+            {filteredShops.length === 0 ? (
               <div className="text-center py-12 bg-white rounded-2xl border border-gray-200/80 p-8">
                 <p className="text-gray-500 text-sm">No shops found matching your search.</p>
+              </div>
+            ) : (
+              <div className="pt-2">
+                <Pagination
+                  meta={backendData?.meta}
+                  currentPage={page}
+                  limit={pageSize}
+                  totalResult={totalShops}
+                  onPageChange={(newPage) => {
+                    setPage(newPage);
+                    window.scrollTo({ top: 300, behavior: "smooth" });
+                  }}
+                  itemName="shops"
+                />
               </div>
             )}
           </main>

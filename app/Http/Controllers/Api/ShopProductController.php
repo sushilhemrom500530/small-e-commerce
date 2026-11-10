@@ -61,11 +61,32 @@ class ShopProductController extends Controller
             });
         }
 
+        $limit = (int) $request->query('limit', $request->query('perPage', 10));
+        $page = (int) $request->query('page', $request->query('currentPage', 1));
+        if ($limit <= 0) {
+            $limit = 10;
+        }
+        if ($page <= 0) {
+            $page = 1;
+        }
+
+        $total = $query->count();
+        if ($total > 10) {
+            $paginator = $query->latest('id')->paginate($limit, ['*'], 'page', $page);
+
+            return $this->sendPaginatedResponse(
+                $paginator,
+                'Items retrieved successfully.',
+                200,
+                ShopProductResource::collection($paginator->items())
+            );
+        }
+
         $shopProducts = $query->latest('id')->get();
 
         return $this->sendResponse(
             ShopProductResource::collection($shopProducts),
-            'Shop products retrieved successfully.'
+            'Operation completed successfully.'
         );
     }
 

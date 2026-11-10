@@ -105,10 +105,17 @@ export interface IOrder {
     updatedAt?: string;
 }
 
+export interface IMeta {
+    currentPage: number;
+    limit: number;
+    totalResult: number;
+    totalPages: number;
+}
+
 export const ecommerceApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // Admin: Shops
-        getAdminShops: builder.query<{ results: IShop[] }, { search?: string; status?: string } | void>({
+        getAdminShops: builder.query<{ results: IShop[]; meta?: IMeta }, { search?: string; status?: string; page?: number; limit?: number } | void>({
             query: (params) => ({
                 url: "/admin/shops",
                 method: "GET",
@@ -141,7 +148,7 @@ export const ecommerceApi = baseApi.injectEndpoints({
         }),
 
         // Admin: Shared Products Catalog
-        getAdminProducts: builder.query<{ results: ICatalogProduct[] }, { search?: string; categoryId?: number } | void>({
+        getAdminProducts: builder.query<{ results: ICatalogProduct[]; meta?: IMeta }, { search?: string; categoryId?: number; page?: number; limit?: number } | void>({
             query: (params) => ({
                 url: "/admin/products",
                 method: "GET",
@@ -174,7 +181,7 @@ export const ecommerceApi = baseApi.injectEndpoints({
         }),
 
         // Admin: Shop Owners
-        getAdminShopOwners: builder.query<{ results: IShopOwner[] }, { search?: string } | void>({
+        getAdminShopOwners: builder.query<{ results: IShopOwner[]; meta?: IMeta }, { search?: string; page?: number; limit?: number } | void>({
             query: (params) => ({
                 url: "/admin/shop-owners",
                 method: "GET",
@@ -192,7 +199,7 @@ export const ecommerceApi = baseApi.injectEndpoints({
         }),
 
         // Shop Owner: Shared Catalog
-        getShopCatalog: builder.query<{ results: ICatalogProduct[] }, { search?: string; categoryId?: number } | void>({
+        getShopCatalog: builder.query<{ results: ICatalogProduct[]; meta?: IMeta }, { search?: string; categoryId?: number; page?: number; limit?: number } | void>({
             query: (params) => ({
                 url: "/shop/catalog",
                 method: "GET",
@@ -210,7 +217,7 @@ export const ecommerceApi = baseApi.injectEndpoints({
         }),
 
         // Shop Owner: My Products
-        getMyShopProducts: builder.query<{ results: IShopProduct[] }, { search?: string; categoryId?: number } | void>({
+        getMyShopProducts: builder.query<{ results: IShopProduct[]; meta?: IMeta }, { search?: string; categoryId?: number; page?: number; limit?: number } | void>({
             query: (params) => ({
                 url: "/shop/my-products",
                 method: "GET",
@@ -269,7 +276,7 @@ export const ecommerceApi = baseApi.injectEndpoints({
         }),
 
         // Customer Storefront
-        getStoreShops: builder.query<{ results: IShop[] }, { search?: string } | void>({
+        getStoreShops: builder.query<{ results: IShop[]; meta?: IMeta }, { search?: string; page?: number; limit?: number } | void>({
             query: (params) => ({
                 url: "/store/shops",
                 method: "GET",
@@ -284,7 +291,7 @@ export const ecommerceApi = baseApi.injectEndpoints({
             }),
             providesTags: ["storefront"],
         }),
-        getStoreShopProducts: builder.query<{ results: IShopProduct[] }, { slug: string; search?: string; category?: string }>({
+        getStoreShopProducts: builder.query<{ results: IShopProduct[]; meta?: IMeta }, { slug: string; search?: string; category?: string; page?: number; limit?: number }>({
             query: ({ slug, ...params }) => ({
                 url: `/store/${slug}/products`,
                 method: "GET",
@@ -301,7 +308,7 @@ export const ecommerceApi = baseApi.injectEndpoints({
         }),
 
         // Shop Owner: Orders
-        getShopOrders: builder.query<{ results: IOrder[] }, { search?: string; status?: string } | void>({
+        getShopOrders: builder.query<{ results: IOrder[]; meta?: IMeta }, { search?: string; status?: string; page?: number; limit?: number } | void>({
             query: (params) => ({
                 url: "/shop/orders",
                 method: "GET",

@@ -31,11 +31,32 @@ class AdminProductController extends Controller
             $query->where('category_id', $categoryId);
         }
 
+        $limit = (int) $request->query('limit', $request->query('perPage', 10));
+        $page = (int) $request->query('page', $request->query('currentPage', 1));
+        if ($limit <= 0) {
+            $limit = 10;
+        }
+        if ($page <= 0) {
+            $page = 1;
+        }
+
+        $total = $query->count();
+        if ($total > 10) {
+            $paginator = $query->latest('id')->paginate($limit, ['*'], 'page', $page);
+
+            return $this->sendPaginatedResponse(
+                $paginator,
+                'Items retrieved successfully.',
+                200,
+                ProductResource::collection($paginator->items())
+            );
+        }
+
         $products = $query->latest('id')->get();
 
         return $this->sendResponse(
             ProductResource::collection($products),
-            'Catalog products retrieved successfully.'
+            'Operation completed successfully.'
         );
     }
 

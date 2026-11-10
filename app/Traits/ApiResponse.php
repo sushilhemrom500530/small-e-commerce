@@ -4,7 +4,9 @@ namespace App\Traits;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 trait ApiResponse
 {
@@ -29,7 +31,7 @@ trait ApiResponse
      */
     public function sendPaginatedResponse(
         LengthAwarePaginator|Paginator $paginator,
-        string $message = 'Operation completed successfully.',
+        string $message = 'Items retrieved successfully.',
         int $statusCode = 200,
         mixed $items = null
     ): JsonResponse {
@@ -60,23 +62,96 @@ trait ApiResponse
         int $statusCode = 200,
         ?array $meta = null
     ): JsonResponse {
+        // 1. Direct Paginator instance
         if ($results instanceof LengthAwarePaginator || $results instanceof Paginator) {
             return self::formatPaginatedResponse($results, $message, $statusCode);
         }
 
-        $payload = [
+        // 2. ResourceCollection wrapping a Paginator
+        if ($results instanceof ResourceCollection && ($results->resource instanceof LengthAwarePaginator || $results->resource instanceof Paginator)) {
+            return self::formatPaginatedResponse($results->resource, $message, $statusCode, $results->resolve());
+        }
+
+        // Resolve Arrayable/Collection/ResourceCollection
+        $resolved = $results;
+        if ($results instanceof ResourceCollection) {
+            $resolved = $results->resolve();
+        } elseif ($results instanceof Arrayable) {
+            $resolved = $results->toArray();
+        }
+
+        // 3. Explicit meta provided
+        if ($meta !== null) {
+            $total = (int) ($meta['totalResult'] ?? 0);
+            if ($total > 10) {
+                return new JsonResponse([
+                    'statusCode' => $statusCode,
+                    'success' => true,
+                    'message' => ($message === 'Operation completed successfully.') ? 'Items retrieved successfully.' : $message,
+                    'meta' => $meta,
+                    'data' => $resolved,
+                    'results' => $resolved,
+                ], $statusCode);
+            }
+
+            return new JsonResponse([
+                'statusCode' => $statusCode,
+                'success' => true,
+                'message' => $message,
+                'data' => $resolved,
+                'results' => $resolved,
+            ], $statusCode);
+        }
+
+        // 4. If $resolved is an indexed array/list of items
+        if (is_array($resolved) && array_is_list($resolved)) {
+            $count = count($resolved);
+            if ($count > 10) {
+                $limit = (int) request()->query('limit', request()->query('perPage', 10));
+                $page = (int) request()->query('page', request()->query('currentPage', 1));
+                if ($limit <= 0) {
+                    $limit = 10;
+                }
+                if ($page <= 0) {
+                    $page = 1;
+                }
+
+                $totalPages = (int) ceil($count / $limit);
+                $sliced = array_slice($resolved, ($page - 1) * $limit, $limit);
+
+                return new JsonResponse([
+                    'statusCode' => $statusCode,
+                    'success' => true,
+                    'message' => ($message === 'Operation completed successfully.') ? 'Items retrieved successfully.' : $message,
+                    'meta' => [
+                        'currentPage' => $page,
+                        'limit' => $limit,
+                        'totalResult' => $count,
+                        'totalPages' => $totalPages,
+                    ],
+                    'data' => $sliced,
+                    'results' => $sliced,
+                ], $statusCode);
+            }
+
+            // <= 10 items in list
+            return new JsonResponse([
+                'statusCode' => $statusCode,
+                'success' => true,
+                'message' => $message,
+                'data' => $resolved,
+                'results' => $resolved,
+            ], $statusCode);
+        }
+
+        // 5. Single item (associative array or scalar/object)
+        return new JsonResponse([
             'statusCode' => $statusCode,
             'success' => true,
             'message' => $message,
-            'data' => $results,
-            'results' => $results,
-        ];
-
-        if ($meta !== null) {
-            $payload['meta'] = $meta;
-        }
-
-        return new JsonResponse($payload, $statusCode);
+            'data' => $resolved,
+            'results' => $resolved,
+        ], $statusCode);
     }
 
     /**
@@ -84,27 +159,41 @@ trait ApiResponse
      */
     public static function formatPaginatedResponse(
         LengthAwarePaginator|Paginator $paginator,
-        string $message = 'Operation completed successfully.',
+        string $message = 'Items retrieved successfully.',
         int $statusCode = 200,
         mixed $items = null
     ): JsonResponse {
-        $meta = [
-            'currentPage' => $paginator->currentPage(),
-            'limit' => $paginator->perPage(),
-        ];
+        $total = $paginator instanceof LengthAwarePaginator ? $paginator->total() : $paginator->count();
+        $resolvedItems = $items ?? $paginator->items();
 
-        if ($paginator instanceof LengthAwarePaginator) {
-            $meta['totalResult'] = $paginator->total();
-            $meta['totalPages'] = $paginator->lastPage();
+        if ($resolvedItems instanceof Arrayable) {
+            $resolvedItems = $resolvedItems->toArray();
+        }
+
+        if ($total > 10) {
+            $meta = [
+                'currentPage' => (int) $paginator->currentPage(),
+                'limit' => (int) $paginator->perPage(),
+                'totalResult' => (int) ($paginator instanceof LengthAwarePaginator ? $paginator->total() : $total),
+                'totalPages' => (int) ($paginator instanceof LengthAwarePaginator ? $paginator->lastPage() : 1),
+            ];
+
+            return new JsonResponse([
+                'statusCode' => $statusCode,
+                'success' => true,
+                'message' => ($message === 'Operation completed successfully.') ? 'Items retrieved successfully.' : $message,
+                'meta' => $meta,
+                'data' => $resolvedItems,
+                'results' => $resolvedItems,
+            ], $statusCode);
         }
 
         return new JsonResponse([
             'statusCode' => $statusCode,
             'success' => true,
-            'message' => $message,
-            'meta' => $meta,
-            'data' => $items ?? $paginator->items(),
-            'results' => $items ?? $paginator->items(),
+            'message' => ($message === 'Items retrieved successfully.') ? 'Operation completed successfully.' : $message,
+            'data' => $resolvedItems,
+            'results' => $resolvedItems,
         ], $statusCode);
     }
 
