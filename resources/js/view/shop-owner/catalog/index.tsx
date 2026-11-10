@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Search, Check, Plus, Package } from "lucide-react";
-import { Button, Form, Input, InputNumber, message, Select } from "antd";
+import { Button, Form, message, Select } from "antd";
 import ResponsiveModal from "../../../Components/reuseable/responsive-modal/index.js";
+import FormField from "../../../Components/form/index.js";
 import {
     useGetShopCatalogQuery,
     useAddCatalogToShopMutation,
@@ -204,38 +205,34 @@ export default function ProductCatalog() {
                     onFinish={handleConfirmAdd}
                     className="space-y-1"
                 >
-                    <Form.Item
+                    <FormField
+                        type="number"
                         name="price"
-                        label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Your Shop Selling Price (৳ BDT)</span>}
-                        rules={[{ required: true, message: "Please set your selling price" }]}
+                        label="Your Shop Selling Price (৳ BDT)"
+                        placeholder="e.g. 45000"
+                        required
+                        colorClass="rounded-xl"
                         className="!mb-3.5"
-                    >
-                        <InputNumber
-                            min={0}
-                            className="w-full rounded-xl py-1 text-base font-bold text-slate-800"
-                            placeholder="e.g. 45000"
-                        />
-                    </Form.Item>
+                    />
 
-                    <Form.Item
+                    <FormField
+                        type="textarea"
                         name="details"
-                        label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Shop-Specific Custom Details / Promotion</span>}
+                        label="Shop-Specific Custom Details / Promotion"
+                        placeholder="e.g. Exclusive Deal: Includes 1-year local warranty and gift box..."
+                        rows={3}
+                        colorClass="rounded-xl"
                         className="!mb-3.5"
-                    >
-                        <Input.TextArea
-                            rows={3}
-                            placeholder="e.g. Exclusive Deal: Includes 1-year local warranty and gift box..."
-                            className="rounded-xl text-sm"
-                        />
-                    </Form.Item>
+                    />
 
-                    <Form.Item
+                    <FormField
+                        type="text"
                         name="thumbnail"
-                        label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Custom Shop Thumbnail URL (Optional)</span>}
+                        label="Custom Shop Thumbnail URL (Optional)"
+                        placeholder="Leave blank to use the shared master thumbnail"
+                        colorClass="rounded-xl"
                         className="!mb-3.5"
-                    >
-                        <Input placeholder="Leave blank to use the shared master thumbnail" className="rounded-xl py-2 text-sm" />
-                    </Form.Item>
+                    />
                 </Form>
             </ResponsiveModal>
         </div>

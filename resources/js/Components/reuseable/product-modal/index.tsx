@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { Form, Input, InputNumber, Switch, Button, Select } from "antd";
+import { Form, Button } from "antd";
 import ResponsiveModal from "../responsive-modal/index.js";
+import FormField from "../../form/index.js";
 
 export interface ProductModalInitialData {
     name?: string;
@@ -35,7 +36,7 @@ export default function ProductModal({
     initialData,
     categories = [],
     loading = false,
-    maxHeight = "90vh",
+    maxHeight = "85vh",
     onCancel,
     onSubmit,
     title,
@@ -112,6 +113,11 @@ export default function ProductModal({
         await onSubmit(payload);
     };
 
+    const categoryOptions = categories.map((c) => ({
+        label: c.name,
+        value: c.id,
+    }));
+
     return (
         <ResponsiveModal
             open={open}
@@ -142,92 +148,86 @@ export default function ProductModal({
             }
         >
             <Form form={form} layout="vertical" onFinish={handleFormSubmit} className="space-y-1">
-                {/* 1. Product Name */}
-                <Form.Item
+                {/* 1. Product Name via common FormField */}
+                <FormField
+                    type="text"
                     name="name"
-                    label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Product Name</span>}
-                    rules={[{ required: true, message: "Product name is required" }]}
+                    label="Product Name"
+                    placeholder="e.g. Mechanical Gaming Keyboard RGB"
+                    required
+                    colorClass="rounded-xl"
                     className="!mb-3.5"
-                >
-                    <Input placeholder="e.g. Mechanical Gaming Keyboard RGB" className="rounded-xl py-2 font-medium text-slate-800" />
-                </Form.Item>
+                />
 
-                {/* 2. Category & Price row */}
+                {/* 2. Category & Price row via common FormField */}
                 <div className={`grid grid-cols-1 ${isShopOwner ? "sm:grid-cols-2" : ""} gap-3 sm:gap-4`}>
-                    <Form.Item
+                    <FormField
+                        type="select"
                         name="categoryId"
-                        label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Category</span>}
+                        label="Category"
+                        placeholder="Select a category"
+                        options={categoryOptions}
+                        allowClear
+                        colorClass="rounded-xl"
                         className="!mb-3.5"
-                    >
-                        <Select placeholder="Select a category" className="rounded-xl !h-10" allowClear>
-                            {categories.map((c) => (
-                                <Select.Option key={c.id} value={c.id}>
-                                    {c.name}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
+                    />
 
                     {isShopOwner && (
-                        <Form.Item
+                        <FormField
+                            type="number"
                             name="price"
-                            label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Your Selling Price (৳ BDT)</span>}
-                            rules={[{ required: true, message: "Price is required" }]}
+                            label="Your Selling Price (৳ BDT)"
+                            placeholder="e.g. 4500"
+                            required
+                            colorClass="rounded-xl"
                             className="!mb-3.5"
-                        >
-                            <InputNumber min={0} placeholder="e.g. 4500" className="w-full rounded-xl py-1 text-base font-bold text-slate-800" />
-                        </Form.Item>
+                        />
                     )}
                 </div>
 
-                {/* 3. Description / Details */}
-                <Form.Item
+                {/* 3. Description / Details via common FormField */}
+                <FormField
+                    type="textarea"
                     name={isShopOwner && isEdit ? "details" : "description"}
                     label={
-                        <span className="text-xs sm:text-sm font-semibold text-slate-700">
-                            {isShopOwner && isEdit
-                                ? "Shop-Specific Custom Details / Promotion Note"
-                                : "Product Description"}
-                        </span>
+                        isShopOwner && isEdit
+                            ? "Shop-Specific Custom Details / Promotion Note"
+                            : "Product Description"
                     }
+                    placeholder={
+                        isShopOwner && isEdit
+                            ? "Customize warranty, accessories, or local deal notes..."
+                            : "Full product specifications and details..."
+                    }
+                    rows={3}
+                    colorClass="rounded-xl"
                     className="!mb-3.5"
-                >
-                    <Input.TextArea
-                        rows={3}
-                        placeholder={
-                            isShopOwner && isEdit
-                                ? "Customize warranty, accessories, or local deal notes..."
-                                : "Full product specifications and details..."
-                        }
-                        className="rounded-xl text-sm"
-                    />
-                </Form.Item>
+                />
 
-                {/* 4. Thumbnail URL */}
-                <Form.Item
+                {/* 4. Thumbnail URL via common FormField */}
+                <FormField
+                    type="text"
                     name="thumbnail"
                     label={
-                        <span className="text-xs sm:text-sm font-semibold text-slate-700">
-                            {isShopOwner
-                                ? "Thumbnail URL (Leave blank to use default)"
-                                : "Master Thumbnail URL"}
-                        </span>
+                        isShopOwner
+                            ? "Thumbnail URL (Leave blank to use default)"
+                            : "Master Thumbnail URL"
                     }
+                    placeholder="https://example.com/product-image.jpg"
+                    colorClass="rounded-xl"
                     className="!mb-3.5"
-                >
-                    <Input placeholder="https://example.com/product-image.jpg" className="rounded-xl py-2 text-sm" />
-                </Form.Item>
+                />
 
-                {/* 5. Live in Store Switch (Shop Owner listing only) */}
+                {/* 5. Live in Store Switch via common FormField (Shop Owner listing only) */}
                 {isShopOwner && isEdit && (
-                    <Form.Item
+                    <FormField
+                        type="switch"
                         name="isActive"
-                        label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Visibility Status in Store</span>}
-                        valuePropName="checked"
+                        label="Visibility Status in Store"
+                        checkedChildren="Live in Store"
+                        unCheckedChildren="Hidden"
                         className="!mb-2"
-                    >
-                        <Switch checkedChildren="Live in Store" unCheckedChildren="Hidden" />
-                    </Form.Item>
+                    />
                 )}
             </Form>
         </ResponsiveModal>

@@ -6,6 +6,7 @@ import {
     Select,
     Radio,
     Checkbox,
+    Switch,
     DatePicker,
     Upload,
 } from "antd";
@@ -31,6 +32,7 @@ export interface FormFieldProps {
     | "select"
     | "radio"
     | "checkbox"
+    | "switch"
     | "file"
     | "file-input"
     | "textarea"
@@ -39,7 +41,7 @@ export interface FormFieldProps {
     /** The name of the field, used by antd Form for binding */
     name: string | (string | number)[];
     /** The label displayed above the field */
-    label?: string;
+    label?: string | ReactNode;
     /** Placeholder text for text, email, password, number, textarea, and select */
     placeholder?: string;
     /** Optional icon to display alongside text-based inputs */
@@ -64,6 +66,9 @@ export interface FormFieldProps {
     fileUploadClass?: string;
     /** Default image to show in file dragger (when no file is selected) */
     defaultImage?: string | null | undefined;
+    allowClear?: boolean;
+    checkedChildren?: ReactNode;
+    unCheckedChildren?: ReactNode;
 }
 
 // Normalize the Upload event into the file list antd Form expects
@@ -166,6 +171,9 @@ const FormField: React.FC<FormFieldProps> = ({
     rows = 4,
     fileUploadClass = "",
     defaultImage,
+    allowClear,
+    checkedChildren,
+    unCheckedChildren,
 }) => {
     const mergedRules: Rule[] = [
         ...rules,
@@ -192,6 +200,7 @@ const FormField: React.FC<FormFieldProps> = ({
                 return (
                     <Select
                         placeholder={placeholder}
+                        allowClear={allowClear}
                         className={controlClass}
                         options={options.map((opt) => ({
                             value: opt.value,
@@ -274,6 +283,24 @@ const FormField: React.FC<FormFieldProps> = ({
                 );
         }
     };
+
+    // Switch binds its value via "checked"
+    if (type === "switch") {
+        return (
+            <Form.Item
+                name={name}
+                label={label}
+                valuePropName="checked"
+                rules={mergedRules}
+                className={className}
+            >
+                <Switch
+                    checkedChildren={checkedChildren || "Live"}
+                    unCheckedChildren={unCheckedChildren || "Hidden"}
+                />
+            </Form.Item>
+        );
+    }
 
     // Checkbox binds its value via "checked"
     if (type === "checkbox") {
