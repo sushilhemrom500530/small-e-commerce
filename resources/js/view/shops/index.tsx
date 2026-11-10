@@ -15,6 +15,7 @@ import {
   Search,
   ChevronDown,
   Star,
+  Check,
 } from "lucide-react";
 
 interface Shop {
@@ -103,10 +104,15 @@ const allShops: Shop[] = [
 
 export default function ShopsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("popular");
   const [page, setPage] = useState(1);
   const pageSize = 6;
+
+  const currentCategoryObj =
+    categories.find((c) => c.id === selectedCategory) || categories[0];
+  const CurrentCategoryIcon = currentCategoryObj.icon;
 
   const { data: backendData } = useGetStoreShopsQuery({
     search: searchQuery,
@@ -184,12 +190,69 @@ export default function ShopsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* category content  */}
-          <aside className="lg:col-span-3 bg-white p-5 rounded-2xl border border-gray-200/80 ">
-            <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">
-              Categories
-            </h2>
+          <aside className="lg:col-span-3 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200/80">
+            {/* Mobile collapsible dropdown trigger - only visible on small devices (< lg) */}
+            <div className="lg:hidden">
+              <button
+                type="button"
+                onClick={() => setIsMobileCategoryOpen(!isMobileCategoryOpen)}
+                className="w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl border border-gray-200/90 bg-slate-50/80 hover:bg-slate-100/80 transition-all cursor-pointer text-left"
+                aria-expanded={isMobileCategoryOpen}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+                    <CurrentCategoryIcon className="w-4 h-4 text-primary" />
+                  </div>
+                  <div className="truncate">
+                    <span className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                      Select Category
+                    </span>
+                    <span className="block text-xs sm:text-sm font-bold text-gray-900 truncate">
+                      {currentCategoryObj.name}
+                    </span>
+                  </div>
+                </div>
 
-            <div className="flex flex-col space-y-1.5">
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className="text-xs font-semibold text-primary hidden sm:inline">
+                    {isMobileCategoryOpen ? "Close" : "Change"}
+                  </span>
+                  <div
+                    className={`w-7 h-7 rounded-lg bg-white border border-gray-200/90 flex items-center justify-center transition-transform duration-200 ${isMobileCategoryOpen ? "rotate-180" : ""
+                      }`}
+                  >
+                    <ChevronDown className="w-4 h-4 text-gray-600" />
+                  </div>
+                </div>
+              </button>
+            </div>
+
+            {/* Desktop header - only visible on large devices */}
+            <div className="hidden lg:flex items-center justify-between mb-4">
+              <h2 className="text-base sm:text-lg font-bold text-gray-900 tracking-tight">
+                Categories
+              </h2>
+              {selectedCategory !== "all" && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategory("all");
+                    setPage(1);
+                  }}
+                  className="text-xs text-primary hover:text-primary-hover font-semibold transition-colors cursor-pointer"
+                >
+                  Reset
+                </button>
+              )}
+            </div>
+
+            {/* Category options - always open on desktop, collapsible dropdown on mobile */}
+            <div
+              className={`flex-col space-y-1.5 transition-all duration-200 ${isMobileCategoryOpen
+                ? "flex mt-3 pt-3 border-t border-gray-100"
+                : "hidden lg:flex"
+                }`}
+            >
               {categories.map((cat) => {
                 const Icon = cat.icon;
                 const active = selectedCategory === cat.id;
@@ -199,14 +262,18 @@ export default function ShopsPage() {
                     onClick={() => {
                       setSelectedCategory(cat.id);
                       setPage(1);
+                      setIsMobileCategoryOpen(false); // auto-matically collapse off when selected
                     }}
-                    className={`flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-left cursor-pointer ${active
-                      ? "bg-primary/10 text-primary font-semibold shadow-2xs"
+                    className={`flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-left cursor-pointer ${active
+                      ? "bg-primary text-white font-semibold "
                       : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                       }`}
                   >
-                    <Icon className={`w-4 h-4 ${active ? "text-primary" : "text-gray-500"}`} />
-                    <span>{cat.name}</span>
+                    <div className="flex items-center gap-3">
+                      <Icon className={`w-4 h-4 ${active ? "text-white" : "text-gray-500"}`} />
+                      <span>{cat.name}</span>
+                    </div>
+                    {active && <Check className="w-3.5 h-3.5 text-white" />}
                   </button>
                 );
               })}
@@ -281,7 +348,7 @@ export default function ShopsPage() {
                     <div className="mt-3.5">
                       <Link
                         to={`/shops/${shop.slug}`}
-                        className="inline-flex items-center justify-center px-4 py-1.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs"
+                        className="inline-flex items-center justify-center px-4 py-1.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg transition-colors"
                       >
                         Visit Shop
                       </Link>
@@ -311,7 +378,6 @@ export default function ShopsPage() {
               </div>
             )}
           </main>
-
         </div>
       </div>
     </div>

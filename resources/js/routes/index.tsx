@@ -80,6 +80,10 @@ const routes = [
                 element: <ProductDetailPage />
             },
             {
+                path: "/products/:id",
+                element: <ProductDetailPage />
+            },
+            {
                 path: "/about",
                 element: <AboutPage />
             },

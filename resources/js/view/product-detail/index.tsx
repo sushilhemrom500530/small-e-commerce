@@ -87,7 +87,7 @@ export default function ProductDetailPage() {
 
       {/* Main Product Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="bg-white rounded-3xl border border-gray-200/80 p-6 sm:p-8 lg:p-10 shadow-2xs">
+        <div className="bg-white rounded-3xl border border-gray-200/80 p-6 sm:p-8 lg:p-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
             {/* Left: Gallery (Thumbnails + Main Image) */}
@@ -101,7 +101,7 @@ export default function ProductDetailPage() {
                       key={thumb.id}
                       onClick={() => setSelectedImage(thumb.id)}
                       className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl border p-1 bg-white flex items-center justify-center overflow-hidden transition-all cursor-pointer ${active
-                        ? "border-primary ring-2 ring-primary/20 shadow-xs"
+                        ? "border-primary ring-2 ring-primary/20 "
                         : "border-gray-200 hover:border-gray-300"
                         }`}
                     >
@@ -184,7 +184,7 @@ export default function ProductDetailPage() {
               {/* Quantity, Add to Cart, Wishlist */}
               <div className="pt-3 flex flex-wrap items-center gap-3.5">
                 {/* Quantity */}
-                <div className="inline-flex items-center border border-gray-200 rounded-xl bg-white shadow-2xs">
+                <div className="inline-flex items-center border border-gray-200 rounded-xl bg-white">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     className="p-3 text-gray-500 hover:text-gray-800 transition-colors cursor-pointer"
@@ -208,7 +208,7 @@ export default function ProductDetailPage() {
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  className={`flex-1 min-w-[180px] font-semibold py-3 px-6 rounded-xl shadow-sm transition-all text-sm text-center flex items-center justify-center gap-2 cursor-pointer ${addedToast
+                  className={`flex-1 min-w-[180px] font-semibold py-3 px-6 rounded-xl transition-all text-sm text-center flex items-center justify-center gap-2 cursor-pointer ${addedToast
                     ? "bg-emerald-600 text-white shadow-emerald-500/20"
                     : "bg-primary hover:bg-primary-hover text-white shadow-primary/20"
                     }`}
@@ -226,7 +226,7 @@ export default function ProductDetailPage() {
                 <button
                   type="button"
                   onClick={() => setIsWishlisted(!isWishlisted)}
-                  className={`p-3 rounded-xl border transition-colors shadow-2xs cursor-pointer ${isWishlisted
+                  className={`p-3 rounded-xl border transition-colors cursor-pointer ${isWishlisted
                     ? "border-rose-200 bg-rose-50 text-rose-500"
                     : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     }`}
@@ -343,7 +343,7 @@ export default function ProductDetailPage() {
 
           {/* Speech bubble with question mark illustration */}
           <div className="hidden sm:flex items-center justify-end pr-6 select-none">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white/95 shadow-lg flex items-center justify-center">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white/95 flex items-center justify-center">
               <span className="text-[#2563eb] text-4xl sm:text-5xl font-black">?</span>
             </div>
           </div>

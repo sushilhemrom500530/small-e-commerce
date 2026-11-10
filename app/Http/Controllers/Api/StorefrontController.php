@@ -226,6 +226,13 @@ class StorefrontController extends Controller
     {
         $product = Product::with(['category', 'creator', 'shopProducts'])->find($id);
 
+        if (! $product && is_numeric($id)) {
+            $shopProduct = ShopProduct::with(['product.category', 'product.creator'])->find($id);
+            if ($shopProduct && $shopProduct->product) {
+                $product = $shopProduct->product;
+            }
+        }
+
         if (! $product) {
             return $this->sendError('Product not found.', 404);
         }

@@ -8,7 +8,9 @@ import {
     ArrowLeft,
     CheckCircle2,
     Eye,
-    X
+    X,
+    ChevronDown,
+    Check,
 } from "lucide-react";
 import {
     useGetStoreShopQuery,
@@ -24,6 +26,7 @@ export default function StorefrontPage() {
 
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<string>("all");
+    const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<IShopProduct | null>(null);
 
     const {
@@ -49,6 +52,10 @@ export default function StorefrontPage() {
     const shop = shopData?.results;
     const products = productsData?.results || [];
     const categories = categoriesData?.results || [];
+    const currentCategoryName =
+        selectedCategory === "all"
+            ? "All Categories"
+            : categories.find((c) => c.slug === selectedCategory)?.name || "All Categories";
 
     if (isShopLoading) {
         return (
@@ -61,7 +68,7 @@ export default function StorefrontPage() {
     if (isShopError || !shop) {
         return (
             <div className="min-h-[70vh] bg-slate-50 flex items-center justify-center px-4 py-16">
-                <div className="max-w-md w-full bg-white rounded-3xl border border-slate-200/80 p-8 text-center shadow-xs">
+                <div className="max-w-md w-full bg-white rounded-3xl border border-slate-200/80 p-8 text-center">
                     <div className="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <Store className="w-8 h-8" />
                     </div>
@@ -71,7 +78,7 @@ export default function StorefrontPage() {
                     </p>
                     <Link
                         to="/shops"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary-hover transition-colors shadow-xs"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary-hover transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4" /> Browse All Shops
                     </Link>
@@ -87,7 +94,7 @@ export default function StorefrontPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                         <div className="flex items-center gap-5">
-                            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-tr from-primary/10 to-indigo-100 border border-primary/20 flex items-center justify-center overflow-hidden shrink-0 shadow-xs">
+                            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-tr from-primary/10 to-indigo-100 border border-primary/20 flex items-center justify-center overflow-hidden shrink-0">
                                 {shop.logo ? (
                                     <img
                                         src={shop.logo}
@@ -150,7 +157,7 @@ export default function StorefrontPage() {
             {/* Filter and Product Grid */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
                 {/* Search & Categories Bar */}
-                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-2xs mb-8 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 mb-8 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
                     <div className="relative flex-1 max-w-md">
                         <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                         <input
@@ -162,11 +169,81 @@ export default function StorefrontPage() {
                         />
                     </div>
 
-                    <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+                    {/* Mobile collapsible category dropdown - only on small devices (< md) */}
+                    <div className="md:hidden">
+                        <button
+                            type="button"
+                            onClick={() => setIsMobileCategoryOpen(!isMobileCategoryOpen)}
+                            className="w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl border border-slate-200/90 bg-slate-50/80 hover:bg-slate-100/80 transition-all cursor-pointer text-left"
+                            aria-expanded={isMobileCategoryOpen}
+                        >
+                            <div className="flex items-center gap-2 min-w-0">
+                                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                                    Category:
+                                </span>
+                                <span className="text-xs sm:text-sm font-bold text-slate-900 truncate">
+                                    {currentCategoryName}
+                                </span>
+                            </div>
+
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                                <span className="text-xs font-semibold text-primary">
+                                    {isMobileCategoryOpen ? "Close" : "Change"}
+                                </span>
+                                <div
+                                    className={`w-7 h-7 rounded-lg bg-white border border-slate-200/90 flex items-center justify-center transition-transform duration-200 ${isMobileCategoryOpen ? "rotate-180" : ""
+                                        }`}
+                                >
+                                    <ChevronDown className="w-4 h-4 text-slate-600" />
+                                </div>
+                            </div>
+                        </button>
+
+                        {/* Collapsible list on mobile */}
+                        {isMobileCategoryOpen && (
+                            <div className="mt-2 p-2 bg-white rounded-xl border border-slate-200 flex flex-col gap-1 z-20">
+                                <button
+                                    onClick={() => {
+                                        setSelectedCategory("all");
+                                        setIsMobileCategoryOpen(false); // auto-matically collapsed off
+                                    }}
+                                    className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition-all text-left cursor-pointer ${selectedCategory === "all"
+                                        ? "bg-primary text-white"
+                                        : "text-slate-700 hover:bg-slate-50"
+                                        }`}
+                                >
+                                    <span>All Categories</span>
+                                    {selectedCategory === "all" && <Check className="w-3.5 h-3.5 text-white" />}
+                                </button>
+                                {categories.map((cat) => {
+                                    const active = selectedCategory === cat.slug;
+                                    return (
+                                        <button
+                                            key={cat.id}
+                                            onClick={() => {
+                                                setSelectedCategory(cat.slug);
+                                                setIsMobileCategoryOpen(false); // auto-matically collapsed off
+                                            }}
+                                            className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition-all text-left cursor-pointer ${active
+                                                ? "bg-primary text-white"
+                                                : "text-slate-700 hover:bg-slate-50"
+                                                }`}
+                                        >
+                                            <span>{cat.name}</span>
+                                            {active && <Check className="w-3.5 h-3.5 text-white" />}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Desktop Category Tabs - only visible on md+ */}
+                    <div className="hidden md:flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
                         <button
                             onClick={() => setSelectedCategory("all")}
                             className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === "all"
-                                ? "bg-primary text-white shadow-2xs"
+                                ? "bg-primary text-white"
                                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                                 }`}
                         >
@@ -177,7 +254,7 @@ export default function StorefrontPage() {
                                 key={cat.id}
                                 onClick={() => setSelectedCategory(cat.slug)}
                                 className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === cat.slug
-                                    ? "bg-primary text-white shadow-2xs"
+                                    ? "bg-primary text-white"
                                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                                     }`}
                             >
@@ -199,13 +276,18 @@ export default function StorefrontPage() {
                         {products.map((item) => {
                             const effectiveThumb = item.effectiveThumbnail || item.thumbnail || item.catalogThumbnail || "/images/product-headphone-main@2x.jpg";
                             const effectiveDesc = item.effectiveDetails || item.details || item.catalogDescription || "No specific details provided.";
+                            const productDetailTargetId = item.productId || item.id;
+                            const productDetailUrl = `/product/${productDetailTargetId}`;
 
                             return (
                                 <div
                                     key={item.id}
-                                    className="bg-white rounded-2xl border border-slate-200/90 hover:shadow-lg hover:border-slate-300 transition-all duration-200 overflow-hidden flex flex-col group"
+                                    className="bg-white rounded-2xl border border-slate-200/90 hover:border-slate-300 transition-all duration-200 overflow-hidden flex flex-col group"
                                 >
-                                    <div className="relative aspect-[4/3] w-full bg-slate-100 overflow-hidden">
+                                    <Link
+                                        to={productDetailUrl}
+                                        className="relative aspect-[4/3] w-full bg-slate-100 overflow-hidden block"
+                                    >
                                         <img
                                             src={effectiveThumb}
                                             alt={item.name || "Product"}
@@ -224,13 +306,16 @@ export default function StorefrontPage() {
                                                 Custom Price
                                             </span>
                                         )}
-                                    </div>
+                                    </Link>
 
                                     <div className="p-4 flex flex-col justify-between flex-1">
                                         <div>
-                                            <h3 className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors line-clamp-1">
+                                            <Link
+                                                to={productDetailUrl}
+                                                className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors line-clamp-1 block"
+                                            >
                                                 {item.name}
-                                            </h3>
+                                            </Link>
                                             <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
                                                 {effectiveDesc}
                                             </p>
@@ -244,12 +329,12 @@ export default function StorefrontPage() {
                                                 </span>
                                             </div>
 
-                                            <button
-                                                onClick={() => setSelectedProduct(item)}
-                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+                                            <Link
+                                                to={productDetailUrl}
+                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary hover:text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer"
                                             >
                                                 <Eye className="w-3.5 h-3.5" /> Details
-                                            </button>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
@@ -268,77 +353,79 @@ export default function StorefrontPage() {
             </div>
 
             {/* Product Quick-View Modal */}
-            {selectedProduct && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-                    <div className="bg-white rounded-3xl max-w-2xl w-full border border-slate-200 overflow-hidden shadow-2xl relative">
-                        <button
-                            onClick={() => setSelectedProduct(null)}
-                            className="absolute top-4 right-4 z-10 p-2 text-slate-400 hover:text-slate-600 bg-white/80 backdrop-blur-xs rounded-full hover:bg-slate-100 transition-colors"
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
+            {
+                selectedProduct && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+                        <div className="bg-white rounded-3xl max-w-2xl w-full border border-slate-200 overflow-hidden relative">
+                            <button
+                                onClick={() => setSelectedProduct(null)}
+                                className="absolute top-4 right-4 z-10 p-2 text-slate-400 hover:text-slate-600 bg-white/80 backdrop-blur-xs rounded-full hover:bg-slate-100 transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2">
-                            <div className="bg-slate-100 relative min-h-[260px] md:min-h-full">
-                                <img
-                                    src={
-                                        selectedProduct.effectiveThumbnail ||
-                                        selectedProduct.thumbnail ||
-                                        selectedProduct.catalogThumbnail ||
-                                        "/images/product-headphone-main@2x.jpg"
-                                    }
-                                    alt={selectedProduct.name}
-                                    className="w-full h-full object-cover"
-                                    onError={(e) => {
-                                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80";
-                                    }}
-                                />
-                            </div>
-
-                            <div className="p-6 md:p-8 flex flex-col justify-between space-y-4">
-                                <div>
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700">
-                                            {selectedProduct.category?.name || "Catalog Product"}
-                                        </span>
-                                        <span className="text-xs text-slate-400">• Sold by {shop.name}</span>
-                                    </div>
-                                    <h2 className="text-xl font-bold text-slate-900 leading-snug">
-                                        {selectedProduct.name}
-                                    </h2>
-                                    <div className="mt-3">
-                                        <span className="text-2xl font-extrabold text-primary">
-                                            ৳{Number(selectedProduct.price).toLocaleString()}
-                                        </span>
-                                    </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2">
+                                <div className="bg-slate-100 relative min-h-[260px] md:min-h-full">
+                                    <img
+                                        src={
+                                            selectedProduct.effectiveThumbnail ||
+                                            selectedProduct.thumbnail ||
+                                            selectedProduct.catalogThumbnail ||
+                                            "/images/product-headphone-main@2x.jpg"
+                                        }
+                                        alt={selectedProduct.name}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80";
+                                        }}
+                                    />
                                 </div>
 
-                                <div className="space-y-3">
-                                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                                        Product Details & Description
-                                    </h4>
-                                    <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 text-xs sm:text-sm text-slate-600 leading-relaxed max-h-48 overflow-y-auto">
-                                        {selectedProduct.effectiveDetails ||
-                                            selectedProduct.details ||
-                                            selectedProduct.catalogDescription ||
-                                            "No additional specifications."}
+                                <div className="p-6 md:p-8 flex flex-col justify-between space-y-4">
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700">
+                                                {selectedProduct.category?.name || "Catalog Product"}
+                                            </span>
+                                            <span className="text-xs text-slate-400">• Sold by {shop.name}</span>
+                                        </div>
+                                        <h2 className="text-xl font-bold text-slate-900 leading-snug">
+                                            {selectedProduct.name}
+                                        </h2>
+                                        <div className="mt-3">
+                                            <span className="text-2xl font-extrabold text-primary">
+                                                ৳{Number(selectedProduct.price).toLocaleString()}
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                                    <span>Availability: <strong className="text-emerald-600 font-semibold">In Stock</strong></span>
-                                    <button
-                                        onClick={() => setSelectedProduct(null)}
-                                        className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold transition-colors"
-                                    >
-                                        Close
-                                    </button>
+                                    <div className="space-y-3">
+                                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                                            Product Details & Description
+                                        </h4>
+                                        <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 text-xs sm:text-sm text-slate-600 leading-relaxed max-h-48 overflow-y-auto">
+                                            {selectedProduct.effectiveDetails ||
+                                                selectedProduct.details ||
+                                                selectedProduct.catalogDescription ||
+                                                "No additional specifications."}
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                                        <span>Availability: <strong className="text-emerald-600 font-semibold">In Stock</strong></span>
+                                        <button
+                                            onClick={() => setSelectedProduct(null)}
+                                            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold transition-colors"
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 }
