@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus, Search, Edit3, Trash2, Package } from "lucide-react";
-import { Button, message } from "antd";
+import { Button, Input, message } from "antd";
 import { Link } from "react-router-dom";
 import {
     useGetMyShopProductsQuery,
@@ -80,14 +80,14 @@ export default function ShopOwnerProductsPage() {
                 </div>
                 <div className="flex items-center gap-3">
                     <Link to="/shop-owner/dashboard/catalog">
-                        <Button className="!rounded-xl !h-10 !px-4 !font-semibold">
+                        <Button className="!rounded-md !h-10 !px-4 !font-semibold">
                             Browse Shared Catalog
                         </Button>
                     </Link>
                     <Button
                         type="primary"
                         onClick={() => setIsCreateModalOpen(true)}
-                        className="!bg-primary hover:!bg-primary-hover !rounded-xl !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white"
+                        className="!bg-primary hover:!bg-primary-hover !rounded-md !h-10 !px-4 !font-semibold !flex !items-center !gap-2 !border-none !text-white"
                     >
                         <Plus className="w-4 h-4" />
                         <span>Create Own Product</span>
@@ -96,20 +96,21 @@ export default function ShopOwnerProductsPage() {
             </div>
 
             {/* Table Container */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-xs">
+            <div className="bg-white rounded-2xl p-6 border border-slate-100">
                 {/* Search Bar */}
                 <div className="flex items-center justify-between gap-4 pb-5 border-b border-slate-100">
                     <div className="relative w-full max-w-xs">
-                        <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                        <input
+                        <Input
                             type="text"
+                            size="large"
+                            prefix={<Search className="w-4 h-4 text-slate-400" />}
                             placeholder="Search listed products..."
                             value={searchTerm}
                             onChange={(e) => {
                                 setSearchTerm(e.target.value);
                                 setPage(1);
                             }}
-                            className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
+                            className="!rounded-md"
                         />
                     </div>
                     <span className="text-xs font-semibold text-slate-400">

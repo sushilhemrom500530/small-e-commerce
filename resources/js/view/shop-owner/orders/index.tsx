@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Search, ShoppingBag, Eye, CheckCircle2, User, Phone, MapPin, Mail, Calendar } from "lucide-react";
-import { message, Select, Button, Modal } from "antd";
+import { message, Select, Button, Modal, Input } from "antd";
 import {
     useGetShopOrdersQuery,
     useUpdateOrderStatusMutation,
@@ -45,26 +45,28 @@ export default function ShopOrdersPage() {
                 </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-xs">
+            <div className="bg-white rounded-2xl p-6 border border-slate-100">
                 {/* Search & Status Filter Bar */}
                 <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-slate-100">
                     <div className="flex items-center gap-3 w-full sm:w-auto">
                         <div className="relative w-full sm:w-72">
-                            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                            <input
+                            <Input
                                 type="text"
+                                size="large"
+                                prefix={<Search className="w-4 h-4 text-slate-400" />}
                                 placeholder="Search order ID or customer..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-9 pr-3.5 py-2 text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary"
+                                className="!rounded-md"
                             />
                         </div>
                         <Select
                             placeholder="All Statuses"
+                            size="large"
                             allowClear
                             value={statusFilter}
                             onChange={(val) => setStatusFilter(val)}
-                            className="w-36 !rounded-xl"
+                            className="w-36 !rounded-md"
                             options={[
                                 { label: "Pending", value: "Pending" },
                                 { label: "Processing", value: "Processing" },
@@ -131,15 +133,14 @@ export default function ShopOrdersPage() {
                                         </td>
                                         <td className="py-4 px-3">
                                             <span
-                                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
-                                                    order.status === "Pending"
-                                                        ? "bg-amber-50 text-amber-600 border-amber-200/60"
-                                                        : order.status === "Processing"
+                                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${order.status === "Pending"
+                                                    ? "bg-amber-50 text-amber-600 border-amber-200/60"
+                                                    : order.status === "Processing"
                                                         ? "bg-blue-50 text-blue-600 border-blue-200/60"
                                                         : order.status === "Cancelled"
-                                                        ? "bg-rose-50 text-rose-600 border-rose-200/60"
-                                                        : "bg-emerald-50 text-emerald-600 border-emerald-200/60"
-                                                }`}
+                                                            ? "bg-rose-50 text-rose-600 border-rose-200/60"
+                                                            : "bg-emerald-50 text-emerald-600 border-emerald-200/60"
+                                                    }`}
                                             >
                                                 {order.status}
                                             </span>
@@ -214,15 +215,14 @@ export default function ShopOrdersPage() {
                                 <span className="text-xl font-black text-slate-900">{selectedOrder.total}</span>
                             </div>
                             <span
-                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${
-                                    selectedOrder.status === "Pending"
-                                        ? "bg-amber-50 text-amber-600 border-amber-200"
-                                        : selectedOrder.status === "Processing"
+                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${selectedOrder.status === "Pending"
+                                    ? "bg-amber-50 text-amber-600 border-amber-200"
+                                    : selectedOrder.status === "Processing"
                                         ? "bg-blue-50 text-blue-600 border-blue-200"
                                         : selectedOrder.status === "Cancelled"
-                                        ? "bg-rose-50 text-rose-600 border-rose-200"
-                                        : "bg-emerald-50 text-emerald-600 border-emerald-200"
-                                }`}
+                                            ? "bg-rose-50 text-rose-600 border-rose-200"
+                                            : "bg-emerald-50 text-emerald-600 border-emerald-200"
+                                    }`}
                             >
                                 {selectedOrder.status}
                             </span>

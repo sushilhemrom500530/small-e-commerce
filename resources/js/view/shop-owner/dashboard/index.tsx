@@ -72,7 +72,7 @@ export default function ShopOwnerDashboard() {
                     return (
                         <div
                             key={idx}
-                            className="bg-white rounded-2xl p-5 border border-slate-100 shadow-xs hover:shadow-md transition-shadow"
+                            className="bg-white rounded-2xl p-5 border border-slate-100"
                         >
                             <div className="flex items-center justify-between mb-3">
                                 <span className="text-xs sm:text-sm text-slate-500 font-medium">
@@ -96,7 +96,7 @@ export default function ShopOwnerDashboard() {
             {/* Shop Overview and Quick Actions */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* My Shop Card */}
-                <div className="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-100 shadow-xs flex flex-col justify-between">
+                <div className="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-100 flex flex-col justify-between">
                     <div>
                         <h2 className="text-base sm:text-lg font-bold text-[#0c1b3a] mb-4">
                             My Shop Profile
@@ -154,7 +154,7 @@ export default function ShopOwnerDashboard() {
                 </div>
 
                 {/* Shared Catalog Shortcuts */}
-                <div className="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-100 shadow-xs flex flex-col justify-between">
+                <div className="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-100 flex flex-col justify-between">
                     <div>
                         <h2 className="text-base sm:text-lg font-bold text-[#0c1b3a] mb-2">
                             Quick Catalog Actions

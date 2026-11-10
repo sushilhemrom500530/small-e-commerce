@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Search, Check, Plus, Package } from "lucide-react";
-import { Button, Form, message, Select } from "antd";
+import { Button, Form, Input, message, Select } from "antd";
 import ResponsiveModal from "../../../Components/reuseable/responsive-modal/index.js";
 import FormField from "../../../Components/form/index.js";
 import Loading from "../../../Components/reuseable/loading/index.js";
@@ -70,20 +70,22 @@ export default function ProductCatalog() {
             {/* Search & Filter Bar */}
             <div className="flex flex-wrap items-center gap-3">
                 <div className="relative w-full sm:w-80">
-                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
+                    <Input
                         type="text"
+                        size="large"
+                        prefix={<Search className="w-4 h-4 text-slate-400" />}
                         placeholder="Search shared products..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-9 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 shadow-2xs focus:outline-none focus:border-primary"
+                        className="!rounded-md"
                     />
                 </div>
                 <Select
                     placeholder="All Categories"
                     allowClear
+                    size="large"
                     onChange={(val) => setSelectedCategory(val)}
-                    className="w-48 !rounded-xl"
+                    className="w-48 !rounded-md"
                 >
                     {categories.map((c) => (
                         <Select.Option key={c.id} value={c.id}>
@@ -106,13 +108,13 @@ export default function ProductCatalog() {
                     No products found in the shared catalog.
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {catalog.map((product) => {
                         const isAdded = product.isAddedToCurrentShop;
                         return (
                             <div
                                 key={product.id}
-                                className="bg-white rounded-2xl p-5 border border-slate-100 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow group"
+                                className="bg-white rounded-2xl p-5 border border-slate-100 flex flex-col justify-between transition-shadow group"
                             >
                                 <div>
                                     {/* Product Image */}
@@ -193,7 +195,7 @@ export default function ProductCatalog() {
                             type="primary"
                             loading={isAdding}
                             onClick={() => form.submit()}
-                            className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold shadow-xs"
+                            className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold"
                         >
                             Confirm & List in Shop
                         </Button>

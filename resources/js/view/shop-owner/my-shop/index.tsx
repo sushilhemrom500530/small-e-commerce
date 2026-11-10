@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Store, Mail, Phone, ExternalLink } from "lucide-react";
-import { message, Form, Input, Button } from "antd";
+import { message, Form, Button } from "antd";
 import { Link } from "react-router-dom";
+import FormField from "../../../Components/form/index.js";
 import {
     useGetMyShopProfileQuery,
     useUpdateMyShopProfileMutation,
@@ -49,10 +50,10 @@ export default function MyShopPage() {
                 </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-100 shadow-xs max-w-4xl">
+            <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-100 max-w-4xl">
                 {/* Storefront Banner / Header Card */}
                 <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-gradient-to-r from-blue-50/70 via-indigo-50/50 to-purple-50/70 border border-slate-100 mb-8">
-                    <div className="w-24 h-24 rounded-2xl bg-white p-2 shadow-xs border border-slate-100 overflow-hidden flex items-center justify-center shrink-0">
+                    <div className="w-24 h-24 rounded-2xl bg-white p-2 border border-slate-100 overflow-hidden flex items-center justify-center shrink-0">
                         {shop?.logo ? (
                             <img src={shop.logo} alt="Shop Preview" className="w-full h-full object-cover rounded-xl" />
                         ) : (
@@ -90,20 +91,38 @@ export default function MyShopPage() {
                 </div>
 
                 <Form form={form} layout="vertical" onFinish={handleSave} className="space-y-4">
-                    <Form.Item name="name" label="Shop Name" rules={[{ required: true, message: "Shop name is required" }]}>
-                        <Input placeholder="Shop Name" className="rounded-xl py-2" />
-                    </Form.Item>
+                    <FormField
+                        type="text"
+                        name="name"
+                        label="Shop Name"
+                        placeholder="Shop Name"
+                        required
+                        rules={[{ required: true, message: "Shop name is required" }]}
+                        colorClass="!rounded-md py-2"
+                        className="!mb-4"
+                    />
 
-                    <Form.Item name="description" label="Shop Bio / Description">
-                        <Input.TextArea rows={4} placeholder="Describe what makes your store unique..." className="rounded-xl" />
-                    </Form.Item>
+                    <FormField
+                        type="textarea"
+                        name="description"
+                        label="Shop Bio / Description"
+                        placeholder="Describe what makes your store unique..."
+                        rows={4}
+                        colorClass="!rounded-md"
+                        className="!mb-4"
+                    />
 
-                    <Form.Item name="logo" label="Logo / Cover Image URL">
-                        <Input placeholder="https://images.unsplash.com/photo-..." className="rounded-xl py-2" />
-                    </Form.Item>
+                    <FormField
+                        type="text"
+                        name="logo"
+                        label="Logo / Cover Image URL"
+                        placeholder="https://images.unsplash.com/photo-..."
+                        colorClass="!rounded-md py-2"
+                        className="!mb-4"
+                    />
 
                     {shop?.owner && (
-                        <div className="pt-2 pb-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div className="pt-2 pb-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-500 bg-slate-50 p-4 rounded-md border border-slate-100">
                             <div className="flex items-center gap-2">
                                 <Mail className="w-4 h-4 text-slate-400" />
                                 <span>Owner: {shop.owner.name} ({shop.owner.email})</span>
@@ -122,7 +141,7 @@ export default function MyShopPage() {
                             type="primary"
                             htmlType="submit"
                             loading={isSaving}
-                            className="!bg-primary hover:!bg-primary-hover rounded-xl h-11 px-8 text-white font-semibold"
+                            className="!bg-primary hover:!bg-primary-hover !rounded-md h-11 px-8 text-white font-semibold"
                         >
                             Save Changes
                         </Button>
