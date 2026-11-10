@@ -201,7 +201,7 @@ const FormField: React.FC<FormFieldProps> = ({
                     <Select
                         placeholder={placeholder}
                         allowClear={allowClear}
-                        className={controlClass}
+                        className={`!w-full ${colorClass} [&_.ant-select-selector]:!min-h-[44px] [&_.ant-select-selector]:!h-[44px] [&_.ant-select-selector]:!px-4 [&_.ant-select-selector]:!rounded-xl [&_.ant-select-selector]:!border-slate-200 [&_.ant-select-selector]:!flex [&_.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!flex [&_.ant-select-selection-item]:!items-center [&_.ant-select-selection-item]:!text-sm [&_.ant-select-selection-item]:!font-medium [&_.ant-select-selection-placeholder]:!flex [&_.ant-select-selection-placeholder]:!items-center [&_.ant-select-selection-placeholder]:!text-sm [&_.ant-select-selection-placeholder]:!text-slate-400 [&_.ant-select-arrow]:!right-4`.trim()}
                         options={options.map((opt) => ({
                             value: opt.value,
                             label: opt.extraText ? (
