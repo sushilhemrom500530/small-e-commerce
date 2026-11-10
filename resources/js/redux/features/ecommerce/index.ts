@@ -80,6 +80,19 @@ export interface IShopOwner {
     createdAt?: string;
 }
 
+export interface IPlatformUser {
+    id: number;
+    name: string;
+    email: string;
+    role: "admin" | "shop_owner" | "customer" | string;
+    roleName: "Admin" | "Shop Owner" | "Customer" | string;
+    phoneNumber?: string | null;
+    status: "active" | "suspended" | "inactive" | string;
+    joinedDate?: string;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
 export interface ICategory {
     id: number;
     name: string;
@@ -221,6 +234,46 @@ export const ecommerceApi = baseApi.injectEndpoints({
                 method: "DELETE",
             }),
             invalidatesTags: ["shopOwner", "shop"],
+        }),
+
+        // Admin: Users Management
+        getAdminUsers: builder.query<{ results: IPlatformUser[]; meta?: IMeta }, { search?: string; role?: string; status?: string; page?: number; limit?: number } | void>({
+            query: (params) => ({
+                url: "/admin/users",
+                method: "GET",
+                params: params || {},
+            }),
+            providesTags: ["user"],
+        }),
+        createAdminUser: builder.mutation<{ results: IPlatformUser }, any>({
+            query: (body) => ({
+                url: "/admin/users",
+                method: "POST",
+                body,
+            }),
+            invalidatesTags: ["user", "shopOwner"],
+        }),
+        updateAdminUser: builder.mutation<{ results: IPlatformUser }, { id: number; body: any }>({
+            query: ({ id, body }) => ({
+                url: `/admin/users/${id}`,
+                method: "PUT",
+                body,
+            }),
+            invalidatesTags: ["user", "shopOwner"],
+        }),
+        toggleAdminUserStatus: builder.mutation<{ results: IPlatformUser }, number>({
+            query: (id) => ({
+                url: `/admin/users/${id}/status`,
+                method: "PATCH",
+            }),
+            invalidatesTags: ["user", "shopOwner"],
+        }),
+        deleteAdminUser: builder.mutation<{ results: null }, number>({
+            query: (id) => ({
+                url: `/admin/users/${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["user", "shopOwner"],
         }),
 
         // Shop Owner: Shared Catalog
@@ -383,6 +436,11 @@ export const {
     useUpdateAdminShopOwnerMutation,
     useToggleAdminShopOwnerStatusMutation,
     useDeleteAdminShopOwnerMutation,
+    useGetAdminUsersQuery,
+    useCreateAdminUserMutation,
+    useUpdateAdminUserMutation,
+    useToggleAdminUserStatusMutation,
+    useDeleteAdminUserMutation,
     useGetShopCatalogQuery,
     useAddCatalogToShopMutation,
     useGetMyShopProductsQuery,

@@ -112,6 +112,10 @@ Route::prefix('admin')->middleware('jwt.auth:admin')->group(function () {
     Route::patch('/shop-owners/{id}/status', [AdminShopOwnerController::class, 'toggleStatus']);
     Route::delete('/shop-owners/{id}', [AdminShopOwnerController::class, 'destroy']);
 
+    // Users Management
+    Route::apiResource('users', AdminUserController::class);
+    Route::patch('/users/{id}/status', [AdminUserController::class, 'toggleStatus']);
+
     // Categories Management
     Route::post('/categories', [CategoryController::class, 'store']);
 });

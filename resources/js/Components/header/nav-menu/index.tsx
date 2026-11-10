@@ -33,8 +33,8 @@ export default function NavItem({
     const location = useLocation();
     const pathname = location.pathname;
 
-    const activeClass = "bg-primary text-white";
-    const inactiveClass = "text-[#43464A] hover:text-primary hover:bg-primary/10";
+    const activeClass = "border-r-2 border-primary text-primary bg-primary/20";
+    const inactiveClass = "text-[#43464A] hover:text-primary hover:bg-primary/10 border-r-2 border-r-transparent";
 
     const isSubmenuOpen = openSubmenu === label;
 
@@ -102,9 +102,9 @@ export default function NavItem({
                                     key={index}
                                     to={item.href || "#"}
                                     onClick={() => setNavOpened(false)}
-                                    className={`flex items-center gap-3 px-5 py-2 rounded-s text-base font-medium transition-colors ${isActive
-                                        ? "bg-white text-black"
-                                        : "text-white/80 hover:bg-white/10 hover:text-white"
+                                    className={`flex items-center gap-3 px-5 py-2 text-base font-medium transition-colors ${isActive
+                                        ? "border-r-2 border-primary text-primary bg-primary/20"
+                                        : "text-slate-600 hover:bg-slate-50 hover:text-primary"
                                         }`}
                                 >
                                     {SubIcon && <SubIcon size={18} />}

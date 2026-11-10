@@ -195,15 +195,15 @@ export default function ShopOwnersManagement() {
                         <tbody className="divide-y divide-slate-50 text-sm">
                             {isLoading ? (
                                 <tr>
-                                        <td colSpan={6} className="py-8 text-center">
-                                            <Loading title="Loading shop owners..." className="min-h-[180px]" />
-                                        </td>
+                                    <td colSpan={6} className="py-8 text-center">
+                                        <Loading title="Loading shop owners..." className="min-h-[180px]" />
+                                    </td>
                                 </tr>
                             ) : owners.length === 0 ? (
                                 <tr>
-                                        <td colSpan={6} className="py-10 text-center text-slate-400">
-                                            No shop owners found. Click "Add Shop Owner" to create one.
-                                        </td>
+                                    <td colSpan={6} className="py-10 text-center text-slate-400">
+                                        No shop owners found. Click "Add Shop Owner" to create one.
+                                    </td>
                                 </tr>
                             ) : (
                                 owners.map((owner) => (
@@ -287,72 +287,72 @@ export default function ShopOwnersManagement() {
                 footer={null}
                 centered
             >
-                    <Form form={createForm} layout="vertical" onFinish={handleCreateOwner} className="mt-4">
-                        <FormField
-                            type="text"
-                            name="name"
-                            label="Full Name"
-                            placeholder="e.g. Michael Smith"
-                            required
-                            rules={[{ required: true, message: "Name is required" }]}
-                            colorClass="!rounded-md"
-                            className="!mb-3.5"
-                        />
+                <Form form={createForm} layout="vertical" onFinish={handleCreateOwner} className="mt-4">
+                    <FormField
+                        type="text"
+                        name="name"
+                        label="Full Name"
+                        placeholder="e.g. Michael Smith"
+                        required
+                        rules={[{ required: true, message: "Name is required" }]}
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                        <FormField
-                            type="email"
-                            name="email"
-                            label="Email Address"
-                            placeholder="owner@store.com"
-                            required
-                            rules={[{ required: true, type: "email", message: "Valid email is required" }]}
-                            colorClass="!rounded-md"
-                            className="!mb-3.5"
-                        />
+                    <FormField
+                        type="email"
+                        name="email"
+                        label="Email Address"
+                        placeholder="owner@store.com"
+                        required
+                        rules={[{ required: true, type: "email", message: "Valid email is required" }]}
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                        <FormField
-                            type="password"
-                            name="password"
-                            label="Password"
-                            placeholder="••••••••"
-                            required
-                            rules={[{ required: true, min: 6, message: "Min 6 characters" }]}
-                            colorClass="!rounded-md"
-                            className="!mb-3.5"
-                        />
+                    <FormField
+                        type="password"
+                        name="password"
+                        label="Password"
+                        placeholder="••••••••"
+                        required
+                        rules={[{ required: true, min: 6, message: "Min 6 characters" }]}
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                        <FormField
-                            type="tel"
-                            name="phoneNumber"
-                            label="Phone Number"
-                            placeholder="+8801700000000"
-                            colorClass="!rounded-md"
-                            className="!mb-3.5"
-                        />
+                    <FormField
+                        type="tel"
+                        name="phoneNumber"
+                        label="Phone Number"
+                        placeholder="+8801700000000"
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                        <FormField
-                            type="text"
-                            name="shopName"
-                            label="Assign New Shop Name (Optional)"
-                            placeholder="e.g. Galaxy Electronics"
-                            colorClass="!rounded-md"
-                            className="!mb-3.5"
-                        />
+                    <FormField
+                        type="text"
+                        name="shopName"
+                        label="Assign New Shop Name (Optional)"
+                        placeholder="e.g. Galaxy Electronics"
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                        <div className="flex justify-end gap-3 mt-6">
-                            <Button onClick={() => setIsCreateOpen(false)} className="!rounded-md h-10 px-4">
-                                Cancel
-                            </Button>
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                loading={isCreating}
-                                className="!bg-primary hover:!bg-primary-hover !rounded-md h-10 px-6 text-white font-semibold"
-                            >
-                                Create Account
-                            </Button>
-                        </div>
-                    </Form>
+                    <div className="flex justify-end gap-3 mt-6">
+                        <Button onClick={() => setIsCreateOpen(false)} className="!rounded-md h-10 px-4">
+                            Cancel
+                        </Button>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={isCreating}
+                            className="!bg-primary hover:!bg-primary-hover !rounded-md h-10 px-6 text-white font-semibold"
+                        >
+                            Create Account
+                        </Button>
+                    </div>
+                </Form>
             </Modal>
 
             {/* Edit Shop Owner Modal */}
@@ -380,9 +380,8 @@ export default function ShopOwnersManagement() {
                         name="email"
                         label="Email Address"
                         placeholder="owner@store.com"
-                        required
-                        rules={[{ required: true, type: "email", message: "Valid email is required" }]}
-                        colorClass="!rounded-md"
+                        disabled
+                        colorClass="!rounded-md !bg-slate-50 !text-slate-500 cursor-not-allowed"
                         className="!mb-3.5"
                     />
 
