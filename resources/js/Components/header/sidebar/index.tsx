@@ -99,15 +99,15 @@ export default function Sidebar({ navOpened, setNavOpened }: SidebarProps) {
                                         to={item.href || "#"}
                                         onClick={() => setNavOpened(false)}
                                     className={`flex items-center gap-3.5 px-6 py-3 text-sm font-semibold transition-all duration-200 group ${isActive
-                                            ? "border-r-2 border-primary text-primary bg-primary/20"
-                                            : "text-slate-600 hover:text-primary hover:bg-slate-50"
+                                            ? "border-r-2 border-primary text-primary bg-primary/10"
+                                            : "!text-slate-600 hover:!text-primary hover:bg-slate-50"
                                             }`}
                                     >
                                         {Icon && (
                                             <Icon
                                                 className={`w-5 h-5 shrink-0 transition-colors ${isActive
                                                         ? "text-primary"
-                                                        : "text-slate-400 group-hover:text-primary"
+                                                        : "!text-slate-400 group-hover:!text-primary"
                                                 }`}
                                             />
                                         )}

@@ -217,7 +217,7 @@ export default function FeaturedShops() {
                   <div className="mt-3">
                     <Link
                       to={`/shops/${shop.slug}`}
-                      className="inline-flex items-center justify-center px-3.5 py-1.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs"
+                      className="inline-flex items-center justify-center px-3.5 py-1.5 bg-primary hover:bg-primary-hover !text-white text-xs font-semibold rounded-lg transition-colors shadow-2xs"
                     >
                       Visit Shop
                     </Link>

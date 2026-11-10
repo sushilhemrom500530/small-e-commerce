@@ -259,10 +259,10 @@ export default function ShopsManagement() {
                     />
 
                     <div className="flex justify-end gap-3 mt-6">
-                        <Button onClick={() => setIsCreateOpen(false)} className="rounded-md h-10 px-4 font-medium text-slate-600 hover:text-slate-800">
+                        <Button onClick={() => setIsCreateOpen(false)} className="!rounded-md h-10 px-4 font-medium text-slate-600 hover:text-slate-800">
                             Cancel
                         </Button>
-                        <Button type="primary" htmlType="submit" loading={isCreating} className="!bg-primary hover:!bg-primary-hover rounded-md h-10 px-6 text-white font-semibold">
+                        <Button type="primary" htmlType="submit" loading={isCreating} className="!bg-primary hover:!bg-primary-hover !rounded-md h-10 px-6 text-white font-semibold">
                             Create Shop
                         </Button>
                     </div>

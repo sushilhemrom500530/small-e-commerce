@@ -348,7 +348,7 @@ export default function ShopsPage() {
                     <div className="mt-3.5">
                       <Link
                         to={`/shops/${shop.slug}`}
-                        className="inline-flex items-center justify-center px-4 py-1.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg transition-colors"
+                        className="inline-flex items-center justify-center px-4 py-1.5 bg-primary hover:bg-primary-hover !text-white text-xs font-semibold rounded-lg transition-colors"
                       >
                         Visit Shop
                       </Link>
