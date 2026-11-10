@@ -167,6 +167,7 @@ select:not(:disabled) {
     opacity: 0;
     transform: translateX(50px) scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: translateX(0) scale(1);
@@ -183,4 +184,55 @@ select:not(:disabled) {
   border-radius: 16px !important;
   border: 1px solid rgba(226, 232, 240, 0.9) !important;
   box-shadow: 0 14px 30px -4px rgba(15, 23, 42, 0.12) !important;
+}
+
+/* =====================================================================
+   ANT DESIGN SELECT TAILWIND ROUNDED UTILITIES FIX
+   Ant Design renders the border on `.ant-select-selector`, not the outer
+   `.ant-select` wrapper. These rules ensure `rounded-*` and `!rounded-*`
+   classes applied to `<Select>` properly curve the inner selector.
+   ===================================================================== */
+.ant-select.rounded-none .ant-select-selector,
+.ant-select.\!rounded-none .ant-select-selector {
+  border-radius: 0px !important;
+}
+
+.ant-select.rounded-sm .ant-select-selector,
+.ant-select.\!rounded-sm .ant-select-selector {
+  border-radius: 0.125rem !important;
+}
+
+.ant-select.rounded .ant-select-selector,
+.ant-select.\!rounded .ant-select-selector {
+  border-radius: 0.25rem !important;
+}
+
+.ant-select.rounded-md .ant-select-selector,
+.ant-select.\!rounded-md .ant-select-selector {
+  border-radius: 0.375rem !important;
+}
+
+.ant-select.rounded-lg .ant-select-selector,
+.ant-select.\!rounded-lg .ant-select-selector {
+  border-radius: 0.5rem !important;
+}
+
+.ant-select.rounded-xl .ant-select-selector,
+.ant-select.\!rounded-xl .ant-select-selector {
+  border-radius: 0.75rem !important;
+}
+
+.ant-select.rounded-2xl .ant-select-selector,
+.ant-select.\!rounded-2xl .ant-select-selector {
+  border-radius: 1rem !important;
+}
+
+.ant-select.rounded-full .ant-select-selector,
+.ant-select.\!rounded-full .ant-select-selector {
+  border-radius: 9999px !important;
+}
+
+.ant-select[class*="rounded-"] .ant-select-selector,
+.ant-select[class*="!rounded-"] .ant-select-selector {
+  border-radius: inherit !important;
 }

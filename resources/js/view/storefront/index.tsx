@@ -165,11 +165,10 @@ export default function StorefrontPage() {
                     <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
                         <button
                             onClick={() => setSelectedCategory("all")}
-                            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                                selectedCategory === "all"
-                                    ? "bg-primary text-white shadow-2xs"
-                                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                            }`}
+                            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === "all"
+                                ? "bg-primary text-white shadow-2xs"
+                                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                }`}
                         >
                             All Categories
                         </button>
@@ -177,11 +176,10 @@ export default function StorefrontPage() {
                             <button
                                 key={cat.id}
                                 onClick={() => setSelectedCategory(cat.slug)}
-                                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                                    selectedCategory === cat.slug
-                                        ? "bg-primary text-white shadow-2xs"
-                                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                                }`}
+                                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === cat.slug
+                                    ? "bg-primary text-white shadow-2xs"
+                                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                    }`}
                             >
                                 {cat.name}
                             </button>

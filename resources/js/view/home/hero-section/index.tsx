@@ -4,13 +4,13 @@ import { ArrowRight } from "lucide-react";
 export default function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-r from-[#ebf3ff] via-[#f4f8ff] to-[#e5efff] py-12 sm:py-16 lg:py-20">
-      {/* Soft circular atmospheric glow behind bags */}
+
       <div className="absolute right-6 top-1/2 -translate-y-1/2 w-[520px] h-[380px] bg-[#d4e4fd]/50 rounded-full blur-3xl pointer-events-none -z-0" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center">
 
-          {/* Left Column: Text & Call to Actions */}
+
           <div className="lg:col-span-6 xl:col-span-6 text-left">
 
             {/* Main Headline */}
@@ -19,23 +19,21 @@ export default function HeroSection() {
               <span className="block text-primary mt-1.5">Better Living</span>
             </h1>
 
-            {/* Subtitle */}
             <p className="mt-4 text-sm sm:text-base lg:text-[16px] text-slate-500 font-normal max-w-lg leading-relaxed">
               Discover amazing products from our trusted shops with the best prices.
             </p>
 
-            {/* Action Buttons */}
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Link
                 to="/shop"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary-hover shadow-sm shadow-primary/20 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary-hover shadow-primary/20 transition-colors"
               >
                 Shop Now
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/about"
-                className="inline-flex items-center px-6 py-2.5 rounded-lg text-sm font-semibold bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 shadow-2xs transition-colors"
+                className="inline-flex items-center px-6 py-2.5 rounded-lg text-sm font-semibold bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 transition-colors"
               >
                 Learn More
               </Link>

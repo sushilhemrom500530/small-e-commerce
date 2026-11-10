@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { message } from "antd";
+import { Input, message, Select } from "antd";
 import {
   LayoutGrid,
   Laptop,
@@ -332,12 +332,11 @@ export default function ShopProductsPage() {
         }
       />
 
-      {/* Main Content Area: Categories Sidebar + Products Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-          {/* Left Sidebar: Categories */}
-          <aside className="lg:col-span-3 bg-white p-5 rounded-2xl border border-gray-200/80 shadow-2xs">
+          {/* categories */}
+          <aside className="lg:col-span-3 bg-white p-5 rounded-2xl border border-gray-200/80">
             <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4 tracking-tight">
               Categories
             </h2>
@@ -366,43 +365,41 @@ export default function ShopProductsPage() {
             </div>
           </aside>
 
-          {/* Right Main Content */}
+          {/* products */}
           <main className="lg:col-span-9 space-y-6">
 
-            {/* Search & Sort Header Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="relative flex-1 max-w-md">
-                <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
+                <Input
                   type="text"
                   value={searchQuery}
+                  prefix={<Search className="w-4 h-4 text-gray-400" />}
+                  size="large"
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
                     setPage(1);
                   }}
                   placeholder="Search products by title, category..."
-                  className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm bg-white border border-gray-200/90 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-primary transition-all"
+                  className="!rounded-md"
                 />
               </div>
 
               <div className="flex items-center justify-end">
-                <div className="relative inline-flex items-center">
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="appearance-none bg-white border border-gray-200/90 rounded-xl px-4 py-2.5 pr-9 text-xs sm:text-sm font-medium text-gray-700 hover:border-gray-300 focus:outline-none focus:border-primary cursor-pointer shadow-2xs"
-                  >
-                    <option value="popular">Sort by: Featured</option>
-                    <option value="rating">Sort by: Top Rated</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                  </select>
-                  <ChevronDown className="w-4 h-4 text-gray-500 absolute right-3 pointer-events-none" />
-                </div>
+                <Select
+                  value={sortBy}
+                  onChange={(val) => setSortBy(val)}
+                  className="w-44 !rounded-md [&_.ant-select-selector]:!rounded-md"
+                  size="large"
+                  options={[
+                    { value: "popular", label: "Sort by: Featured" },
+                    { value: "rating", label: "Sort by: Top Rated" },
+                    { value: "price-low", label: "Price: Low to High" },
+                    { value: "price-high", label: "Price: High to Low" },
+                  ]}
+                />
               </div>
             </div>
 
-            {/* Products Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {paginatedProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
