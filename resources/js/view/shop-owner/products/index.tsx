@@ -1,83 +1,36 @@
 import { useState } from "react";
-import { Plus, Search, Edit3, Trash2, Package, Check, Tag } from "lucide-react";
-import { Button, Modal, Form, Input, InputNumber, Switch, message, Popconfirm, Select } from "antd";
+import { Plus, Search, Edit3, Trash2, Package } from "lucide-react";
+import { Button, message } from "antd";
 import { Link } from "react-router-dom";
 import {
     useGetMyShopProductsQuery,
-    useCreateShopProductMutation,
-    useUpdateShopProductMutation,
     useDeleteShopProductMutation,
     useGetCategoriesQuery,
     type IShopProduct,
 } from "../../../redux/features/ecommerce/index.js";
+import CustomizeProductModal from "./components/customize-product-modal.js";
+import CreateProductModal from "./components/create-product-modal.js";
+import DeleteConfirmModal from "../../../Components/reuseable/delete-confirm-modal/index.js";
 
 export default function ShopOwnerProductsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [editingProduct, setEditingProduct] = useState<IShopProduct | null>(null);
     const [deletingProduct, setDeletingProduct] = useState<IShopProduct | null>(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [form] = Form.useForm();
-    const [createForm] = Form.useForm();
 
     const { data, isLoading } = useGetMyShopProductsQuery({ search: searchTerm });
     const { data: catData } = useGetCategoriesQuery();
-
-    const [updateShopProduct, { isLoading: isUpdating }] = useUpdateShopProductMutation();
-    const [createShopProduct, { isLoading: isCreating }] = useCreateShopProductMutation();
     const [deleteShopProduct, { isLoading: isDeleting }] = useDeleteShopProductMutation();
 
     const products: IShopProduct[] = data?.results || [];
     const categories = catData?.results || [];
 
-    const handleOpenEdit = (sp: IShopProduct) => {
-        setEditingProduct(sp);
-        form.setFieldsValue({
-            name: sp.name,
-            categoryId: sp.category?.id,
-            price: sp.price,
-            details: sp.details,
-            thumbnail: sp.thumbnail,
-            isActive: sp.isActive,
-        });
-    };
-
-    const handleSaveEdit = async (values: any) => {
-        if (!editingProduct) return;
+    const handleConfirmDelete = async () => {
+        if (!deletingProduct) return;
         try {
-            await updateShopProduct({
-                id: editingProduct.id,
-                body: {
-                    name: values.name,
-                    categoryId: values.categoryId,
-                    price: values.price,
-                    details: values.details,
-                    thumbnail: values.thumbnail,
-                    isActive: values.isActive,
-                },
-            }).unwrap();
-            message.success("Product name, pricing, and details updated successfully!");
-            setEditingProduct(null);
-            form.resetFields();
-        } catch (err: any) {
-            message.error(err?.data?.message || "Failed to update listing.");
-        }
-    };
-
-    const handleCreateCustomProduct = async (values: any) => {
-        try {
-            await createShopProduct(values).unwrap();
-            message.success("New product created in shared catalog and listed in your shop!");
-            setIsCreateModalOpen(false);
-            createForm.resetFields();
-        } catch (err: any) {
-            message.error(err?.data?.message || "Failed to create product.");
-        }
-    };
-
-    const handleRemoveFromShop = async (id: number) => {
-        try {
-            await deleteShopProduct(id).unwrap();
+            await deleteShopProduct(deletingProduct.id).unwrap();
             message.success("Product removed from your shop.");
+            setDeletingProduct(null);
         } catch (err: any) {
             message.error(err?.data?.message || "Failed to remove product.");
         }
@@ -201,7 +154,7 @@ export default function ShopOwnerProductsPage() {
                                         <td className="py-4 text-right">
                                             <div className="flex items-center justify-end gap-1">
                                                 <button
-                                                    onClick={() => handleOpenEdit(sp)}
+                                                    onClick={() => setEditingProduct(sp)}
                                                     className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-blue-50 transition-colors cursor-pointer"
                                                     title="Edit Price & Details"
                                                 >
@@ -224,305 +177,41 @@ export default function ShopOwnerProductsPage() {
                 </div>
             </div>
 
-            {/* Edit Shop Product Modal */}
-            <Modal
-                title={
-                    <div className="pr-6">
-                        <span className="text-lg font-bold text-[#0c1b3a] block">
-                            Customize Product in Your Shop
-                        </span>
-                        <span className="text-xs text-slate-500 font-medium truncate block max-w-md">
-                            {editingProduct?.name}
-                        </span>
-                    </div>
-                }
+            {/* Reusable Modals */}
+            <CustomizeProductModal
+                product={editingProduct}
                 open={!!editingProduct}
                 onCancel={() => setEditingProduct(null)}
-                footer={null}
-                centered
-                width="min(680px, 95vw)"
-                style={{ top: "3vh", maxHeight: "90vh" }}
-                styles={{
-                    content: {
-                        maxHeight: "90vh",
-                        display: "flex",
-                        flexDirection: "column",
-                        borderRadius: "1rem",
-                        padding: "1.25rem 1.5rem",
-                    },
-                    body: {
-                        overflow: "hidden",
-                        display: "flex",
-                        flexDirection: "column",
-                        flex: 1,
-                        maxHeight: "calc(90vh - 85px)",
-                    },
-                }}
-            >
-                <div className="flex flex-col h-full max-h-[calc(90vh-95px)] min-h-0">
-                    <p className="text-xs text-slate-500 mb-3 shrink-0">
-                        Changes made here apply only to your shop's listing. The shared global product remains unaffected.
-                    </p>
-                    <Form
-                        form={form}
-                        layout="vertical"
-                        onFinish={handleSaveEdit}
-                        className="flex flex-col flex-1 min-h-0 overflow-hidden"
-                    >
-                        <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-1">
-                            <Form.Item
-                                name="name"
-                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Product Name</span>}
-                                rules={[{ required: true, message: "Product name is required" }]}
-                            >
-                                <Input placeholder="Enter product name..." className="rounded-xl py-2 font-medium text-slate-800" />
-                            </Form.Item>
+                onSuccess={() => setEditingProduct(null)}
+                categories={categories}
+            />
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                                <Form.Item
-                                    name="categoryId"
-                                    label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Category</span>}
-                                >
-                                    <Select placeholder="Select a category" className="rounded-xl !h-10" allowClear>
-                                        {categories.map((c) => (
-                                            <Select.Option key={c.id} value={c.id}>
-                                                {c.name}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
-                                </Form.Item>
-
-                                <Form.Item
-                                    name="price"
-                                    label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Your Selling Price (৳ BDT)</span>}
-                                    rules={[{ required: true, message: "Price is required" }]}
-                                >
-                                    <InputNumber min={0} className="w-full rounded-xl py-1 text-base font-bold text-slate-800" />
-                                </Form.Item>
-                            </div>
-
-                            <Form.Item
-                                name="details"
-                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Shop-Specific Custom Details / Promotion Note</span>}
-                            >
-                                <Input.TextArea
-                                    rows={3}
-                                    placeholder="Customize your description or warranty notes..."
-                                    className="rounded-xl text-sm"
-                                />
-                            </Form.Item>
-
-                            <Form.Item
-                                name="thumbnail"
-                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Shop-Specific Custom Thumbnail URL</span>}
-                            >
-                                <Input placeholder="Leave blank to use global catalog thumbnail" className="rounded-xl py-2 text-sm" />
-                            </Form.Item>
-
-                            <Form.Item
-                                name="isActive"
-                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Visibility Status in Store</span>}
-                                valuePropName="checked"
-                            >
-                                <Switch checkedChildren="Live" unCheckedChildren="Hidden" />
-                            </Form.Item>
-                        </div>
-
-                        {/* Pinned Action Buttons */}
-                        <div className="sticky bottom-0 bg-white pt-3 pb-1 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0 mt-3 z-10">
-                            <Button onClick={() => setEditingProduct(null)} className="rounded-xl h-10 px-5 font-medium text-slate-600 hover:text-slate-800">
-                                Cancel
-                            </Button>
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                loading={isUpdating}
-                                className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold shadow-xs"
-                            >
-                                Save Listing
-                            </Button>
-                        </div>
-                    </Form>
-                </div>
-            </Modal>
-
-            {/* Create Own Product Modal */}
-            <Modal
-                title={<span className="text-lg font-bold text-[#0c1b3a]">Create New Product (Enters Shared Catalog + Your Shop)</span>}
+            <CreateProductModal
                 open={isCreateModalOpen}
                 onCancel={() => setIsCreateModalOpen(false)}
-                footer={null}
-                centered
-                width="min(680px, 95vw)"
-                style={{ top: "3vh", maxHeight: "90vh" }}
-                styles={{
-                    content: {
-                        maxHeight: "90vh",
-                        display: "flex",
-                        flexDirection: "column",
-                        borderRadius: "1rem",
-                        padding: "1.25rem 1.5rem",
-                    },
-                    body: {
-                        overflow: "hidden",
-                        display: "flex",
-                        flexDirection: "column",
-                        flex: 1,
-                        maxHeight: "calc(90vh - 85px)",
-                    },
-                }}
-            >
-                <div className="flex flex-col h-full max-h-[calc(90vh-95px)] min-h-0">
-                    <p className="text-xs text-slate-500 mb-3 shrink-0">
-                        Products created by you will become available in the Shared Catalog for other shop owners, and automatically listed in your shop!
-                    </p>
-                    <Form
-                        form={createForm}
-                        layout="vertical"
-                        onFinish={handleCreateCustomProduct}
-                        className="flex flex-col flex-1 min-h-0 overflow-hidden"
-                    >
-                        <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-1">
-                            <Form.Item
-                                name="name"
-                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Product Name</span>}
-                                rules={[{ required: true, message: "Name is required" }]}
-                            >
-                                <Input placeholder="e.g. Handmade Leather Wallet" className="rounded-xl py-2 font-medium text-slate-800" />
-                            </Form.Item>
+                onSuccess={() => setIsCreateModalOpen(false)}
+                categories={categories}
+            />
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                                <Form.Item
-                                    name="categoryId"
-                                    label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Category</span>}
-                                >
-                                    <Select placeholder="Select a category" className="rounded-xl !h-10" allowClear>
-                                        {categories.map((c) => (
-                                            <Select.Option key={c.id} value={c.id}>
-                                                {c.name}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
-                                </Form.Item>
-
-                                <Form.Item
-                                    name="price"
-                                    label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Your Shop Selling Price (৳ BDT)</span>}
-                                    rules={[{ required: true, message: "Price is required" }]}
-                                >
-                                    <InputNumber min={0} placeholder="e.g. 2500" className="w-full rounded-xl py-1 text-base font-bold text-slate-800" />
-                                </Form.Item>
-                            </div>
-
-                            <Form.Item
-                                name="description"
-                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Catalog Master Description</span>}
-                            >
-                                <Input.TextArea rows={3} placeholder="Full product description..." className="rounded-xl text-sm" />
-                            </Form.Item>
-
-                            <Form.Item
-                                name="thumbnail"
-                                label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Product Thumbnail URL</span>}
-                            >
-                                <Input placeholder="https://example.com/image.jpg" className="rounded-xl py-2 text-sm" />
-                            </Form.Item>
-                        </div>
-
-                        {/* Pinned Action Buttons */}
-                        <div className="sticky bottom-0 bg-white pt-3 pb-1 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0 mt-3 z-10">
-                            <Button onClick={() => setIsCreateModalOpen(false)} className="rounded-xl h-10 px-5 font-medium text-slate-600 hover:text-slate-800">
-                                Cancel
-                            </Button>
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                loading={isCreating}
-                                className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold shadow-xs"
-                            >
-                                Create & List Product
-                            </Button>
-                        </div>
-                    </Form>
-                </div>
-            </Modal>
-
-            {/* Remove / Delete from Shop Confirmation Modal */}
-            <Modal
+            <DeleteConfirmModal
                 open={!!deletingProduct}
                 onCancel={() => setDeletingProduct(null)}
-                footer={null}
-                centered
-                width="min(460px, 95vw)"
-                styles={{
-                    content: {
-                        borderRadius: "1rem",
-                        padding: "1.5rem",
-                    },
-                }}
-            >
-                <div className="flex flex-col items-center text-center">
-                    <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-500 mb-3.5 shadow-2xs">
-                        <Trash2 className="w-7 h-7" />
-                    </div>
-
-                    <h3 className="text-xl font-bold text-[#0c1b3a]">
-                        Remove from Your Shop?
-                    </h3>
-
-                    <p className="text-sm text-slate-500 mt-2">
+                onConfirm={handleConfirmDelete}
+                loading={isDeleting}
+                title="Remove from Your Shop?"
+                description={
+                    <>
                         Are you sure you want to remove <strong className="text-slate-800">"{deletingProduct?.name}"</strong> from your shop?
-                    </p>
-
-                    {deletingProduct && (
-                        <div className="w-full mt-4 p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3 text-left">
-                            <div className="w-12 h-12 rounded-lg bg-white border border-slate-200 overflow-hidden flex items-center justify-center shrink-0">
-                                {deletingProduct.effectiveThumbnail ? (
-                                    <img src={deletingProduct.effectiveThumbnail} alt={deletingProduct.name} className="w-full h-full object-cover" />
-                                ) : (
-                                    <Package className="w-5 h-5 text-slate-300" />
-                                )}
-                            </div>
-                            <div className="min-w-0 flex-1">
-                                <span className="font-semibold text-slate-800 text-sm block truncate">
-                                    {deletingProduct.name}
-                                </span>
-                                <span className="text-xs font-bold text-primary">
-                                    ৳{Number(deletingProduct.price).toLocaleString()}
-                                </span>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="bg-amber-50 border border-amber-200/60 rounded-xl p-3 text-xs text-amber-800 text-left mt-3 w-full">
-                        ℹ️ <strong>Note:</strong> This removes the product listing from your shop's customer storefront. The master item remains safely available in the shared catalog.
-                    </div>
-
-                    <div className="flex items-center justify-end gap-3 w-full mt-6">
-                        <Button
-                            onClick={() => setDeletingProduct(null)}
-                            className="rounded-xl h-10 px-5 font-medium text-slate-600 hover:text-slate-800 flex-1"
-                            disabled={isDeleting}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            type="primary"
-                            danger
-                            loading={isDeleting}
-                            onClick={async () => {
-                                if (!deletingProduct) return;
-                                await handleRemoveFromShop(deletingProduct.id);
-                                setDeletingProduct(null);
-                            }}
-                            className="rounded-xl h-10 px-5 font-semibold flex-1 shadow-xs"
-                        >
-                            Yes, Remove
-                        </Button>
-                    </div>
-                </div>
-            </Modal>
+                    </>
+                }
+                itemPreview={deletingProduct ? {
+                    name: deletingProduct.name,
+                    thumbnail: deletingProduct.effectiveThumbnail,
+                    subtitle: `৳${Number(deletingProduct.price).toLocaleString()}`
+                } : undefined}
+                note="This removes the product listing from your shop's customer storefront. The master item remains safely available in the shared catalog."
+                confirmText="Yes, Remove"
+            />
         </div>
     );
 }
-

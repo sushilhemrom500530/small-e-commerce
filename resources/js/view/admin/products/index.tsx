@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus, Search, Edit2, Trash2, Package } from "lucide-react";
-import { Button, Modal, Form, Input, Select, message, Popconfirm } from "antd";
+import { Button, Modal, Form, Input, Select, message } from "antd";
 import {
     useGetAdminProductsQuery,
     useCreateAdminProductMutation,
@@ -9,12 +9,14 @@ import {
     useGetCategoriesQuery,
     type ICatalogProduct,
 } from "../../../redux/features/ecommerce/index.js";
+import DeleteConfirmModal from "../../../Components/reuseable/delete-confirm-modal/index.js";
 
 export default function ManageProducts() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<number | undefined>(undefined);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<ICatalogProduct | null>(null);
+    const [deletingProduct, setDeletingProduct] = useState<ICatalogProduct | null>(null);
     const [form] = Form.useForm();
 
     const { data, isLoading } = useGetAdminProductsQuery({
@@ -25,7 +27,7 @@ export default function ManageProducts() {
 
     const [createProduct, { isLoading: isCreating }] = useCreateAdminProductMutation();
     const [updateProduct, { isLoading: isUpdating }] = useUpdateAdminProductMutation();
-    const [deleteProduct] = useDeleteAdminProductMutation();
+    const [deleteProduct, { isLoading: isDeleting }] = useDeleteAdminProductMutation();
 
     const products: ICatalogProduct[] = data?.results || [];
     const categories = catData?.results || [];
@@ -184,17 +186,13 @@ export default function ManageProducts() {
                                                 >
                                                     <Edit2 className="w-4 h-4" />
                                                 </button>
-                                                <Popconfirm
-                                                    title="Remove from shared catalog?"
-                                                    description="This will delete this product from the global catalog and all shops."
-                                                    onConfirm={() => handleDelete(product.id)}
-                                                    okText="Yes, Delete"
-                                                    okButtonProps={{ danger: true }}
+                                                <button
+                                                    onClick={() => setDeletingProduct(product)}
+                                                    className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                                                    title="Remove from shared catalog"
                                                 >
-                                                    <button className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
-                                                </Popconfirm>
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -255,6 +253,31 @@ export default function ManageProducts() {
                     </div>
                 </Form>
             </Modal>
+
+            {/* Reusable Delete Confirmation Modal */}
+            <DeleteConfirmModal
+                open={!!deletingProduct}
+                onCancel={() => setDeletingProduct(null)}
+                onConfirm={async () => {
+                    if (!deletingProduct) return;
+                    await handleDelete(deletingProduct.id);
+                    setDeletingProduct(null);
+                }}
+                loading={isDeleting}
+                title="Delete from Catalog?"
+                description={
+                    <>
+                        Are you sure you want to delete <strong className="text-slate-800">"{deletingProduct?.name}"</strong> from the shared catalog?
+                    </>
+                }
+                itemPreview={deletingProduct ? {
+                    name: deletingProduct.name,
+                    thumbnail: deletingProduct.thumbnail,
+                    subtitle: deletingProduct.categoryName || "Catalog Product"
+                } : undefined}
+                note="This permanently removes the master product from the global catalog and all shops that have added it."
+                confirmText="Yes, Delete"
+            />
         </div>
     );
 }
