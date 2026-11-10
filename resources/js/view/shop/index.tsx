@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import PageBanner from "../../Components/shared/page-banner/index.js";
 import Pagination from "../../Components/reuseable/pagination/index.js";
+import ProductCard from "../../Components/reuseable/product-card/index.js";
 import {
   useGetAllProductsQuery,
   useGetCategoriesQuery,
@@ -352,11 +353,10 @@ export default function ShopProductsPage() {
                       setSelectedCategory(cat.id);
                       setPage(1);
                     }}
-                    className={`flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-left cursor-pointer ${
-                      active
-                        ? "bg-primary/10 text-primary font-semibold shadow-2xs"
-                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
+                    className={`flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-left cursor-pointer ${active
+                      ? "bg-primary/10 text-primary font-semibold shadow-2xs"
+                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                      }`}
                   >
                     <Icon className={`w-4 h-4 ${active ? "text-primary" : "text-gray-500"}`} />
                     <span>{cat.name}</span>
@@ -403,108 +403,10 @@ export default function ShopProductsPage() {
             </div>
 
             {/* Products Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {paginatedProducts.map((product) => {
-                const isAdded = !!addedItemIds[product.id];
-                const detailUrl = `/product/${product.id}`;
-
-                return (
-                  <div
-                    key={product.id}
-                    className="bg-white rounded-2xl border border-gray-200/80 hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col group"
-                  >
-                    {/* Product Image Container */}
-                    <Link
-                      to={detailUrl}
-                      className="relative aspect-square w-full overflow-hidden bg-slate-50 flex items-center justify-center p-4 block"
-                    >
-                      <img
-                        src={product.thumbnail}
-                        alt={product.name}
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 select-none"
-                        loading="lazy"
-                      />
-
-                      {/* Top Badges */}
-                      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/95 text-slate-700 border border-slate-200/80 shadow-2xs">
-                        {product.category}
-                      </span>
-                    </Link>
-
-                    {/* Product Body */}
-                    <div className="p-4 sm:p-5 flex flex-col justify-between flex-1">
-                      <div>
-                        {product.shopName && (
-                          <p className="text-[11px] font-medium text-slate-400 mb-1">
-                            Sold by <span className="text-slate-600">{product.shopName}</span>
-                          </p>
-                        )}
-
-                        <Link
-                          to={detailUrl}
-                          className="text-sm sm:text-base font-bold text-gray-900 group-hover:text-primary transition-colors leading-snug line-clamp-2"
-                        >
-                          {product.name}
-                        </Link>
-
-                        {/* Rating Row */}
-                        <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-600">
-                          <span className="text-amber-500 font-bold">★ {product.rating}</span>
-                          <span className="text-gray-400">({product.reviewsCount})</span>
-                        </div>
-
-                        {/* Price */}
-                        <div className="flex items-baseline gap-2 mt-3">
-                          <span className="text-lg sm:text-xl font-extrabold text-gray-900">
-                            ${Number(product.price).toFixed(2)}
-                          </span>
-                          {product.originalPrice && product.originalPrice > product.price && (
-                            <span className="text-xs sm:text-sm text-gray-400 line-through">
-                              ${Number(product.originalPrice).toFixed(2)}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Action Buttons: View Details & Add to Cart */}
-                      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
-                        {/* View Details Link */}
-                        <Link
-                          to={detailUrl}
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 border border-slate-200 hover:border-primary hover:text-primary text-slate-700 text-xs font-semibold rounded-xl transition-all shadow-2xs bg-white text-center cursor-pointer"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                          <span>View Details</span>
-                        </Link>
-
-                        {/* Add to Cart Quick Button */}
-                        <button
-                          type="button"
-                          onClick={(e) => handleAddToCart(product, e)}
-                          className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-white text-xs font-semibold rounded-xl transition-all shadow-2xs cursor-pointer ${
-                            isAdded
-                              ? "bg-emerald-600"
-                              : "bg-primary hover:bg-primary-hover shadow-primary/20"
-                          }`}
-                          title="Add to Cart"
-                        >
-                          {isAdded ? (
-                            <>
-                              <Check className="w-3.5 h-3.5" />
-                              <span className="hidden sm:inline">Added</span>
-                            </>
-                          ) : (
-                            <>
-                              <ShoppingCart className="w-3.5 h-3.5" />
-                              <span className="hidden sm:inline">Add</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {paginatedProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
             </div>
 
             {/* Empty State */}
