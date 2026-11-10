@@ -14,6 +14,7 @@ import {
 export default function ShopOwnerProductsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [editingProduct, setEditingProduct] = useState<IShopProduct | null>(null);
+    const [deletingProduct, setDeletingProduct] = useState<IShopProduct | null>(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [form] = Form.useForm();
     const [createForm] = Form.useForm();
@@ -23,7 +24,7 @@ export default function ShopOwnerProductsPage() {
 
     const [updateShopProduct, { isLoading: isUpdating }] = useUpdateShopProductMutation();
     const [createShopProduct, { isLoading: isCreating }] = useCreateShopProductMutation();
-    const [deleteShopProduct] = useDeleteShopProductMutation();
+    const [deleteShopProduct, { isLoading: isDeleting }] = useDeleteShopProductMutation();
 
     const products: IShopProduct[] = data?.results || [];
     const categories = catData?.results || [];
@@ -206,17 +207,13 @@ export default function ShopOwnerProductsPage() {
                                                 >
                                                     <Edit3 className="w-4 h-4" />
                                                 </button>
-                                                <Popconfirm
-                                                    title="Remove from your shop?"
-                                                    description="This removes it from your shop's customer listings. It will remain in the shared catalog."
-                                                    onConfirm={() => handleRemoveFromShop(sp.id)}
-                                                    okText="Yes, Remove"
-                                                    okButtonProps={{ danger: true }}
+                                                <button
+                                                    onClick={() => setDeletingProduct(sp)}
+                                                    className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                                                    title="Remove from your shop"
                                                 >
-                                                    <button className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
-                                                </Popconfirm>
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -447,6 +444,82 @@ export default function ShopOwnerProductsPage() {
                             </Button>
                         </div>
                     </Form>
+                </div>
+            </Modal>
+
+            {/* Remove / Delete from Shop Confirmation Modal */}
+            <Modal
+                open={!!deletingProduct}
+                onCancel={() => setDeletingProduct(null)}
+                footer={null}
+                centered
+                width="min(460px, 95vw)"
+                styles={{
+                    content: {
+                        borderRadius: "1rem",
+                        padding: "1.5rem",
+                    },
+                }}
+            >
+                <div className="flex flex-col items-center text-center">
+                    <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-500 mb-3.5 shadow-2xs">
+                        <Trash2 className="w-7 h-7" />
+                    </div>
+
+                    <h3 className="text-xl font-bold text-[#0c1b3a]">
+                        Remove from Your Shop?
+                    </h3>
+
+                    <p className="text-sm text-slate-500 mt-2">
+                        Are you sure you want to remove <strong className="text-slate-800">"{deletingProduct?.name}"</strong> from your shop?
+                    </p>
+
+                    {deletingProduct && (
+                        <div className="w-full mt-4 p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3 text-left">
+                            <div className="w-12 h-12 rounded-lg bg-white border border-slate-200 overflow-hidden flex items-center justify-center shrink-0">
+                                {deletingProduct.effectiveThumbnail ? (
+                                    <img src={deletingProduct.effectiveThumbnail} alt={deletingProduct.name} className="w-full h-full object-cover" />
+                                ) : (
+                                    <Package className="w-5 h-5 text-slate-300" />
+                                )}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                                <span className="font-semibold text-slate-800 text-sm block truncate">
+                                    {deletingProduct.name}
+                                </span>
+                                <span className="text-xs font-bold text-primary">
+                                    ৳{Number(deletingProduct.price).toLocaleString()}
+                                </span>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="bg-amber-50 border border-amber-200/60 rounded-xl p-3 text-xs text-amber-800 text-left mt-3 w-full">
+                        ℹ️ <strong>Note:</strong> This removes the product listing from your shop's customer storefront. The master item remains safely available in the shared catalog.
+                    </div>
+
+                    <div className="flex items-center justify-end gap-3 w-full mt-6">
+                        <Button
+                            onClick={() => setDeletingProduct(null)}
+                            className="rounded-xl h-10 px-5 font-medium text-slate-600 hover:text-slate-800 flex-1"
+                            disabled={isDeleting}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="primary"
+                            danger
+                            loading={isDeleting}
+                            onClick={async () => {
+                                if (!deletingProduct) return;
+                                await handleRemoveFromShop(deletingProduct.id);
+                                setDeletingProduct(null);
+                            }}
+                            className="rounded-xl h-10 px-5 font-semibold flex-1 shadow-xs"
+                        >
+                            Yes, Remove
+                        </Button>
+                    </div>
                 </div>
             </Modal>
         </div>
