@@ -224,10 +224,10 @@ export default function ShopsManagement() {
                     </Form.Item>
 
                     <div className="flex justify-end gap-3 mt-6">
-                        <Button onClick={() => setIsCreateOpen(false)} className="rounded-xl h-10 px-4">
+                        <Button onClick={() => setIsCreateOpen(false)} className="rounded-md h-10 px-4">
                             Cancel
                         </Button>
-                        <Button type="primary" htmlType="submit" loading={isCreating} className="!bg-primary hover:!bg-primary-hover rounded-xl h-10 px-6 text-white font-semibold">
+                        <Button type="primary" htmlType="submit" loading={isCreating} className="!bg-primary hover:!bg-primary-hover rounded-md h-10 px-6 text-white font-semibold">
                             Create Shop
                         </Button>
                     </div>
@@ -251,10 +251,10 @@ export default function ShopsManagement() {
                 itemPreview={
                     deletingShop
                         ? {
-                              name: deletingShop.name,
-                              thumbnail: deletingShop.logo,
-                              subtitle: `/store/${deletingShop.slug}`,
-                          }
+                            name: deletingShop.name,
+                            thumbnail: deletingShop.logo,
+                            subtitle: `/store/${deletingShop.slug}`,
+                        }
                         : undefined
                 }
                 confirmText="Delete Shop"

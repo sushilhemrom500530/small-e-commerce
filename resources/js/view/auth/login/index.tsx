@@ -69,7 +69,6 @@ export default function Login() {
             }
 
             toast.success(res.message || "Logged in successfully!");
-            message.success(res.message || "Logged in successfully!");
 
             const role = loginUser?.role;
             if (role === "admin") {

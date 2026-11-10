@@ -117,7 +117,7 @@ if (typeof window !== "undefined") {
             try {
                 return originalSuccess(content, duration, onClose);
             } catch {
-                return () => {};
+                return () => { };
             }
         };
 
@@ -129,7 +129,7 @@ if (typeof window !== "undefined") {
             try {
                 return originalError(content, duration, onClose);
             } catch {
-                return () => {};
+                return () => { };
             }
         };
 
@@ -141,7 +141,7 @@ if (typeof window !== "undefined") {
             try {
                 return originalWarning(content, duration, onClose);
             } catch {
-                return () => {};
+                return () => { };
             }
         };
 
@@ -153,7 +153,7 @@ if (typeof window !== "undefined") {
             try {
                 return originalInfo(content, duration, onClose);
             } catch {
-                return () => {};
+                return () => { };
             }
         };
     } catch (e) {
@@ -186,26 +186,26 @@ export function ToastContainer() {
                 const borderColor = isSuccess
                     ? "border-emerald-200"
                     : isError
-                    ? "border-rose-200"
-                    : isWarning
-                    ? "border-amber-200"
-                    : "border-blue-200";
+                        ? "border-rose-200"
+                        : isWarning
+                            ? "border-amber-200"
+                            : "border-blue-200";
 
                 const iconBg = isSuccess
                     ? "bg-emerald-50 text-emerald-600"
                     : isError
-                    ? "bg-rose-50 text-rose-600"
-                    : isWarning
-                    ? "bg-amber-50 text-amber-600"
-                    : "bg-blue-50 text-blue-600";
+                        ? "bg-rose-50 text-rose-600"
+                        : isWarning
+                            ? "bg-amber-50 text-amber-600"
+                            : "bg-blue-50 text-blue-600";
 
                 const badgeBg = isSuccess
                     ? "bg-emerald-500"
                     : isError
-                    ? "bg-rose-500"
-                    : isWarning
-                    ? "bg-amber-500"
-                    : "bg-blue-500";
+                        ? "bg-rose-500"
+                        : isWarning
+                            ? "bg-amber-500"
+                            : "bg-blue-500";
 
                 return (
                     <div

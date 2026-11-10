@@ -92,7 +92,7 @@ class StorefrontController extends Controller
             ->where('is_active', true)
             ->with(['product.category', 'shop']);
 
-        if ($search = $request->query('search', $request->query('searchTerm'))) {
+        if ($search = $request->query('product', $request->query('search', $request->query('searchTerm')))) {
             $query->whereHas('product', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%");
@@ -173,7 +173,7 @@ class StorefrontController extends Controller
     {
         $query = Product::with(['category', 'creator', 'shopProducts']);
 
-        if ($search = $request->query('search', $request->query('searchTerm'))) {
+        if ($search = $request->query('product', $request->query('search', $request->query('searchTerm')))) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%");

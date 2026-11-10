@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Search, ShoppingCart, User, Menu, X, LogOut, LayoutDashboard } from "lucide-react";
 import Logo from "../logo/index.js";
 import { navLinks, type MenuItem } from "../../../data/menu-items/index.js";
@@ -9,9 +9,33 @@ import Cookies from "js-cookie";
 
 export default function Navbar() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(
+    pathname === "/shop" ? (searchParams.get("product") || searchParams.get("search") || "") : ""
+  );
+
+  useEffect(() => {
+    if (pathname === "/shop") {
+      const q = searchParams.get("product") || searchParams.get("search") || "";
+      setSearchQuery(q);
+    }
+  }, [pathname, searchParams]);
+
+  const handleSearchSubmit = (e?: React.FormEvent | React.KeyboardEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+    const trimmed = searchQuery.trim();
+    if (trimmed) {
+      navigate(`/shop?product=${encodeURIComponent(trimmed)}`);
+    } else {
+      navigate("/shop");
+    }
+    setMobileMenuOpen(false);
+  };
   const cartItems = useAppSelector((state) => state.cart?.items ?? []);
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -99,16 +123,21 @@ export default function Navbar() {
           <div className="flex items-center gap-3 sm:gap-4">
 
             {/* Search Input Bar */}
-            <div className="relative hidden sm:flex items-center">
+            <form onSubmit={handleSearchSubmit} className="relative hidden sm:flex items-center">
               <Search className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearchSubmit(e);
+                  }
+                }}
                 placeholder="Search products..."
                 className="w-48 lg:w-60 pl-9 pr-3 py-1.5 text-xs sm:text-sm bg-[#fbfbfb] border border-gray-200/90 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary focus:bg-white transition-all"
               />
-            </div>
+            </form>
 
             {/* Shopping Cart Icon with Badge */}
             <Link
