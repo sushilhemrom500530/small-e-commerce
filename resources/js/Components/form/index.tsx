@@ -188,8 +188,11 @@ const FormField: React.FC<FormFieldProps> = ({
             : []),
     ];
 
-    const controlClass =
-        `${colorClass} ${className} !py-2.5 !px-4 hover:!border-primary focus:!border-primary !focus:outline-none !focus:ring-2 !focus:ring-primary/10`.trim();
+    const textInputControlClass =
+        `${colorClass || "!rounded-md"} !w-full !min-h-[44px] !h-[44px] !rounded-md !border-slate-200 !px-4 text-sm hover:!border-primary focus:!border-primary !focus:outline-none focus:!shadow-[0_0_0_2px_rgba(67,83,255,0.12)] transition-all duration-200`.trim();
+
+    const textareaControlClass =
+        `${colorClass || "!rounded-md"} !w-full !rounded-md !border-slate-200 !py-2.5 !px-4 text-sm hover:!border-primary focus:!border-primary !focus:outline-none focus:!shadow-[0_0_0_2px_rgba(67,83,255,0.12)] transition-all duration-200`.trim();
 
     const draggerName =
         typeof name === "string"
@@ -209,7 +212,7 @@ const FormField: React.FC<FormFieldProps> = ({
                         allowClear={allowClear}
                         disabled={disabled}
                         showSearch={showSearch}
-                        className={`!w-full ${colorClass} text-sm [&_.ant-select-selector]:!min-h-[44px] [&_.ant-select-selector]:!h-[44px] [&_.ant-select-selector]:!px-4 [&_.ant-select-selector]:!rounded-md [&_.ant-select-selector]:!border-slate-200 hover:[&_.ant-select-selector]:!border-primary [&_.ant-select-selector]:!transition-all [&_.ant-select-selector]:!duration-200 [&.ant-select-focused_.ant-select-selector]:!border-primary [&.ant-select-focused_.ant-select-selector]:!shadow-[0_0_0_2px_rgba(67,83,255,0.12)] [&.ant-select-open_.ant-select-selector]:!border-primary [&.ant-select-open_.ant-select-selector]:!shadow-[0_0_0_2px_rgba(67,83,255,0.12)] [&_.ant-select-selection-item]:!flex [&_.ant-select-selection-item]:!items-center [&_.ant-select-selection-item]:!text-sm [&_.ant-select-selection-item]:!text-slate-800 [&_.ant-select-selection-placeholder]:!flex [&_.ant-select-selection-placeholder]:!items-center [&_.ant-select-selection-placeholder]:!text-sm [&_.ant-select-selection-placeholder]:!text-slate-400 [&_.ant-select-arrow]:!right-4 [&_.ant-select-arrow]:!text-slate-400 [&.ant-select-disabled_.ant-select-selector]:!bg-slate-50 [&.ant-select-disabled_.ant-select-selector]:!text-slate-400`.trim()}
+                        className={`!w-full ${colorClass || "!rounded-md"} text-sm [&_.ant-select-selector]:!min-h-[44px] [&_.ant-select-selector]:!h-[44px] [&_.ant-select-selector]:!px-4 [&_.ant-select-selector]:!rounded-md [&_.ant-select-selector]:!border-slate-200 hover:[&_.ant-select-selector]:!border-primary [&_.ant-select-selector]:!transition-all [&_.ant-select-selector]:!duration-200 [&.ant-select-focused_.ant-select-selector]:!border-primary [&.ant-select-focused_.ant-select-selector]:!shadow-[0_0_0_2px_rgba(67,83,255,0.12)] [&.ant-select-open_.ant-select-selector]:!border-primary [&.ant-select-open_.ant-select-selector]:!shadow-[0_0_0_2px_rgba(67,83,255,0.12)] [&_.ant-select-selection-item]:!flex [&_.ant-select-selection-item]:!items-center [&_.ant-select-selection-item]:!text-sm [&_.ant-select-selection-item]:!text-slate-800 [&_.ant-select-selection-placeholder]:!flex [&_.ant-select-selection-placeholder]:!items-center [&_.ant-select-selection-placeholder]:!text-sm [&_.ant-select-selection-placeholder]:!text-slate-400 [&_.ant-select-arrow]:!right-4 [&_.ant-select-arrow]:!text-slate-400 [&.ant-select-disabled_.ant-select-selector]:!bg-slate-50 [&.ant-select-disabled_.ant-select-selector]:!text-slate-400`.trim()}
                         options={options.map((opt) => ({
                             value: opt.value,
                             label: opt.extraText ? (
@@ -233,14 +236,14 @@ const FormField: React.FC<FormFieldProps> = ({
                         rows={rows}
                         placeholder={placeholder}
                         disabled={disabled}
-                        className={controlClass}
+                        className={textareaControlClass}
                         {...rest}
                     />
                 );
 
             case "radio":
                 return (
-                    <Radio.Group className={className} disabled={disabled} {...rest}>
+                    <Radio.Group className={colorClass} disabled={disabled} {...rest}>
                         {options.map((opt) => (
                             <Radio key={opt.value} value={opt.value}>
                                 {opt.label}
@@ -250,16 +253,13 @@ const FormField: React.FC<FormFieldProps> = ({
                 );
 
             case "number":
-                // InputNumber wraps an inner <input>; applying the vertical/horizontal
-                // padding to the wrapper double-stacks its height vs. a plain Input.
-                // Push the padding onto the inner input so it matches text fields.
                 return (
                     <InputNumber
                         placeholder={placeholder}
                         prefix={icon}
                         controls={false}
                         disabled={disabled}
-                        className={`${colorClass} ${className} !w-full [&_.ant-input-number-input]:!h-auto [&_.ant-input-number-input]:!py-2.5 [&_.ant-input-number-input]:!px-4 hover:!border-primary focus:!border-primary focus-within:!border-primary [&.ant-input-number-focused]:!border-primary [&.ant-input-number-focused]:!shadow-[0_0_0_2px_rgba(67,83,255,0.12)]`.trim()}
+                        className={`!w-full ${colorClass || "!rounded-md"} !min-h-[44px] !h-[44px] !rounded-md !border-slate-200 [&_.ant-input-number-input]:!h-[42px] [&_.ant-input-number-input]:!px-4 [&_.ant-input-number-input]:!text-sm hover:!border-primary focus:!border-primary focus-within:!border-primary [&.ant-input-number-focused]:!border-primary [&.ant-input-number-focused]:!shadow-[0_0_0_2px_rgba(67,83,255,0.12)]`.trim()}
                         style={{ width: "100%" }}
                         {...rest}
                     />
@@ -271,7 +271,7 @@ const FormField: React.FC<FormFieldProps> = ({
                         placeholder={placeholder}
                         prefix={icon}
                         disabled={disabled}
-                        className={controlClass}
+                        className={textInputControlClass}
                         {...rest}
                     />
                 );
@@ -281,7 +281,7 @@ const FormField: React.FC<FormFieldProps> = ({
                     <DatePicker
                         {...(placeholder !== undefined ? { placeholder } : {})}
                         disabled={disabled}
-                        className={controlClass}
+                        className={textInputControlClass}
                         style={{ width: "100%" }}
                         {...rest}
                     />
@@ -296,7 +296,7 @@ const FormField: React.FC<FormFieldProps> = ({
                         prefix={iconPosition === "left" ? icon : undefined}
                         suffix={iconPosition === "right" ? icon : undefined}
                         disabled={disabled}
-                        className={controlClass}
+                        className={textInputControlClass}
                         {...rest}
                     />
                 );
@@ -351,7 +351,7 @@ const FormField: React.FC<FormFieldProps> = ({
                     placeholder={placeholder}
                     accept={accept}
                     icon={icon}
-                    className={controlClass}
+                    className={textInputControlClass}
                 />
             </Form.Item>
         );

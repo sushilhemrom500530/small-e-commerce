@@ -99,6 +99,18 @@ select:not(:disabled) {
 /* =====================================================================
    GLOBAL TOAST & NOTIFICATION SYSTEM (RIGHT TOP PLACEMENT)
    ===================================================================== */
+@keyframes toastSlideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
 .ant-message {
   position: fixed !important;
   top: 24px !important;
@@ -108,7 +120,6 @@ select:not(:disabled) {
   max-width: calc(100vw - 48px) !important;
   pointer-events: none !important;
   z-index: 99999 !important;
-  transform: none !important;
 }
 
 .ant-message .ant-message-notice {
@@ -129,7 +140,6 @@ select:not(:disabled) {
   font-weight: 600 !important;
   color: #0f172a !important;
   pointer-events: auto !important;
-  animation: toastSlideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .ant-message-success .ant-message-custom-content,

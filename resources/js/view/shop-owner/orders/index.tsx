@@ -193,14 +193,14 @@ export default function ShopOrdersPage() {
                                         handleMarkDelivered(selectedOrder);
                                         setSelectedOrder({ ...selectedOrder, status: "Delivered" });
                                     }}
-                                    className="!bg-emerald-600 hover:!bg-emerald-700 rounded-xl h-10 px-5 text-white font-semibold"
+                                    className="!bg-emerald-600 hover:!bg-emerald-700 !rounded-md h-10 px-5 text-white font-semibold"
                                 >
                                     Mark as Delivered
                                 </Button>
                             )}
                             <Button
                                 onClick={() => setSelectedOrder(null)}
-                                className="rounded-xl h-10 px-5 font-medium text-slate-600"
+                                className="!rounded-md h-10 px-5 font-medium text-slate-600"
                             >
                                 Close
                             </Button>

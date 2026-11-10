@@ -5,7 +5,8 @@ import { RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { store } from './redux/store.js'
 import router from './routes'
-import { ConfigProvider, message, notification } from 'antd'
+import { ConfigProvider, App, message, notification } from 'antd'
+import { ToastContainer } from './Components/reuseable/toast/index.js'
 
 // Configure global toast message & notification placement to top-right
 message.config({
@@ -40,7 +41,10 @@ createRoot(document.getElementById('root')!).render(
           },
         }}
       >
-        <RouterProvider router={router} />
+        <App>
+          <ToastContainer />
+          <RouterProvider router={router} />
+        </App>
       </ConfigProvider>
     </Provider>
   </StrictMode>,

@@ -6,6 +6,7 @@ import type { AppDispatch } from "../../../redux/store.js";
 import { useLoginMutation } from "../../../redux/features/user/index.js";
 import { setCredentials } from "../../../redux/userSlice.js";
 import FormField from "../../../Components/form/index.js";
+import { toast } from "../../../Components/reuseable/toast/index.js";
 import Cookies from "js-cookie";
 
 interface LoginFormValues {
@@ -67,6 +68,7 @@ export default function Login() {
                 );
             }
 
+            toast.success(res.message || "Logged in successfully!");
             message.success(res.message || "Logged in successfully!");
 
             const role = loginUser?.role;
@@ -109,6 +111,7 @@ export default function Login() {
                         token: "admin-session-token",
                     })
                 );
+                toast.success("Login successful as Admin");
                 message.success("Login successful as Admin");
                 navigate("/admin/dashboard", {
                     replace: true,
@@ -135,6 +138,7 @@ export default function Login() {
                         token: "owner-session-token",
                     })
                 );
+                toast.success("Login successful as Shop Owner");
                 message.success("Login successful as Shop Owner");
                 navigate("/shop-owner/dashboard", {
                     replace: true,
@@ -161,12 +165,14 @@ export default function Login() {
                         token: "customer-session-token",
                     })
                 );
+                toast.success("Login successful as Customer");
                 message.success("Login successful as Customer");
                 navigate("/", {
                     replace: true,
                 });
                 return;
             }
+            toast.error(error?.data?.message || "Login failed");
             message.error(error?.data?.message || "Login failed");
         }
     };

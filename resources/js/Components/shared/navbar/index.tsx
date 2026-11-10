@@ -67,7 +67,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-white border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
-          
+
           {/* Left: Brand Logo */}
           <div className="flex-shrink-0">
             <Logo />
@@ -81,11 +81,10 @@ export default function Navbar() {
                 <Link
                   key={item.label}
                   to={item.href || "/"}
-                  className={`relative inline-flex flex-col items-center py-1 text-[15px] transition-colors ${
-                    active
-                      ? "text-gray-900 font-semibold"
-                      : "text-gray-600 hover:text-primary font-medium"
-                  }`}
+                  className={`relative inline-flex flex-col items-center py-1 text-[15px] transition-colors ${active
+                    ? "text-gray-900 font-semibold"
+                    : "text-gray-600 hover:text-primary font-medium"
+                    }`}
                 >
                   <span>{item.label}</span>
                   {active && (
@@ -98,7 +97,7 @@ export default function Navbar() {
 
           {/* Right: Search, Cart, Profile */}
           <div className="flex items-center gap-3 sm:gap-4">
-            
+
             {/* Search Input Bar */}
             <div className="relative hidden sm:flex items-center">
               <Search className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
@@ -200,11 +199,10 @@ export default function Navbar() {
                 <Link
                   key={item.label}
                   to={item.href || "/"}
-                  className={`px-3 py-2 rounded-lg text-base font-medium transition-colors ${
-                    active
-                      ? "bg-primary/10 text-primary font-semibold"
-                      : "text-gray-700 hover:bg-gray-50"
-                  }`}
+                  className={`px-3 py-2 rounded-lg text-base font-medium transition-colors ${active
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-gray-700 hover:bg-gray-50"
+                    }`}
                 >
                   {item.label}
                 </Link>

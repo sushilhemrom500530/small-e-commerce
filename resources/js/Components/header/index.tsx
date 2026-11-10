@@ -77,14 +77,14 @@ export default function Header({ navOpened, setNavOpened }: HeaderProps) {
                 </button>
 
                 {/* Search Input */}
-                <div className="relative w-48 sm:w-72">
+                {/* <div className="relative w-48 sm:w-72">
                     <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
                         type="text"
                         placeholder="Search..."
                         className="w-full pl-9 pr-3.5 py-1.5 sm:py-2 text-xs sm:text-sm bg-[#f8fafc] border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:border-primary focus:bg-white transition-all"
                     />
-                </div>
+                </div> */}
             </div>
 
             {/* Right: Notifications & Profile */}
