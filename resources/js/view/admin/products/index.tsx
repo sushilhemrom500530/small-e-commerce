@@ -88,9 +88,7 @@ export default function ManageProducts() {
                 </Button>
             </div>
 
-            {/* Table Container */}
             <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-xs">
-                {/* Search & Filter Bar */}
                 <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-slate-100">
                     <div className="flex items-center gap-3 w-full sm:w-auto">
                         <div className="relative w-full sm:w-72">
@@ -206,7 +204,6 @@ export default function ManageProducts() {
                 </div>
             </div>
 
-            {/* Reusable ProductModal for Create / Edit (Same component used by Shop Owner) */}
             <ProductModal
                 open={isModalOpen}
                 role="admin"
@@ -223,7 +220,7 @@ export default function ManageProducts() {
                 onSubmit={handleSubmit}
             />
 
-            {/* Reusable Delete Confirmation Modal */}
+
             <DeleteConfirmModal
                 open={!!deletingProduct}
                 onCancel={() => setDeletingProduct(null)}

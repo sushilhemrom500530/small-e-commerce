@@ -1,6 +1,6 @@
 export default function Loading({
     title = "Loading...",
-    className = "min-h-[260px]",
+    className = "min-h-[45vh]",
 }: {
     title?: string;
     className?: string;

@@ -69,7 +69,6 @@ export default function Dashboard() {
                 </p>
             </div>
 
-            {/* 4 Stat Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {statCards.map((stat, idx) => {
                     const Icon = stat.icon;
@@ -94,9 +93,7 @@ export default function Dashboard() {
                 })}
             </div>
 
-            {/* Bottom Row: Recent Shops & Sales Overview */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* Recent Shops */}
                 <div className="lg:col-span-7 bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-xs flex flex-col justify-between">
                     <div>
                         <div className="flex items-center justify-between pb-4 border-b border-slate-100">
