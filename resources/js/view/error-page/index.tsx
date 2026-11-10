@@ -1,61 +1,38 @@
-
-import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { Home } from "lucide-react";
 
 export default function ErrorPage() {
-  const navigate = useNavigate()
-
   return (
-    <section className='bg-white '>
-      <div className='container flex items-center min-h-screen px-6 py-12 mx-auto'>
-        <div className='flex flex-col items-center max-w-sm mx-auto text-center'>
-          <p className='p-3 text-sm font-medium text-rose-500 rounded-full bg-blue-50 '>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='2'
-              stroke='currentColor'
-              className='w-6 h-6'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z'
-              />
-            </svg>
-          </p>
-          <h1 className='mt-3 text-2xl font-semibold text-gray-800  md:text-3xl'>
-            Something Went Wrong!
-          </h1>
-          <p className='mt-4 text-gray-500 '>Here are some helpful links:</p>
+    <div className="min-h-screen w-full bg-[#f8fafc] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+      {/* Background soft atmospheric glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
-          <div className='flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto'>
-            <button
-              onClick={() => navigate(-1)}
-              className='flex items-center justify-center w-1/2 px-5 py-1 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto   hover:bg-gray-100 '
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth='1.5'
-                stroke='currentColor'
-                className='w-5 h-5 rtl:rotate-180 text-rose-500'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18'
-                />
-              </svg>
+      <div className="relative z-10 max-w-lg w-full text-center">
+        {/* Large 404 display */}
+        <h1 className="text-8xl sm:text-9xl font-black text-primary tracking-tight select-none leading-none">
+          404
+        </h1>
 
-              <span>Go back</span>
-            </button>
+        {/* Text headings */}
+        <h2 className="mt-6 text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+          Page Not Found
+        </h2>
 
-            <button onClick={() => navigate('/')} >Take Me Home</button>
-          </div>
+        <p className="mt-3 text-sm sm:text-base text-gray-500 leading-relaxed max-w-md mx-auto">
+          Sorry, the page you are looking for doesn't exist, has been removed, or is temporarily unavailable.
+        </p>
+
+        {/* Single button for re-direct to Home */}
+        <div className="mt-8 flex justify-center">
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-xl transition-all shadow-md shadow-primary/25 cursor-pointer"
+          >
+            <Home className="w-4 h-4" />
+            <span>Back to Home</span>
+          </Link>
         </div>
       </div>
-    </section>
-  )
+    </div>
+  );
 }
