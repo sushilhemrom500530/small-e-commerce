@@ -19,6 +19,7 @@ export interface ProductModalProps {
     initialData?: ProductModalInitialData | null;
     categories: Array<{ id: number; name: string }>;
     loading?: boolean;
+    maxHeight?: string;
     onCancel: () => void;
     onSubmit: (values: any) => Promise<void> | void;
     title?: string;
@@ -34,6 +35,7 @@ export default function ProductModal({
     initialData,
     categories = [],
     loading = false,
+    maxHeight = "90vh",
     onCancel,
     onSubmit,
     title,
@@ -118,7 +120,7 @@ export default function ProductModal({
             subtitle={resolvedSubtitle}
             description={resolvedDescription}
             width="min(680px, 95vw)"
-            maxHeight="90vh"
+            maxHeight={maxHeight}
             footer={
                 <>
                     <Button
@@ -145,6 +147,7 @@ export default function ProductModal({
                     name="name"
                     label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Product Name</span>}
                     rules={[{ required: true, message: "Product name is required" }]}
+                    className="!mb-3.5"
                 >
                     <Input placeholder="e.g. Mechanical Gaming Keyboard RGB" className="rounded-xl py-2 font-medium text-slate-800" />
                 </Form.Item>
@@ -154,6 +157,7 @@ export default function ProductModal({
                     <Form.Item
                         name="categoryId"
                         label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Category</span>}
+                        className="!mb-3.5"
                     >
                         <Select placeholder="Select a category" className="rounded-xl !h-10" allowClear>
                             {categories.map((c) => (
@@ -169,6 +173,7 @@ export default function ProductModal({
                             name="price"
                             label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Your Selling Price (৳ BDT)</span>}
                             rules={[{ required: true, message: "Price is required" }]}
+                            className="!mb-3.5"
                         >
                             <InputNumber min={0} placeholder="e.g. 4500" className="w-full rounded-xl py-1 text-base font-bold text-slate-800" />
                         </Form.Item>
@@ -185,6 +190,7 @@ export default function ProductModal({
                                 : "Product Description"}
                         </span>
                     }
+                    className="!mb-3.5"
                 >
                     <Input.TextArea
                         rows={3}
@@ -207,6 +213,7 @@ export default function ProductModal({
                                 : "Master Thumbnail URL"}
                         </span>
                     }
+                    className="!mb-3.5"
                 >
                     <Input placeholder="https://example.com/product-image.jpg" className="rounded-xl py-2 text-sm" />
                 </Form.Item>
@@ -217,6 +224,7 @@ export default function ProductModal({
                         name="isActive"
                         label={<span className="text-xs sm:text-sm font-semibold text-slate-700">Visibility Status in Store</span>}
                         valuePropName="checked"
+                        className="!mb-2"
                     >
                         <Switch checkedChildren="Live in Store" unCheckedChildren="Hidden" />
                     </Form.Item>

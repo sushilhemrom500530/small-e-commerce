@@ -4,12 +4,13 @@ import { Button, message } from "antd";
 import { Link } from "react-router-dom";
 import {
     useGetMyShopProductsQuery,
+    useCreateShopProductMutation,
+    useUpdateShopProductMutation,
     useDeleteShopProductMutation,
     useGetCategoriesQuery,
     type IShopProduct,
 } from "../../../redux/features/ecommerce/index.js";
-import CustomizeProductModal from "./components/customize-product-modal.js";
-import CreateProductModal from "./components/create-product-modal.js";
+import ProductModal from "../../../Components/reuseable/product-modal/index.js";
 import DeleteConfirmModal from "../../../Components/reuseable/delete-confirm-modal/index.js";
 
 export default function ShopOwnerProductsPage() {
@@ -20,10 +21,37 @@ export default function ShopOwnerProductsPage() {
 
     const { data, isLoading } = useGetMyShopProductsQuery({ search: searchTerm });
     const { data: catData } = useGetCategoriesQuery();
+
+    const [createShopProduct, { isLoading: isCreating }] = useCreateShopProductMutation();
+    const [updateShopProduct, { isLoading: isUpdating }] = useUpdateShopProductMutation();
     const [deleteShopProduct, { isLoading: isDeleting }] = useDeleteShopProductMutation();
 
     const products: IShopProduct[] = data?.results || [];
     const categories = catData?.results || [];
+
+    const handleCreateProduct = async (values: any) => {
+        try {
+            await createShopProduct(values).unwrap();
+            message.success("New product created in shared catalog and listed in your shop!");
+            setIsCreateModalOpen(false);
+        } catch (err: any) {
+            message.error(err?.data?.message || "Failed to create product.");
+        }
+    };
+
+    const handleUpdateProduct = async (values: any) => {
+        if (!editingProduct) return;
+        try {
+            await updateShopProduct({
+                id: editingProduct.id,
+                body: values,
+            }).unwrap();
+            message.success("Product name, pricing, and details updated successfully!");
+            setEditingProduct(null);
+        } catch (err: any) {
+            message.error(err?.data?.message || "Failed to update listing.");
+        }
+    };
 
     const handleConfirmDelete = async () => {
         if (!deletingProduct) return;
@@ -177,22 +205,37 @@ export default function ShopOwnerProductsPage() {
                 </div>
             </div>
 
-            {/* Reusable Modals */}
-            <CustomizeProductModal
-                product={editingProduct}
+            {/* Reusable ProductModal for Customizing / Editing */}
+            <ProductModal
                 open={!!editingProduct}
+                role="shop_owner"
+                mode="customize"
+                initialData={editingProduct ? {
+                    name: editingProduct.name,
+                    categoryId: editingProduct.category?.id,
+                    price: editingProduct.price,
+                    details: editingProduct.details,
+                    thumbnail: editingProduct.thumbnail,
+                    isActive: editingProduct.isActive,
+                } : null}
+                categories={categories}
+                loading={isUpdating}
                 onCancel={() => setEditingProduct(null)}
-                onSuccess={() => setEditingProduct(null)}
-                categories={categories}
+                onSubmit={handleUpdateProduct}
             />
 
-            <CreateProductModal
+            {/* Reusable ProductModal for Creating Own Product */}
+            <ProductModal
                 open={isCreateModalOpen}
-                onCancel={() => setIsCreateModalOpen(false)}
-                onSuccess={() => setIsCreateModalOpen(false)}
+                role="shop_owner"
+                mode="create"
                 categories={categories}
+                loading={isCreating}
+                onCancel={() => setIsCreateModalOpen(false)}
+                onSubmit={handleCreateProduct}
             />
 
+            {/* Reusable Delete Confirmation Modal */}
             <DeleteConfirmModal
                 open={!!deletingProduct}
                 onCancel={() => setDeletingProduct(null)}

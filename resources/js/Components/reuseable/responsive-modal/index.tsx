@@ -21,7 +21,7 @@ export default function ResponsiveModal({
     children,
     footer,
     width = "min(680px, 95vw)",
-    maxHeight = "90vh",
+    maxHeight = "85vh",
     description,
 }: ResponsiveModalProps) {
     return (
@@ -43,25 +43,31 @@ export default function ResponsiveModal({
             footer={null}
             centered
             width={width}
-            style={{ top: "3vh", maxHeight }}
+            style={{ maxWidth: "95vw" }}
             styles={{
                 content: {
-                    maxHeight,
+                    maxHeight: maxHeight || "85vh",
                     display: "flex",
                     flexDirection: "column",
                     borderRadius: "1rem",
                     padding: "1.25rem 1.5rem",
+                    overflow: "hidden",
+                },
+                header: {
+                    flexShrink: 0,
+                    marginBottom: "0.5rem",
                 },
                 body: {
-                    overflow: "hidden",
+                    flex: "1 1 auto",
+                    minHeight: 0,
                     display: "flex",
                     flexDirection: "column",
-                    flex: 1,
-                    maxHeight: `calc(${maxHeight} - 85px)`,
+                    overflow: "hidden",
+                    padding: 0,
                 },
             }}
         >
-            <div className="flex flex-col h-full max-h-[calc(90vh-95px)] min-h-0">
+            <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
                 {description && (
                     <div className="text-xs text-slate-500 mb-3 shrink-0">
                         {description}
@@ -69,13 +75,13 @@ export default function ResponsiveModal({
                 )}
 
                 {/* Scrollable Children Body */}
-                <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 min-h-0">
+                <div className="flex-1 min-h-0 overflow-y-auto pr-1 sm:pr-2 overscroll-contain">
                     {children}
                 </div>
 
-                {/* Pinned Sticky Footer if provided */}
+                {/* Pinned Fixed Footer */}
                 {footer && (
-                    <div className="sticky bottom-0 bg-white pt-3 pb-1 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0 mt-3 z-10">
+                    <div className="shrink-0 pt-3 pb-1 mt-3 border-t border-slate-100 flex items-center justify-end gap-3 bg-white">
                         {footer}
                     </div>
                 )}
