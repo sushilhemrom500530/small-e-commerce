@@ -71,6 +71,7 @@ export interface FormFieldProps {
     unCheckedChildren?: ReactNode;
     disabled?: boolean;
     showSearch?: boolean;
+    initialValue?: any;
     [key: string]: any;
 }
 
@@ -179,6 +180,7 @@ const FormField: React.FC<FormFieldProps> = ({
     unCheckedChildren,
     disabled,
     showSearch,
+    initialValue,
     ...rest
 }) => {
     const mergedRules: Rule[] = [
@@ -397,6 +399,7 @@ const FormField: React.FC<FormFieldProps> = ({
             label={label}
             required={required}
             rules={mergedRules}
+            initialValue={initialValue}
             className={className}
         >
             {renderControl()}

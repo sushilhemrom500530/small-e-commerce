@@ -4,6 +4,7 @@ import { Button, Modal, Form, Input, Select, message } from "antd";
 import { Link } from "react-router-dom";
 import Loading from "../../../Components/reuseable/loading/index.js";
 import DeleteConfirmModal from "../../../Components/reuseable/delete-confirm-modal/index.js";
+import FormField from "../../../Components/form/index.js";
 import {
     useGetAdminShopsQuery,
     useCreateAdminShopMutation,
@@ -25,6 +26,16 @@ export default function ShopsManagement() {
 
     const shops: IShop[] = data?.results || [];
     const owners = ownersData?.results || [];
+
+    const ownerOptions = owners.map((owner) => ({
+        label: `${owner.name} (${owner.email})`,
+        value: owner.id,
+    }));
+
+    const statusOptions = [
+        { label: "Active", value: "active" },
+        { label: "Inactive", value: "inactive" },
+    ];
 
     const handleCreateShop = async (values: any) => {
         try {
@@ -193,38 +204,62 @@ export default function ShopsManagement() {
                 footer={null}
                 centered
             >
-                <Form form={form} layout="vertical" onFinish={handleCreateShop} className="mt-4">
-                    <Form.Item name="name" label="Shop Name" rules={[{ required: true, message: "Shop name is required" }]}>
-                        <Input placeholder="e.g. Apex Gadgets" className="rounded-xl py-2" />
-                    </Form.Item>
+                <Form form={form} layout="vertical" onFinish={handleCreateShop} initialValues={{ status: "active" }} className="mt-4">
+                    <FormField
+                        type="text"
+                        name="name"
+                        label="Shop Name"
+                        placeholder="e.g. Apex Gadgets"
+                        required
+                        rules={[{ required: true, message: "Shop name is required" }]}
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                    <Form.Item name="ownerId" label="Assign Shop Owner" rules={[{ required: true, message: "Please select an owner" }]}>
-                        <Select placeholder="Select a registered shop owner" className="rounded-xl">
-                            {owners.map((owner) => (
-                                <Select.Option key={owner.id} value={owner.id}>
-                                    {owner.name} ({owner.email})
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
+                    <FormField
+                        type="select"
+                        name="ownerId"
+                        label="Assign Shop Owner"
+                        placeholder="Select a registered shop owner"
+                        required
+                        rules={[{ required: true, message: "Please select an owner" }]}
+                        options={ownerOptions}
+                        showSearch
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                    <Form.Item name="description" label="Shop Description">
-                        <Input.TextArea rows={3} placeholder="Brief summary of what this shop sells..." className="rounded-xl" />
-                    </Form.Item>
+                    <FormField
+                        type="textarea"
+                        name="description"
+                        label="Shop Description"
+                        rows={3}
+                        placeholder="Brief summary of what this shop sells..."
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                    <Form.Item name="logo" label="Logo / Cover Image URL">
-                        <Input placeholder="https://example.com/logo.jpg" className="rounded-xl py-2" />
-                    </Form.Item>
+                    <FormField
+                        type="text"
+                        name="logo"
+                        label="Logo / Cover Image URL"
+                        placeholder="https://example.com/logo.jpg"
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
-                    <Form.Item name="status" label="Initial Status" initialValue="active">
-                        <Select className="rounded-xl">
-                            <Select.Option value="active">Active</Select.Option>
-                            <Select.Option value="inactive">Inactive</Select.Option>
-                        </Select>
-                    </Form.Item>
+                    <FormField
+                        type="select"
+                        name="status"
+                        label="Initial Status"
+                        initialValue="active"
+                        options={statusOptions}
+                        colorClass="!rounded-md"
+                        className="!mb-3.5"
+                    />
 
                     <div className="flex justify-end gap-3 mt-6">
-                        <Button onClick={() => setIsCreateOpen(false)} className="rounded-md h-10 px-4">
+                        <Button onClick={() => setIsCreateOpen(false)} className="rounded-md h-10 px-4 font-medium text-slate-600 hover:text-slate-800">
                             Cancel
                         </Button>
                         <Button type="primary" htmlType="submit" loading={isCreating} className="!bg-primary hover:!bg-primary-hover rounded-md h-10 px-6 text-white font-semibold">
