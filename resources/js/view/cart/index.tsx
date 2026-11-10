@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { message } from "antd";
 import {
   Minus,
   Plus,
@@ -40,6 +41,7 @@ export default function CartPage() {
   const handleCheckout = () => {
     setCheckoutSuccess(true);
     dispatch(clearCart());
+    message.success("Purchase completed successfully! Your order has been placed.");
     setTimeout(() => {
       setCheckoutSuccess(false);
     }, 6000);

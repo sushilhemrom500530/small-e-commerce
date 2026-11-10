@@ -95,3 +95,92 @@ select:not(:disabled) {
   padding: 0;
   text-align: left;
 }
+
+/* =====================================================================
+   GLOBAL TOAST & NOTIFICATION SYSTEM (RIGHT TOP PLACEMENT)
+   ===================================================================== */
+.ant-message {
+  position: fixed !important;
+  top: 24px !important;
+  right: 24px !important;
+  left: auto !important;
+  width: auto !important;
+  max-width: calc(100vw - 48px) !important;
+  pointer-events: none !important;
+  z-index: 99999 !important;
+  transform: none !important;
+}
+
+.ant-message .ant-message-notice {
+  text-align: right !important;
+  padding: 6px 0 !important;
+}
+
+.ant-message .ant-message-notice-content {
+  display: inline-flex !important;
+  align-items: center !important;
+  text-align: left !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.08) !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  background-color: #ffffff !important;
+  padding: 12px 20px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  pointer-events: auto !important;
+  animation: toastSlideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.ant-message-success .ant-message-custom-content,
+.ant-message-error .ant-message-custom-content,
+.ant-message-warning .ant-message-custom-content,
+.ant-message-info .ant-message-custom-content {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: #0f172a !important;
+}
+
+.ant-message-success .anticon {
+  color: #10b981 !important;
+  font-size: 18px !important;
+}
+
+.ant-message-error .anticon {
+  color: #ef4444 !important;
+  font-size: 18px !important;
+}
+
+.ant-message-warning .anticon {
+  color: #f59e0b !important;
+  font-size: 18px !important;
+}
+
+.ant-message-info .anticon {
+  color: var(--primary) !important;
+  font-size: 18px !important;
+}
+
+@keyframes toastSlideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.ant-notification-topRight {
+  top: 24px !important;
+  right: 24px !important;
+  z-index: 99999 !important;
+}
+
+.ant-notification-notice {
+  border-radius: 16px !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 14px 30px -4px rgba(15, 23, 42, 0.12) !important;
+}

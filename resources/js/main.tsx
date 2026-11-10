@@ -5,7 +5,20 @@ import { RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { store } from './redux/store.js'
 import router from './routes'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, message, notification } from 'antd'
+
+// Configure global toast message & notification placement to top-right
+message.config({
+  top: 24,
+  duration: 3.5,
+  maxCount: 4,
+});
+
+notification.config({
+  placement: 'topRight',
+  top: 24,
+  duration: 4.5,
+});
 
 const getPrimaryColor = () => {
   if (typeof window !== 'undefined') {

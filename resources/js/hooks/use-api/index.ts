@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { message } from "antd";
 
 const useApi = axios.create({
     baseURL: import.meta.env.VITE_API_URL || import.meta.env.VITE_PUBLIC_URL || "/api/v1",
@@ -40,6 +41,8 @@ useApi.interceptors.response.use(
                 localStorage.removeItem("authToken");
                 localStorage.removeItem("token");
             }
+        } else if (!error.response) {
+            message.error("Network connection error. Server is offline or unreachable.");
         }
         return Promise.reject(error);
     }

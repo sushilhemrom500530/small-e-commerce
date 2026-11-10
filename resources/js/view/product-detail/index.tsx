@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { message } from "antd";
 import {
   Star,
   CheckCircle2,
@@ -37,6 +38,7 @@ export default function ProductDetailPage() {
       })
     );
     setAddedToast(true);
+    message.success("Added to cart successfully!");
     setTimeout(() => setAddedToast(false), 3000);
   };
 

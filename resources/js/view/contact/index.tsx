@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { message as antdMessage } from "antd";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { FaFacebookF, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 import { RiMessengerLine } from "react-icons/ri";
@@ -15,6 +16,7 @@ export default function ContactPage() {
     e.preventDefault();
     if (!name || !email || !message) return;
     setSubmitted(true);
+    antdMessage.success("Thank you for reaching out! Your message has been sent successfully.");
     setTimeout(() => {
       setName("");
       setEmail("");
