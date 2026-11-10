@@ -69,6 +69,9 @@ export interface FormFieldProps {
     allowClear?: boolean;
     checkedChildren?: ReactNode;
     unCheckedChildren?: ReactNode;
+    disabled?: boolean;
+    showSearch?: boolean;
+    [key: string]: any;
 }
 
 // Normalize the Upload event into the file list antd Form expects
@@ -174,16 +177,19 @@ const FormField: React.FC<FormFieldProps> = ({
     allowClear,
     checkedChildren,
     unCheckedChildren,
+    disabled,
+    showSearch,
+    ...rest
 }) => {
     const mergedRules: Rule[] = [
         ...rules,
         ...(required
-            ? [{ required: true, message: `${label || "This field"} is required` }]
+            ? [{ required: true, message: `${typeof label === "string" ? label : "This field"} is required` }]
             : []),
     ];
 
     const controlClass =
-        `${colorClass} ${className} !py-2.5 !px-6 !focus:outline-none !focus:ring-offset-0`.trim();
+        `${colorClass} ${className} !py-2.5 !px-4 hover:!border-primary focus:!border-primary !focus:outline-none !focus:ring-2 !focus:ring-primary/10`.trim();
 
     const draggerName =
         typeof name === "string"
@@ -201,7 +207,9 @@ const FormField: React.FC<FormFieldProps> = ({
                     <Select
                         placeholder={placeholder}
                         allowClear={allowClear}
-                        className={`!w-full ${colorClass} [&_.ant-select-selector]:!min-h-[44px] [&_.ant-select-selector]:!h-[44px] [&_.ant-select-selector]:!px-4 [&_.ant-select-selector]:!rounded-xl [&_.ant-select-selector]:!border-slate-200 [&_.ant-select-selector]:!flex [&_.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!flex [&_.ant-select-selection-item]:!items-center [&_.ant-select-selection-item]:!text-sm [&_.ant-select-selection-item]:!font-medium [&_.ant-select-selection-placeholder]:!flex [&_.ant-select-selection-placeholder]:!items-center [&_.ant-select-selection-placeholder]:!text-sm [&_.ant-select-selection-placeholder]:!text-slate-400 [&_.ant-select-arrow]:!right-4`.trim()}
+                        disabled={disabled}
+                        showSearch={showSearch}
+                        className={`!w-full ${colorClass} text-sm [&_.ant-select-selector]:!min-h-[44px] [&_.ant-select-selector]:!h-[44px] [&_.ant-select-selector]:!px-4 [&_.ant-select-selector]:!rounded-xl [&_.ant-select-selector]:!border-slate-200 hover:[&_.ant-select-selector]:!border-primary [&_.ant-select-selector]:!transition-all [&_.ant-select-selector]:!duration-200 [&.ant-select-focused_.ant-select-selector]:!border-primary [&.ant-select-focused_.ant-select-selector]:!shadow-[0_0_0_2px_rgba(67,83,255,0.12)] [&.ant-select-open_.ant-select-selector]:!border-primary [&.ant-select-open_.ant-select-selector]:!shadow-[0_0_0_2px_rgba(67,83,255,0.12)] [&_.ant-select-selection-item]:!flex [&_.ant-select-selection-item]:!items-center [&_.ant-select-selection-item]:!text-sm [&_.ant-select-selection-item]:!text-slate-800 [&_.ant-select-selection-placeholder]:!flex [&_.ant-select-selection-placeholder]:!items-center [&_.ant-select-selection-placeholder]:!text-sm [&_.ant-select-selection-placeholder]:!text-slate-400 [&_.ant-select-arrow]:!right-4 [&_.ant-select-arrow]:!text-slate-400 [&.ant-select-disabled_.ant-select-selector]:!bg-slate-50 [&.ant-select-disabled_.ant-select-selector]:!text-slate-400`.trim()}
                         options={options.map((opt) => ({
                             value: opt.value,
                             label: opt.extraText ? (
@@ -215,6 +223,7 @@ const FormField: React.FC<FormFieldProps> = ({
                                 opt.label
                             ),
                         }))}
+                        {...rest}
                     />
                 );
 
@@ -223,13 +232,15 @@ const FormField: React.FC<FormFieldProps> = ({
                     <TextArea
                         rows={rows}
                         placeholder={placeholder}
+                        disabled={disabled}
                         className={controlClass}
+                        {...rest}
                     />
                 );
 
             case "radio":
                 return (
-                    <Radio.Group className={className}>
+                    <Radio.Group className={className} disabled={disabled} {...rest}>
                         {options.map((opt) => (
                             <Radio key={opt.value} value={opt.value}>
                                 {opt.label}
@@ -247,8 +258,10 @@ const FormField: React.FC<FormFieldProps> = ({
                         placeholder={placeholder}
                         prefix={icon}
                         controls={false}
-                        className={`${colorClass} ${className} !w-full [&_.ant-input-number-input]:!h-auto [&_.ant-input-number-input]:!py-2.5 [&_.ant-input-number-input]:!px-6`.trim()}
+                        disabled={disabled}
+                        className={`${colorClass} ${className} !w-full [&_.ant-input-number-input]:!h-auto [&_.ant-input-number-input]:!py-2.5 [&_.ant-input-number-input]:!px-4 hover:!border-primary focus:!border-primary focus-within:!border-primary [&.ant-input-number-focused]:!border-primary [&.ant-input-number-focused]:!shadow-[0_0_0_2px_rgba(67,83,255,0.12)]`.trim()}
                         style={{ width: "100%" }}
+                        {...rest}
                     />
                 );
 
@@ -257,7 +270,9 @@ const FormField: React.FC<FormFieldProps> = ({
                     <Input.Password
                         placeholder={placeholder}
                         prefix={icon}
+                        disabled={disabled}
                         className={controlClass}
+                        {...rest}
                     />
                 );
 
@@ -265,8 +280,10 @@ const FormField: React.FC<FormFieldProps> = ({
                 return (
                     <DatePicker
                         {...(placeholder !== undefined ? { placeholder } : {})}
+                        disabled={disabled}
                         className={controlClass}
                         style={{ width: "100%" }}
+                        {...rest}
                     />
                 );
 
@@ -278,7 +295,9 @@ const FormField: React.FC<FormFieldProps> = ({
                         placeholder={placeholder}
                         prefix={iconPosition === "left" ? icon : undefined}
                         suffix={iconPosition === "right" ? icon : undefined}
+                        disabled={disabled}
                         className={controlClass}
+                        {...rest}
                     />
                 );
         }
