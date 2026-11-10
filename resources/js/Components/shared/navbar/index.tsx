@@ -210,16 +210,21 @@ export default function Navbar() {
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-gray-100 bg-white px-4 pt-3 pb-6 space-y-3">
-          <div className="relative mb-3">
+          <form onSubmit={handleSearchSubmit} className="relative mb-3">
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-2.5 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearchSubmit(e);
+                }
+              }}
               placeholder="Search products..."
               className="w-full pl-9 pr-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
             />
-          </div>
+          </form>
 
           <div className="flex flex-col space-y-1">
             {navLinks.map((item: MenuItem) => {

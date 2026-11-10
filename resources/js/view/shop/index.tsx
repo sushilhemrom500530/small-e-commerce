@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Input, message, Select } from "antd";
 import {
   LayoutGrid,
@@ -210,13 +210,23 @@ const fallbackProducts: IProductItem[] = [
 
 export default function ShopProductsPage() {
   const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  
+  const initialProductQuery = searchParams.get("product") || searchParams.get("search") || "";
+  const [searchQuery, setSearchQuery] = useState(initialProductQuery);
   const [sortBy, setSortBy] = useState("popular");
   const [page, setPage] = useState(1);
   const [addedItemIds, setAddedItemIds] = useState<Record<string | number, boolean>>({});
   const pageSize = 9;
+
+  // Sync searchQuery whenever URL query params change (e.g. redirected from Navbar)
+  useEffect(() => {
+    const q = searchParams.get("product") || searchParams.get("search") || "";
+    setSearchQuery(q);
+    setPage(1);
+  }, [searchParams]);
 
   const currentCategoryObj =
     categoryTabs.find((c) => c.id === selectedCategory) || categoryTabs[0];
@@ -442,8 +452,17 @@ export default function ShopProductsPage() {
                   prefix={<Search className="w-4 h-4 text-gray-400" />}
                   size="large"
                   onChange={(e) => {
-                    setSearchQuery(e.target.value);
+                    const val = e.target.value;
+                    setSearchQuery(val);
                     setPage(1);
+                    if (val.trim()) {
+                      setSearchParams({ product: val }, { replace: true });
+                    } else {
+                      const nextParams = new URLSearchParams(searchParams);
+                      nextParams.delete("product");
+                      nextParams.delete("search");
+                      setSearchParams(nextParams, { replace: true });
+                    }
                   }}
                   placeholder="Search products by title, category..."
                   className="!rounded-md"
@@ -480,6 +499,7 @@ export default function ShopProductsPage() {
                   type="button"
                   onClick={() => {
                     setSearchQuery("");
+                    setSearchParams({}, { replace: true });
                     setSelectedCategory("all");
                     setPage(1);
                   }}
